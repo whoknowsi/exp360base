@@ -14,7 +14,6 @@
         <a-scene id="scene" render-enabled="true">
             <!-- Recursos -->
             <a-assets id="assets">
-                <img id="cursor-img" src="./img/cursor.png">
                 <img id="infoSpot-img" src="./img/infoSpotImg.png">
             </a-assets>
 
@@ -53,22 +52,22 @@
             <a-sky 
                 id="sky2" 
                 radius="100" 
-                src="#cursor-img"
-                animation__fadeout="startEvents: fadeout; property: material.opacity; from: 1; to: 0; dur: 500"
-                animation__movein="startEvents: movein; property: position; from: 0 0 0; to: 0 0 0; dur: 400">
+                src="#infoSpot-img"
+                animation__fadeout="startEvents: fadeout; property: material.opacity; from: 1; to: 0; dur: 500; easing: easeInOutSine"
+                animation__movein="startEvents: movein; property: position; from: 0 0 0; to: 0 0 0; dur: 400; easing: easeInOutSine">
             </a-sky>
             
             <a-sky 
                 id="sky" 
                 radius="100" 
-                src="#cursor-img"
-                animation__fadeout="startEvents: fadeout; property: material.opacity; from: 1; to: 0; dur: 400"
-                animation__moveout="startEvents: moveout; property: position; from: 0 0 0; to: 50 0 12; dur: 500"
+                src="#infoSpot-img"
+                animation__fadeout="startEvents: fadeout; property: material.opacity; from: 1; to: 0; dur: 450; easing: easeInOutSine"
+                animation__moveout="startEvents: moveout; property: position; from: 0 0 0; to: 50 0 12; dur: 500; easing: easeInOutSine"
                 animation__fadein="startEvents: fadein; property: material.opacity; from: 0; to: 1; dur: 5">
             </a-sky>
 
             <a-entity id="structure-container"
-                animation__moveout="startEvents: moveout; property: position; from: 0 0 0; to: 50 0 12; dur: 350">
+                animation__moveout="startEvents: moveout; property: position; from: 0 0 0; to: 50 0 12; dur: 300">
             </a-entity>
 
         </a-scene>
