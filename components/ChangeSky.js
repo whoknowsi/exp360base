@@ -116,7 +116,7 @@ function MakeTransitionBetweenSkies(data, targetSkyPosition) {
             
             UnsetMoving()
         }, 450)
-    }, 150);
+    }, 100);
 }
 
 function SetMoving() {
