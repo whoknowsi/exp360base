@@ -16,6 +16,7 @@ AFRAME.registerComponent('camera-check', {
             let isMouseEvent = evt.target.classList.contains("a-canvas")
             if(!isMouseEvent) { return }
             
+            console.log("pressed")
             rotating = true
             if(animating) {
                 cameraContainer.emit("pause-anim")
