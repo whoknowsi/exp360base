@@ -1,0 +1,89 @@
+.buttonContainer {
+    position: absolute;
+    right: 1vh;
+    top: 1vh;
+}
+.buttonBuilds {
+    position: absolute;
+    left: 1vh;
+    bottom: 2vh;
+}
+
+.editorButton {
+    visibility: hidden;
+}
+
+.skyButtonContainer {
+    position: absolute;
+    right: 0;
+    top: 3vh;
+    max-width: 200px;
+    padding: 20px;
+}
+.skyButtonContainer > button {
+    width: 200px;
+    margin: 2px;
+}
+
+.imagePreviewSkyContainer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imagePreviewSkyContainer > img {
+    max-width: 100%;
+    max-height: 100%;
+}
+.buttonContainerSkyOptions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.editSkyOptionsButtonContainer {
+    position: absolute;
+    top: 6vh;
+    right: 1vh;
+}
+
+.infoPanelSetting {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .85);
+    border-radius: 5px;
+    padding: 12px;
+    display: grid;
+    color: #CCC;
+    justify-content: space-around;
+    margin: 20px;
+    visibility: hidden;
+}
+
+.infoPanel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, .85);
+    border-radius: 5px;
+    padding: 12px;
+    display: grid;
+    color: #CCC;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.infoPanel img {
+    max-width: 250px;
+}
