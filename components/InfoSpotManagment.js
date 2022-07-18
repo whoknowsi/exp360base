@@ -74,7 +74,6 @@ function CreatePanel(title, description, image, target) {
 }
 
 var MovePanel = function(target) {
-    console.log("test")
     let transform = toScreenPosition(target)
     panel.style.transform = `translate(${transform.x}px, ${transform.y}px)`
 }

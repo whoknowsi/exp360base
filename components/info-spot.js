@@ -15,7 +15,8 @@ const device = deviceType()
 const temporalRaycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
 const touch = new THREE.Vector2()
-const camera = document.querySelector("#camera").components.camera.camera
+const cameraEl = document.querySelector("#camera")
+const camera = cameraEl.components.camera.camera
 const canvas = document.querySelector(".a-canvas")
 const structureObjects = []
 const hotspotObjects = []
@@ -49,10 +50,9 @@ AFRAME.registerComponent('info-spot', {
         }
     },
     tick: function () {
-        let camera = document.querySelector("#camera")
-        this.el.object3D.lookAt(camera.object3D.position)
+        FaceHotspotToCamera(this.el)
     }
-});
+})
 
 let handleEnterHotspot = (raycaster, hotspot, title, description, image) => {
     let isCorrectRaycaster = raycaster.getAttribute("id") == "cursor-prev-raycast"
@@ -60,21 +60,10 @@ let handleEnterHotspot = (raycaster, hotspot, title, description, image) => {
 
     let hotspotIntersection = raycaster.components.raycaster.getIntersection(hotspot)
 
-    let isBlocked = CheckIfItIsBlocked(hotspotIntersection, structureObjects)
+    let isBlocked = CheckIfItIsBlocked(hotspotIntersection, structureObjects, pointer)
     if (isBlocked) { return }
 
     ShowPanelInfo(hotspot, hotspotIntersection, title, description, image)
-}
-
-let CheckIfItIsBlocked = (hotspotIntersection, structureObjects) => {
-    temporalRaycaster.setFromCamera(pointer, camera)
-    const structureIntersections = temporalRaycaster.intersectObjects(structureObjects)
-
-    let isBlocked = false
-    structureIntersections.forEach(structure => {
-        structure.distance < hotspotIntersection.distance && (isBlocked = true)
-    })
-    return isBlocked
 }
 
 let handleLeaveHotspot = () => {
@@ -82,10 +71,9 @@ let handleLeaveHotspot = () => {
 }
 
 let handleTouchMobile = (evt) => {
-    touch.x = (evt.changedTouches[0].pageX / window.innerWidth) * 2 - 1;
-    touch.y = -(evt.changedTouches[0].pageY / window.innerHeight) * 2 + 1;
+    UpdateTouchPoint(evt)
 
-    temporalRaycaster.setFromCamera(touch, camera)
+    temporalRaycaster.setFromCamera(touch, camera, pointer)
     const hotspotIntersections = temporalRaycaster.intersectObjects(hotspotObjects)
 
     let thereIsHotspotIntersection = hotspotIntersections.length > 0
@@ -99,6 +87,9 @@ let handleTouchMobile = (evt) => {
         hotspotIntersection = intersection
     })
 
+    let isBlocked = CheckIfItIsBlocked(hotspotIntersection, structureObjects, touch)
+    if (isBlocked) { return }
+
     let hotspot = hotspotIntersection.object.el
     let data = hotspotIntersection.object.el.components["info-spot"].data
     let title = data.description
@@ -106,6 +97,26 @@ let handleTouchMobile = (evt) => {
     let image = data.image
 
     ShowPanelInfo(hotspot, hotspotIntersection, title, description, image)
+}
+
+let UpdateTouchPoint = (evt) => {
+    touch.x = (evt.changedTouches[0].pageX / window.innerWidth) * 2 - 1;
+    touch.y = -(evt.changedTouches[0].pageY / window.innerHeight) * 2 + 1;
+}
+
+let CheckIfItIsBlocked = (hotspotIntersection, structureObjects, cursorPosition) => {
+    temporalRaycaster.setFromCamera(cursorPosition, camera)
+    const structureIntersections = temporalRaycaster.intersectObjects(structureObjects)
+
+    let isBlocked = false
+    structureIntersections.forEach(structure => {
+        structure.distance < hotspotIntersection.distance && (isBlocked = true)
+    })
+    return isBlocked
+}
+
+let FaceHotspotToCamera = (hotspot) => {
+    hotspot.object3D.lookAt(cameraEl.object3D.position)
 }
 
 let onPointerMove = (evt) => {
