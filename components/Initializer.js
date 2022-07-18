@@ -18,7 +18,9 @@ const AddAssets = async (data) => {
         img.setAttribute("id", assetName)
         img.setAttribute("class", "skyImage")
         img.setAttribute("src", "./img/skies/" + asset)
+        
         document.querySelector("#assets").appendChild(img)
+        THREE.Cache.add("./img/skies/" + asset, document.querySelector("#" + assetName))
     })
 }
 
@@ -105,6 +107,7 @@ function CreateSavedElements(data) {
         const mergedMesh = new THREE.Mesh(mergedGeo, mergedMaterial);
         structuresEl.object3D.add(mergedMesh)
         structuresEl.setAttribute("raycaster-listener", "")
+        console.log(THREE.Cache);
     }, 1000);
     // console.log(structureElements[0].object3D)
 
