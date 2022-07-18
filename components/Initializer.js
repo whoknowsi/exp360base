@@ -242,13 +242,11 @@ function CreateInfoSpot(infoSpot) {
 var textureManager = new THREE.LoadingManager();
 textureManager.onProgress = function ( item, loaded, total ) {
     // this gets called after any item has been loaded
-    console.log(item)
-    SetFirstSky(item)
+    
 };
 
 textureManager.onLoad = function () {
-    // all textures are loaded
-    // ...
+    SetFirstSky(item)
 };
 
 var textureLoader = new THREE.ImageLoader(textureManager)
