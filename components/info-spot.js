@@ -73,7 +73,7 @@ let handleLeaveHotspot = () => {
 let handleTouchMobile = (evt) => {
     UpdateTouchPoint(evt)
 
-    temporalRaycaster.setFromCamera(touch, camera, pointer)
+    temporalRaycaster.setFromCamera(touch, camera)
     const hotspotIntersections = temporalRaycaster.intersectObjects(hotspotObjects)
 
     let thereIsHotspotIntersection = hotspotIntersections.length > 0
@@ -106,7 +106,10 @@ let UpdateTouchPoint = (evt) => {
 
 let CheckIfItIsBlocked = (hotspotIntersection, structureObjects, cursorPosition) => {
     temporalRaycaster.setFromCamera(cursorPosition, camera)
-    const structureIntersections = temporalRaycaster.intersectObjects(structureObjects)
+    let structures = document.querySelector(".structure")
+    const structureIntersections = temporalRaycaster.intersectObject(structures.object3D)
+
+    console.log(structureIntersections)
 
     let isBlocked = false
     structureIntersections.forEach(structure => {

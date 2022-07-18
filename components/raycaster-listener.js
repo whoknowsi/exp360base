@@ -1,7 +1,10 @@
 import { RemoveTarget, AddTarget, GetCurrentTarget, MapInterval, NormalizeAngleInRadians } from "./helper.js"
 
 var startCamRotation
-
+const pointer = new THREE.Vector2()
+const temporalRaycaster = new THREE.Raycaster()
+const cameraEl = document.querySelector("#camera")
+const camera = cameraEl.components.camera.camera
 var cursorPrev
 var mouse = new THREE.Vector2();
 
@@ -30,10 +33,11 @@ AFRAME.registerComponent('raycaster-listener', {
     init: function () {
 
         
+    console.log("here")
         this.cornerValue = 0.1
         cursorPrev = document.querySelector("#cursor-prev")
 
-
+        
         this.el.addEventListener('raycaster-intersected', evt => {
             this.raycaster = evt.detail.el;
             AddTarget(this.el);
@@ -44,6 +48,8 @@ AFRAME.registerComponent('raycaster-listener', {
             RemoveTarget(this.el);
         })
         
+        window.addEventListener('pointermove', onPointerMove);
+
         document.querySelector(".a-canvas").addEventListener('touchstart', onMouseMove)
 
         this.el.addEventListener('mousedown', () => OnMouseDown())
@@ -58,23 +64,16 @@ AFRAME.registerComponent('raycaster-listener', {
     },
     tick: function () {
 
-        if (!this.raycaster) { return }
+        let target = document.querySelector(".structure")
 
-        let target = GetCurrentTarget()
-
-        if (target == null && this.raycaster != null) {
-            AddTarget(this.el);
-            target = this.el
-        }
-
-        else if (target != null) {
-            this.intersection = this.raycaster.components.raycaster.getIntersection(target);
-        }
-
-        if (!this.intersection) { return }
-
+        temporalRaycaster.setFromCamera(pointer, camera)
+        const hotspotIntersections = temporalRaycaster.intersectObject(target.object3D)
+    
+        let thereIsHotspotIntersection = hotspotIntersections.length > 0
+        if (!thereIsHotspotIntersection) { return }
+    
         cursorPrev.setAttribute("visible", "true")
-        CursorManagment(this.intersection, target, this.cornerValue)
+        CursorManagment(hotspotIntersections[0], null, 1)
     }
 });
 
@@ -85,9 +84,7 @@ function onMouseMove(event) {
 
 function CursorManagment(intersection, target, cornerValue) {
     let normal = intersection.face.normal;
-    let distance = intersection.distance;
-    let cornersToRotate = target.getAttribute("rotate-corner")
-    let scale = 3 / (1 + distance * 2)
+    let cornersToRotate = ""
     let edge
     let cameraRotationHorizontal = NormalizeAngleInRadians(document.querySelector("#cameraContainer").getAttribute("rotation").y)
 
@@ -235,17 +232,17 @@ function RotateOnCorners(target, intersection, cornerValue) {
     return edge
 }
 
-// Necesario para que se ejecute el init
-let query;
-if (query == null) {
-    query = document.querySelectorAll(".collidable")
-    for (let i = 0; i < query.length; i++) {
+// // Necesario para que se ejecute el init
+// let query;
+// if (query == null) {
+//     query = document.querySelectorAll(".collidable")
+//     for (let i = 0; i < query.length; i++) {
 
-        const item = query[i];
-        item.setAttribute('raycaster-listener', '');
+//         const item = query[i];
+//         item.setAttribute('raycaster-listener', '');
 
-    }
-}
+//     }
+// }
 
 export function ChangeTargetEditRaycaster(className) {
     let raycaster = document.querySelector("#cursor-edit")
@@ -258,6 +255,7 @@ export function ChangeTargetEditRaycasterMouse(className) {
 }
 
 var OnMouseDown = function () {
+
     let camera = document.querySelector("#cameraContainer")
     let cameraRotation = camera.getAttribute("rotation")
 
@@ -365,4 +363,9 @@ function CheckIfUserClick() {
     const diffX = Math.abs(cameraRotation.x - startCamRotation.x);
     const diffY = Math.abs(cameraRotation.y - startCamRotation.y);
     return (diffX < delta && diffY < delta)
+}
+
+let onPointerMove = (evt) => {
+    pointer.x = (evt.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = - (evt.clientY / window.innerHeight) * 2 + 1;
 }

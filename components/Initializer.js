@@ -50,21 +50,63 @@ function CreateSavedElements(data) {
 
 
     let skySpotsContainer = document.createElement("a-entity")
+    let structureElements = []
 
     skySpots.forEach(spot => {
         skySpotsContainer.appendChild(CreateSkySpot(spot))
     });
-
+    let elements = []
     structures.forEach(structure => {
-        structureContainer.appendChild(CreateStructure(structure))
-    });
+        //geometries.push(CreateStructure(structure))
+        //structureElements.push(CreateStructure(structure))
+        let elem = CreateStructure(structure)
+        elements.push(elem)
+        structureContainer.appendChild(elem)
+    })
 
     infoSpots.forEach(infoSpot => {
-
         structureContainer.appendChild(CreateInfoSpot(infoSpot))
-    });
+    })
 
+    // const mergedGeo = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
+    // const mergedMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3, vertexColors: THREE.FaceColors });
+    // const mergedMesh = new THREE.Mesh(mergedGeo, mergedMaterial);
+    // let mergedMeshEl = document.createElement("a-box")
+    let structuresEl = document.createElement("a-entity")
+    structuresEl.setAttribute("class", "structure collidable")
     structureContainer.appendChild(skySpotsContainer)
+    structureContainer.appendChild(structuresEl)
+    //structureContainer.appendChild(mergedMeshEl)
+
+    setTimeout(function() {
+        
+        //console.log("asdfasdfdasf")
+        let geometries = []
+        //console.log(elements)
+        elements.forEach(x => {
+            let node = x.object3D.children[0]
+            if (node.type === "Mesh") {
+                const geometry = node.geometry.clone();
+                geometry.applyMatrix4(node.parent.matrix);
+                geometries.push(geometry)
+
+                // dispose the merged meshes 
+                //console.log(node.parent)
+                node.parent.el.remove();
+                node.geometry.dispose();
+                node.material.dispose();
+            }
+        })
+
+        //console.log(geometries)
+        const mergedGeo = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
+        const mergedMaterial = new THREE.MeshStandardMaterial({ opacity: 0, alphaTest: 0.5, color: "black" });
+
+        const mergedMesh = new THREE.Mesh(mergedGeo, mergedMaterial);
+        structuresEl.object3D.add(mergedMesh)
+        structuresEl.setAttribute("raycaster-listener", "")
+    }, 1000);
+    // console.log(structureElements[0].object3D)
 
 }
 
@@ -72,12 +114,12 @@ function CreateSkySpot(spot) {
     let spotEl = document.createElement("a-entity")
     spotEl.setAttribute("id", spot.id)
     spotEl.classList.add("skyChanger")
-    if(spot.current) {
+    if (spot.current) {
         spotEl.classList.add("current")
         currentSky = {
             id: spot.id,
             rotation: spot.rotation,
-            position: (-spot.position.x) + " " + (-spot.position.y + .2/2) + " " + (-spot.position.z),
+            position: (-spot.position.x) + " " + (-spot.position.y + .2 / 2) + " " + (-spot.position.z),
         }
     }
     spotEl.setAttribute("rotation", "90 0 0")
@@ -110,24 +152,47 @@ function CreateSkySpot(spot) {
 }
 
 function CreateStructure(structure) {
+
+    const geometry = new THREE.BoxGeometry(structure.width, structure.height, structure.depth)
+    const material = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, opacity: 0, transparent: true })
+
+    const mesh = new THREE.Mesh(geometry, material);
+    // PONER PARA QUE HAYA CILINDROS
+
+
     let structureContainer = document.createElement("a-entity")
-    structureContainer.setAttribute("id", "container-" +  structure.id)
-    structureContainer.setAttribute("position", structure.position.x + " " + structure.position.y + " " + structure.position.z)
+    structureContainer.setAttribute("id", "container-" + structure.id)
+
 
 
     let structureEl = document.createElement("a-" + structure.primitive)
     structureEl.setAttribute("id", structure.id)
     structureEl.setAttribute("class", "collidable structure")
-    structureEl.setAttribute("width", structure.width)
-    structureEl.setAttribute("height", structure.height)
-    structureEl.setAttribute("depth", structure.depth)
     structureEl.setAttribute("radius", structure.radius)
     structureEl.setAttribute("color", "#7BC8A4")
     structureEl.setAttribute("opacity", "0")
     structureEl.setAttribute("rotate-corner", "all")
-    structureEl.setAttribute("raycaster-listener", "")
+    structureEl.object3D.add(mesh)
+    structureEl.setAttribute("position", structure.position.x + " " + structure.position.y + " " + structure.position.z)
     structureContainer.appendChild(structureEl)
-    return structureContainer
+
+    // modelElement.addEventListener('model-loaded', (e) => {
+    //     var obj = modelElement.getObject3D('mesh');
+    //     var bbox = new THREE.Box3().setFromObject(obj);
+    //     console.log(bbox)
+    // })
+
+    // structureEl.object3D.traverse(node => {
+    //     console.log(structureEl.getObject3D())
+    //     if (node.type === "Mesh") { 
+
+    //         const geometry = node.geometry.clone();
+    //         geometry.applyMatrix4(node.parent.matrix);
+    //         mesh.push(geometry)
+    //     }
+    // })
+
+    return structureEl
 }
 
 function CreateInfoSpot(infoSpot) {
@@ -139,7 +204,8 @@ function CreateInfoSpot(infoSpot) {
     line.setAttribute("line", {
         start: infoSpot.startPosition,
         end: infoSpot.endPosition,
-        opacity: 0.99,
+        // opacity: 0.99,
+        // alphaTest: .5,
         color: "white"
     })
 
@@ -152,12 +218,14 @@ function CreateInfoSpot(infoSpot) {
     })
     pointer.classList.add("infoSpot")
     pointer.setAttribute("material", {
-        src: "#infoSpot-img"
+        src: "#infoSpot-img",
+        opacity: 0.5,
+        alphaTest: .5
     })
-    pointer.setAttribute("info-spot", 
-        "title: " + infoSpot.infoSpot.title + 
+    pointer.setAttribute("info-spot",
+        "title: " + infoSpot.infoSpot.title +
         "; description: " + infoSpot.infoSpot.description +
-        "; image: " + infoSpot.infoSpot.image 
+        "; image: " + infoSpot.infoSpot.image
     )
 
     infoSpotContainer.appendChild(line)
