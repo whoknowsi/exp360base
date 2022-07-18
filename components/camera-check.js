@@ -15,8 +15,7 @@ AFRAME.registerComponent('camera-check', {
         document.addEventListener('mousedown', function(evt) {
             let isMouseEvent = evt.target.classList.contains("a-canvas")
             if(!isMouseEvent) { return }
-            
-            console.log("pressed")
+        
             rotating = true
             if(animating) {
                 cameraContainer.emit("pause-anim")

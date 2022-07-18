@@ -41,6 +41,8 @@ export function ShowPanelInfo(target, intersection, title, description, image) {
 }
 
 function CreatePanel(title, description, image, target) {
+    panel != null && panel.remove()
+
     panel = document.createElement("div")
     panel.setAttribute("class", "infoPanel")
     
@@ -68,16 +70,18 @@ function CreatePanel(title, description, image, target) {
     document.body.appendChild(panel)
     MovePanel(target)
     document.addEventListener("mousemove", () => MovePanel(target))
+    document.addEventListener("touchmove", () => MovePanel(target))
 }
 
-var MovePanel = function(target){
+var MovePanel = function(target) {
+    console.log("test")
     let transform = toScreenPosition(target)
     panel.style.transform = `translate(${transform.x}px, ${transform.y}px)`
 }
 
 export function HidePanelInfo() {
     document.removeEventListener("mousemove", MovePanel)
-    panel.remove()
+    panel != null && panel.remove()
 }
 
 function toScreenPosition(obj)
