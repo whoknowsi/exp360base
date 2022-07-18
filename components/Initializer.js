@@ -6,7 +6,6 @@ const Init = async () => {
 
     await AddAssets(data)
     await LoadStructures(data)
-    SetFirstSky()
 }
 
 Init()
@@ -20,11 +19,15 @@ const AddAssets = async (data) => {
         img.setAttribute("src", "./img/skies/" + asset)
         
         document.querySelector("#assets").appendChild(img)
+            
+    textureLoader.load("./img/skies/" + asset, function (image) {
+        myTexture.image = image;
+    })
         THREE.Cache.add("./img/skies/" + asset, document.querySelector("#" + assetName))
     })
 }
 
-const SetFirstSky = () => {
+const SetFirstSky = (item) => {
     let sky1 = document.querySelector("#sky")
     let sky2 = document.querySelector("#sky2")
     let structureContainer = document.querySelector("#structure-container")
@@ -235,3 +238,20 @@ function CreateInfoSpot(infoSpot) {
     infoSpotContainer.appendChild(pointer)
     return infoSpotContainer
 }
+
+var textureManager = new THREE.LoadingManager();
+textureManager.onProgress = function ( item, loaded, total ) {
+    // this gets called after any item has been loaded
+    console.log(item)
+    SetFirstSky(item)
+};
+
+textureManager.onLoad = function () {
+    // all textures are loaded
+    // ...
+};
+
+var textureLoader = new THREE.ImageLoader(textureManager)
+var myTextureArray = [];
+var myTexture = new THREE.Texture();
+myTextureArray.push(myTexture);
