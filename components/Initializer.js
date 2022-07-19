@@ -7,7 +7,7 @@ const Init = async () => {
     await LoadStructures(data)
     await AddAssets(data)
     console.log("2")
-    SetFirstSky("#Iglesia-9-low")
+    SetFirstSky("#Iglesia-9")
     
 }
 
@@ -51,8 +51,8 @@ const SetFirstSky = (id) => {
 
     let skies = document.querySelectorAll(".skySpot")
     skies.forEach(item => {
-        sky1.setAttribute("src", "./img/skies/" + item.target + "-low.jpg")
-        sky2.setAttribute("src", "./img/skies/" + item.target + "-low.jpg")
+        sky1.setAttribute("src", "./img/skies/" + item.target + ".jpg")
+        sky2.setAttribute("src", "./img/skies/" + item.target + ".jpg")
         if(item.current) currentSky = item
     })
     console.log(skies)
