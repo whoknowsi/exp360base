@@ -24,7 +24,7 @@ const PreloadAllSkies = (data, currentPosition) => {
         let skyVectorPosition = new THREE.Vector3(sky.position.x, sky.position.y, sky.position.z)
         let distance = currentVectorPosition.distanceTo(skyVectorPosition)
 
-        if(distance < 10) skiesToPreload.push(sky)     
+        if(distance < 100) skiesToPreload.push(sky)     
     })
 
     let interval = 200
@@ -39,6 +39,8 @@ const PreloadAllSkies = (data, currentPosition) => {
     })
 
     promise.then(function () {
+        let skyEl = document.querySelector("#temporalSky")
+        skyEl != null && skyEl.remove()
         var data = JSON.parse(sessionStorage.getItem('skies'))
         sessionStorage.setItem('skies', "[" + data.map((sky) => {
             let skyObj = sky
@@ -56,8 +58,14 @@ const PreloadAllSkies = (data, currentPosition) => {
 }
 
 const PreloadSky = (sky) => {
-    let sky2 = document.querySelector("#sky2")
-    sky2.setAttribute("src", "#" + sky.target)
+    let skyEl = document.querySelector("#temporalSky")
+    if(skyEl == null) { 
+        skyEl = document.createElement("a-sky")
+        skyEl.setAttribute("id", "temporalSky")
+        skyEl.setAttribute("material", "opacity", 0)
+        document.querySelector("#scene").appendChild(skyEl)
+    }
+    skyEl.setAttribute("src", "#" + sky.target)
 }
 
 

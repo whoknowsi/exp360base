@@ -110,7 +110,7 @@ function MakeTransitionBetweenSkies(data, targetSkyPosition, texture) {
         sky1.object3D.children[0].material.needsUpdate = true;
         sky1.setAttribute("position", "0 0 0")
 
-        PreloadCloseSkies(data)
+        //PreloadCloseSkies(data)
 
         UnsetMoving()
     }, 600)
