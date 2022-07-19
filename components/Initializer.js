@@ -4,8 +4,9 @@ const Init = async () => {
     const results = await fetch("./data/data.json")
     const data = await results.json()
 
-    await AddAssets(data)
     await LoadStructures(data)
+    await AddAssets(data)
+    
 }
 
 Init()
@@ -19,46 +20,79 @@ const AddAssets = async (data) => {
 
     let assets = []
 
-    data.skyAssets.forEach(asset => {
-        let assetName = asset.split(".")[0].toLowerCase()
+    preloadImages(data.skyAssets)
 
-        const image = new Image()
-        image.id = assetName
-        image.src= "./img/skies/" + asset.split(".")[0] + "-low." + asset.split(".")[1]
-        // textureLoader.load("./img/skies/" + asset, function (image) {
-        //     myTexture.image = image;
-        // })
+//     data.skyAssets.forEach(asset => {
+//         let assetName = asset.split(".")[0].toLowerCase()
 
-        assets.push(image)
+//         const image = new Image()
+//         image.id = assetName
+//         image.src= "./img/skies/" + asset.split(".")[0] + "-low." + asset.split(".")[1]
+//         // textureLoader.load("./img/skies/" + asset, function (image) {
+//         //     myTexture.image = image;
+//         // })
+
+//         assets.push(image)
         
-        image.onload = () => {
-            window.THREE.Cache.add("./img/skies/" + asset.split(".")[0] + "-low." + asset.split(".")[1], image)
-            if(currentSky == assetName) {
+//         image.onload = () => {
+//             window.THREE.Cache.add("./img/skies/" + asset.split(".")[0] + "-low." + asset.split(".")[1], image)
+//             if(currentSky == assetName) {
                 
+//             }
+//         }
+        
+//     })
+
+//     document.addEventListener("DOMContentLoaded", function(){
+//         assets.forEach(asset => {  
+//             document.querySelector("#assets").appendChild(asset)
+//         })
+//         SetFirstSky(currentSky)
+// structureContainer    })
+}
+
+function preloadImages(array) {
+    if (!preloadImages.list) {
+        preloadImages.list = [];
+    }
+    var list = preloadImages.list;
+    for (var i = 0; i < array.length; i++) {
+        var img = new Image();
+        img.onload = function() {
+            var index = list.indexOf(this);
+            if (index !== -1) {
+                // remove image from the array once it's loaded
+                // for memory consumption reasons
+                list.splice(index, 1);
             }
         }
-        
-    })
+        list.push(img);
+        img.src = "./img/skies/" + array[i];
+        console.log(img)
+    }
+    SetFirstSky("./img/skies/Iglesia-9-low.jpg")
 
-    document.addEventListener("DOMContentLoaded", function(){
-        console.log(assets)
-        assets.forEach(asset => {  
-            document.querySelector("#assets").appendChild(asset)
-        })
-        SetFirstSky(currentSky)
-    })
 }
+
 
 const SetFirstSky = (id) => {
     let sky1 = document.querySelector("#sky")
     let sky2 = document.querySelector("#sky2")
     let structureContainer = document.querySelector("#structure-container")
 
+    let skies = document.querySelectorAll(".skySpot")
+    skies.forEach(item => {
+        sky1.setAttribute("src", "./img/skies/" + item.target + "-low.jpg")
+        sky2.setAttribute("src", "./img/skies/" + item.target + "-low.jpg")
+        if(item.current) currentSky = item
+    })
+    console.log(skies)
+
     console.log(THREE.Cache)
     // ESPERAR A QUE LA IMAGEN SE CARGUE ANTES DE PONERLA
-    sky1.setAttribute("src", "#" + id)
+    sky1.setAttribute("src", id)
     sky1.setAttribute("rotation", currentSky.rotation)
-    sky2.setAttribute("src", "#" + id)
+    sky2.setAttribute("src", id)
     sky2.setAttribute("rotation", currentSky.rotation)
     structureContainer.setAttribute("position", currentSky.position)
 }
@@ -105,9 +139,7 @@ function CreateSavedElements(data) {
 
     setTimeout(function() {
         
-        //console.log("asdfasdfdasf")
         let geometries = []
-        //console.log(elements)
         elements.forEach(x => {
             let node = x.object3D.children[0]
             if (node.type === "Mesh") {
@@ -115,24 +147,19 @@ function CreateSavedElements(data) {
                 geometry.applyMatrix4(node.parent.matrix);
                 geometries.push(geometry)
 
-                // dispose the merged meshes 
-                //console.log(node.parent)
                 node.parent.el.remove();
                 node.geometry.dispose();
                 node.material.dispose();
             }
         })
 
-        //console.log(geometries)
         const mergedGeo = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
         const mergedMaterial = new THREE.MeshStandardMaterial({ opacity: 0, alphaTest: 0.5, color: "black" });
 
         const mergedMesh = new THREE.Mesh(mergedGeo, mergedMaterial);
         structuresEl.object3D.add(mergedMesh)
         structuresEl.setAttribute("raycaster-listener", "")
-        console.log(THREE.Cache);
     }, 1000);
-    // console.log(structureElements[0].object3D)
 
 }
 
@@ -205,11 +232,9 @@ function CreateStructure(structure) {
     // modelElement.addEventListener('model-loaded', (e) => {
     //     var obj = modelElement.getObject3D('mesh');
     //     var bbox = new THREE.Box3().setFromObject(obj);
-    //     console.log(bbox)
     // })
 
     // structureEl.object3D.traverse(node => {
-    //     console.log(structureEl.getObject3D())
     //     if (node.type === "Mesh") { 
 
     //         const geometry = node.geometry.clone();

@@ -9128,7 +9128,7 @@
         {
             "id": "iglesia1-pointer",
             "rotation": "0 -.5 0",
-            "target": "#iglesia1",
+            "target": "Iglesia1",
             "position": {
                 "x": -0.7159336274525152,
                 "y": 0.1,
@@ -9139,7 +9139,7 @@
         {
             "id": "iglesia2-pointer",
             "rotation": "0 270 0",
-            "target": "#iglesia2",
+            "target": "Iglesia2",
             "position": {
                 "x": -0.8674634249515227,
                 "y": 0.1,
@@ -9150,7 +9150,7 @@
         {
             "id": "iglesia3-pointer",
             "rotation": "0 270 0",
-            "target": "#iglesia3",
+            "target": "Iglesia3",
             "position": {
                 "x": -0.8493457669086724,
                 "y": 0.1,
@@ -9161,7 +9161,7 @@
         {
             "id": "iglesia4-pointer",
             "rotation": "0 269 0",
-            "target": "#iglesia4",
+            "target": "Iglesia4",
             "position": {
                 "x": -0.8495505697943492,
                 "y": 0.1,
@@ -9172,7 +9172,7 @@
         {
             "id": "iglesia-1-pointer",
             "rotation": "0 -1.6 0",
-            "target": "#iglesia-1",
+            "target": "Iglesia-1",
             "position": {
                 "x": 0.9126466833171634,
                 "y": 0.1,
@@ -9183,7 +9183,7 @@
         {
             "id": "iglesia-2-pointer",
             "rotation": "0 -1.6 0",
-            "target": "#iglesia-2",
+            "target": "Iglesia-2",
             "position": {
                 "x": 2.9942396523254495,
                 "y": 0.1,
@@ -9194,7 +9194,7 @@
         {
             "id": "iglesia-3-pointer",
             "rotation": "0 -1.5 0",
-            "target": "#iglesia-3",
+            "target": "Iglesia-3",
             "position": {
                 "x": 5.237385209323483,
                 "y": 0.1,
@@ -9205,7 +9205,7 @@
         {
             "id": "iglesia-4-pointer",
             "rotation": "0 270.6 0",
-            "target": "#iglesia-4",
+            "target": "Iglesia-4",
             "position": {
                 "x": 7.070466872252464,
                 "y": 0.1,
@@ -9216,7 +9216,7 @@
         {
             "id": "iglesia-5-pointer",
             "rotation": "0 -1.5 0",
-            "target": "#iglesia-5",
+            "target": "Iglesia-5",
             "position": {
                 "x": 8.851016688097397,
                 "y": 0.1,
@@ -9227,7 +9227,7 @@
         {
             "id": "iglesia-6-pointer",
             "rotation": "0 .3 0",
-            "target": "#iglesia-6",
+            "target": "Iglesia-6",
             "position": {
                 "x": 10.99587289703827,
                 "y": 0.1,
@@ -9238,7 +9238,7 @@
         {
             "id": "iglesia-7-pointer",
             "rotation": "0 -2 0",
-            "target": "#iglesia-7",
+            "target": "Iglesia-7",
             "position": {
                 "x": 13.494567329568834,
                 "y": 0.1,
@@ -9249,7 +9249,7 @@
         {
             "id": "iglesia-8-pointer",
             "rotation": "0 89 0",
-            "target": "#iglesia-8",
+            "target": "Iglesia-8",
             "position": {
                 "x": 14.837910408827923,
                 "y": 0.1,
@@ -9260,7 +9260,7 @@
         {
             "id": "iglesia-9-pointer",
             "rotation": "0 91.5 0",
-            "target": "#iglesia-9",
+            "target": "Iglesia-9",
             "position": {
                 "x": 14.847299904273767,
                 "y": 0.1,
@@ -9271,7 +9271,7 @@
         {
             "id": "iglesia-10-pointer",
             "rotation": "0 89.5 0",
-            "target": "#iglesia-10",
+            "target": "Iglesia-10",
             "position": {
                 "x": 14.73342330646577,
                 "y": 0.1,
@@ -9282,7 +9282,7 @@
         {
             "id": "iglesia-11-pointer",
             "rotation": "0 89.3 0",
-            "target": "#iglesia-11",
+            "target": "Iglesia-11",
             "position": {
                 "x": 14.724789497773878,
                 "y": 0.1,
@@ -9293,7 +9293,7 @@
         {
             "id": "iglesia-12-pointer",
             "rotation": "0 88.5 0",
-            "target": "#iglesia-12",
+            "target": "Iglesia-12",
             "position": {
                 "x": 14.699414316833966,
                 "y": 0.1,
@@ -9304,7 +9304,7 @@
         {
             "id": "iglesia-13-pointer",
             "rotation": "0 88.2 0",
-            "target": "#iglesia-13",
+            "target": "Iglesia-13",
             "position": {
                 "x": 14.636308095597824,
                 "y": 0.1,
@@ -9315,7 +9315,7 @@
         {
             "id": "iglesia-14-pointer",
             "rotation": "0 89.5 0",
-            "target": "#iglesia-14",
+            "target": "Iglesia-14",
             "position": {
                 "x": 14.543093214919251,
                 "y": 0.1,
@@ -9326,7 +9326,7 @@
         {
             "id": "iglesia-15-pointer",
             "rotation": "0 88.5 0",
-            "target": "#iglesia-15",
+            "target": "Iglesia-15",
             "position": {
                 "x": 14.471592782278211,
                 "y": 0.1,
@@ -9337,7 +9337,7 @@
         {
             "id": "iglesia-16-pointer",
             "rotation": "0 90 0",
-            "target": "#iglesia-16",
+            "target": "Iglesia-16",
             "position": {
                 "x": 14.422148320996875,
                 "y": 0.1,
@@ -9348,7 +9348,7 @@
         {
             "id": "iglesia-17-pointer",
             "rotation": "0 88 0",
-            "target": "#iglesia-17",
+            "target": "Iglesia-17",
             "position": {
                 "x": 14.388639803976,
                 "y": 0.1,
@@ -9359,7 +9359,7 @@
         {
             "id": "iglesia-18-pointer",
             "rotation": "0 90 0",
-            "target": "#iglesia-18",
+            "target": "Iglesia-18",
             "position": {
                 "x": 14.41005254465827,
                 "y": 0.1,
@@ -9370,7 +9370,7 @@
         {
             "id": "iglesia-19-pointer",
             "rotation": "0 89 0",
-            "target": "#iglesia-19",
+            "target": "Iglesia-19",
             "position": {
                 "x": 14.336692200969228,
                 "y": 0.1,
@@ -9381,7 +9381,7 @@
         {
             "id": "iglesia-21-pointer",
             "rotation": "0 90.5 0",
-            "target": "#iglesia-21",
+            "target": "Iglesia-21",
             "position": {
                 "x": 14.364663353105403,
                 "y": 0.1,
@@ -9392,7 +9392,7 @@
         {
             "id": "iglesia-20-pointer",
             "rotation": "0 89 0",
-            "target": "#iglesia-20",
+            "target": "Iglesia-20",
             "position": {
                 "x": 14.386445587581573,
                 "y": 0.1,
@@ -9403,7 +9403,7 @@
         {
             "id": "iglesia-22-pointer",
             "rotation": "0 88.5 0",
-            "target": "#iglesia-22",
+            "target": "Iglesia-22",
             "position": {
                 "x": 14.391207686100111,
                 "y": 0.1,
@@ -9414,7 +9414,7 @@
         {
             "id": "iglesia-23-pointer",
             "rotation": "0 -1 0",
-            "target": "#iglesia-23",
+            "target": "Iglesia-23",
             "position": {
                 "x": 16.4454225332561,
                 "y": 0.1,
@@ -9425,7 +9425,7 @@
         {
             "id": "iglesia-24-pointer",
             "rotation": "0 -.5 0",
-            "target": "#iglesia-24",
+            "target": "Iglesia-24",
             "position": {
                 "x": 18.88104063302046,
                 "y": 0.1,
@@ -9436,7 +9436,7 @@
         {
             "id": "iglesia-25-pointer",
             "rotation": "0 -1.2 0",
-            "target": "#iglesia-25",
+            "target": "Iglesia-25",
             "position": {
                 "x": 21.54893180087222,
                 "y": 0.1,
@@ -9447,7 +9447,7 @@
         {
             "id": "iglesia-26-pointer",
             "rotation": "0 -2 0",
-            "target": "#iglesia-26",
+            "target": "Iglesia-26",
             "position": {
                 "x": 23.316149033415478,
                 "y": 0.1,
@@ -9458,7 +9458,7 @@
         {
             "id": "iglesia-27-pointer",
             "rotation": "0 81 0",
-            "target": "#iglesia-27",
+            "target": "Iglesia-27",
             "position": {
                 "x": 25.596753787092947,
                 "y": 0.1,
@@ -9469,7 +9469,7 @@
         {
             "id": "iglesia-28-pointer",
             "rotation": "0 84.3 0",
-            "target": "#iglesia-28",
+            "target": "Iglesia-28",
             "position": {
                 "x": 26.123203182332308,
                 "y": 0.1,
@@ -9480,7 +9480,7 @@
         {
             "id": "iglesia-29-pointer",
             "rotation": "0 74 0",
-            "target": "#iglesia-29",
+            "target": "Iglesia-29",
             "position": {
                 "x": 26.975594834574704,
                 "y": 0.1,
@@ -9491,7 +9491,7 @@
         {
             "id": "iglesia-30-pointer",
             "rotation": "0 90 0",
-            "target": "#iglesia-30",
+            "target": "Iglesia-30",
             "position": {
                 "x": 27.266275994556494,
                 "y": 0.1,
@@ -9502,7 +9502,7 @@
         {
             "id": "iglesia-31-pointer",
             "rotation": "0 90 0",
-            "target": "#iglesia-31",
+            "target": "Iglesia-31",
             "position": {
                 "x": 27.288921389482894,
                 "y": 0.1,
@@ -9513,7 +9513,7 @@
         {
             "id": "iglesia-32-pointer",
             "rotation": "0 180.2 0",
-            "target": "#iglesia-32",
+            "target": "Iglesia-32",
             "position": {
                 "x": 23.36640256128287,
                 "y": 0.1,
@@ -9524,7 +9524,7 @@
         {
             "id": "iglesia-33-pointer",
             "rotation": "0 182.2 0",
-            "target": "#iglesia-33",
+            "target": "Iglesia-33",
             "position": {
                 "x": 20.842298360091007,
                 "y": 0.1,
@@ -9535,7 +9535,7 @@
         {
             "id": "iglesia-34-pointer",
             "rotation": "0 180.7 0",
-            "target": "#iglesia-34",
+            "target": "Iglesia-34",
             "position": {
                 "x": 18.326768713346738,
                 "y": 0.1,
@@ -9546,7 +9546,7 @@
         {
             "id": "iglesia-35-pointer",
             "rotation": "0 181.8 0",
-            "target": "#iglesia-35",
+            "target": "Iglesia-35",
             "position": {
                 "x": 15.79766317402617,
                 "y": 0.1,
@@ -9557,7 +9557,7 @@
         {
             "id": "iglesia-36-pointer",
             "rotation": "0 183 0",
-            "target": "#iglesia-36",
+            "target": "Iglesia-36",
             "position": {
                 "x": 12.97075207885324,
                 "y": 0.1,
@@ -9568,7 +9568,7 @@
         {
             "id": "iglesia-37-pointer",
             "rotation": "0 212.5 0",
-            "target": "#iglesia-37",
+            "target": "Iglesia-37",
             "position": {
                 "x": 10.773890852573793,
                 "y": 0.1,
@@ -9579,7 +9579,7 @@
         {
             "id": "iglesia-38-pointer",
             "rotation": "0 207 0",
-            "target": "#iglesia-38",
+            "target": "Iglesia-38",
             "position": {
                 "x": 8.737586816360029,
                 "y": 0.1,
@@ -9590,7 +9590,7 @@
         {
             "id": "iglesia-39-pointer",
             "rotation": "0 271.3 0",
-            "target": "#iglesia-39",
+            "target": "Iglesia-39",
             "position": {
                 "x": 6.420916874222782,
                 "y": 0.15198536864687706,
@@ -9601,7 +9601,7 @@
         {
             "id": "iglesia-41-pointer",
             "rotation": "0 152.8 0",
-            "target": "#iglesia-41",
+            "target": "Iglesia-41",
             "position": {
                 "x": 2.7306991019352873,
                 "y": 0.1,
@@ -9612,7 +9612,7 @@
         {
             "id": "iglesia-42-pointer",
             "rotation": "0 180.3 0",
-            "target": "#iglesia-42",
+            "target": "Iglesia-42",
             "position": {
                 "x": 0.5372294610878401,
                 "y": 0.1,
@@ -9623,7 +9623,7 @@
         {
             "id": "iglesia-40-pointer",
             "rotation": "0 175 0",
-            "target": "#iglesia-40",
+            "target": "Iglesia-40",
             "position": {
                 "x": 4.931578780067406,
                 "y": 0.1,
@@ -9634,7 +9634,7 @@
         {
             "id": "iglesia-43-pointer",
             "rotation": "0 270.5 0",
-            "target": "#iglesia-43",
+            "target": "Iglesia-43",
             "position": {
                 "x": -1.799030724569104,
                 "y": 0.1,
@@ -9645,7 +9645,7 @@
         {
             "id": "iglesia-44-pointer",
             "rotation": "0 270 0",
-            "target": "#iglesia-44",
+            "target": "Iglesia-44",
             "position": {
                 "x": -1.7060132680116844,
                 "y": 0.1,
@@ -9656,7 +9656,7 @@
         {
             "id": "iglesia5-pointer",
             "rotation": "0 269 0",
-            "target": "#iglesia5",
+            "target": "Iglesia5",
             "position": {
                 "x": -0.8495505697943493,
                 "y": 0.1,
@@ -9667,7 +9667,7 @@
         {
             "id": "iglesia6-pointer",
             "rotation": "0 270 0",
-            "target": "#iglesia6",
+            "target": "Iglesia6",
             "position": {
                 "x": -1.0035812173181964,
                 "y": 0.1,
@@ -9678,7 +9678,7 @@
         {
             "id": "iglesia7-pointer",
             "rotation": "0 270.5 0",
-            "target": "#iglesia7",
+            "target": "Iglesia7",
             "position": {
                 "x": -1.0515945164349825,
                 "y": 0.1,
@@ -9689,7 +9689,7 @@
         {
             "id": "iglesia8-pointer",
             "rotation": "0 270 0",
-            "target": "#iglesia8",
+            "target": "Iglesia8",
             "position": {
                 "x": -1.1459527102475053,
                 "y": 0.1,
@@ -9700,7 +9700,7 @@
         {
             "id": "iglesia9-pointer",
             "rotation": "0 270.6 0",
-            "target": "#iglesia9",
+            "target": "Iglesia9",
             "position": {
                 "x": -1.2408880327491665,
                 "y": 0.1,
@@ -9711,7 +9711,7 @@
         {
             "id": "iglesia10-pointer",
             "rotation": "0 269.5 0",
-            "target": "#iglesia10",
+            "target": "Iglesia10",
             "position": {
                 "x": -1.2064829199551943,
                 "y": 0.1,
@@ -9722,7 +9722,7 @@
         {
             "id": "iglesia11-pointer",
             "rotation": "0 268.6 0",
-            "target": "#iglesia11",
+            "target": "Iglesia11",
             "position": {
                 "x": -1.2194812501059138,
                 "y": 0.1,
@@ -9733,7 +9733,7 @@
         {
             "id": "iglesia12-pointer",
             "rotation": "0 268 0",
-            "target": "#iglesia12",
+            "target": "Iglesia12",
             "position": {
                 "x": -1.169378731019508,
                 "y": 0.1,
@@ -9744,7 +9744,7 @@
         {
             "id": "iglesia13-pointer",
             "rotation": "0 269.5 0",
-            "target": "#iglesia13",
+            "target": "Iglesia13",
             "position": {
                 "x": -1.150453591776194,
                 "y": 0.1,
@@ -9755,7 +9755,7 @@
         {
             "id": "iglesia14-pointer",
             "rotation": "0 272 0",
-            "target": "#iglesia14",
+            "target": "Iglesia14",
             "position": {
                 "x": -1.2675015391309343,
                 "y": 0.1,
@@ -9766,7 +9766,7 @@
         {
             "id": "iglesia15-pointer",
             "rotation": "0 271.4 0",
-            "target": "#iglesia15",
+            "target": "Iglesia15",
             "position": {
                 "x": -1.3675015391309344,
                 "y": 0.1,
@@ -9777,7 +9777,7 @@
         {
             "id": "iglesia16-pointer",
             "rotation": "0 270.5 0",
-            "target": "#iglesia16",
+            "target": "Iglesia16",
             "position": {
                 "x": -1.6918818864283778,
                 "y": 0.1,
@@ -9788,7 +9788,7 @@
         {
             "id": "iglesia15-1-pointer",
             "rotation": "0 1.3999999999999773 0",
-            "target": "#iglesia15-1",
+            "target": "Iglesia15-1",
             "position": {
                 "x": -3.6081103407898216,
                 "y": 0.1,
@@ -9799,7 +9799,7 @@
         {
             "id": "iglesia15-2-pointer",
             "rotation": "0 -.9 0",
-            "target": "#iglesia15-2",
+            "target": "Iglesia15-2",
             "position": {
                 "x": -6.164757385588782,
                 "y": 0.1,
@@ -9810,7 +9810,7 @@
         {
             "id": "iglesia15-3-pointer",
             "rotation": "0 -0.9 0",
-            "target": "#iglesia15-3",
+            "target": "Iglesia15-3",
             "position": {
                 "x": -8.770560020141025,
                 "y": 0.1,
@@ -9821,7 +9821,7 @@
         {
             "id": "iglesia15-4-pointer",
             "rotation": "0 0 0",
-            "target": "#iglesia15-4",
+            "target": "Iglesia15-4",
             "position": {
                 "x": -11.28435874860831,
                 "y": 0.1,
@@ -9832,7 +9832,7 @@
         {
             "id": "iglesia15-5-pointer",
             "rotation": "0 0 0",
-            "target": "#iglesia15-5",
+            "target": "Iglesia15-5",
             "position": {
                 "x": -13.684358748608302,
                 "y": 0.1,
@@ -9843,7 +9843,7 @@
         {
             "id": "iglesia15-6-pointer",
             "rotation": "0 269.6 0",
-            "target": "#iglesia15-6",
+            "target": "Iglesia15-6",
             "position": {
                 "x": -14.567271739350044,
                 "y": 0.1,
@@ -9854,7 +9854,7 @@
         {
             "id": "iglesia15-7-pointer",
             "rotation": "0 93.3 0",
-            "target": "#iglesia15-7",
+            "target": "Iglesia15-7",
             "position": {
                 "x": -14.358292226983362,
                 "y": 0.1,
@@ -9865,7 +9865,7 @@
         {
             "id": "iglesia15-8-pointer",
             "rotation": "0 96.5 0",
-            "target": "#iglesia15-8",
+            "target": "Iglesia15-8",
             "position": {
                 "x": -14.440436559562137,
                 "y": 0.1,
@@ -9876,7 +9876,7 @@
         {
             "id": "iglesia15-9-pointer",
             "rotation": "0 91 0",
-            "target": "#iglesia15-9",
+            "target": "Iglesia15-9",
             "position": {
                 "x": -14.844331136370531,
                 "y": 0.1,
@@ -9887,7 +9887,7 @@
         {
             "id": "iglesia15-10-pointer",
             "rotation": "0 180 0",
-            "target": "#iglesia15-10",
+            "target": "Iglesia15-10",
             "position": {
                 "x": -14.961111739188624,
                 "y": 0.1,
@@ -9898,7 +9898,7 @@
         {
             "id": "iglesia15-11-pointer",
             "rotation": "0 271 0",
-            "target": "#iglesia15-11",
+            "target": "Iglesia15-11",
             "position": {
                 "x": -15.072954970385208,
                 "y": 0.1,
@@ -9909,7 +9909,7 @@
         {
             "id": "iglesia15-12-pointer",
             "rotation": "0 260.7 0",
-            "target": "#iglesia15-12",
+            "target": "Iglesia15-12",
             "position": {
                 "x": -14.760882016613353,
                 "y": 0.1,
@@ -9920,7 +9920,7 @@
         {
             "id": "iglesia15-13-pointer",
             "rotation": "0 234.6 0",
-            "target": "#iglesia15-13",
+            "target": "Iglesia15-13",
             "position": {
                 "x": -13.459066967888164,
                 "y": 0.1,
@@ -9931,7 +9931,7 @@
         {
             "id": "iglesia15-14-pointer",
             "rotation": "0 268 0",
-            "target": "#iglesia15-14",
+            "target": "Iglesia15-14",
             "position": {
                 "x": -12.884282752957416,
                 "y": 0.1,
@@ -9942,7 +9942,7 @@
         {
             "id": "iglesia15-15-pointer",
             "rotation": "0 180.5 0",
-            "target": "#iglesia15-15",
+            "target": "Iglesia15-15",
             "position": {
                 "x": -10.62195220799092,
                 "y": 0.1,
@@ -9953,7 +9953,7 @@
         {
             "id": "iglesia15-16-pointer",
             "rotation": "0 178.8 0",
-            "target": "#iglesia15-16",
+            "target": "Iglesia15-16",
             "position": {
                 "x": -9.793901925417487,
                 "y": 0.1,
@@ -9964,7 +9964,7 @@
         {
             "id": "iglesia15-17-pointer",
             "rotation": "0 234.4 0",
-            "target": "#iglesia15-17",
+            "target": "Iglesia15-17",
             "position": {
                 "x": -7.602348307478271,
                 "y": 0.1,
@@ -9975,7 +9975,7 @@
         {
             "id": "iglesia15-18-pointer",
             "rotation": "0 265.8 0",
-            "target": "#iglesia15-18",
+            "target": "Iglesia15-18",
             "position": {
                 "x": -7.778377667254641,
                 "y": 0.1,
@@ -9986,7 +9986,7 @@
         {
             "id": "iglesia15-19-pointer",
             "rotation": "0 259 0",
-            "target": "#iglesia15-19",
+            "target": "Iglesia15-19",
             "position": {
                 "x": -7.298082474199543,
                 "y": 0.1,
@@ -9997,7 +9997,7 @@
         {
             "id": "iglesia15-20-pointer",
             "rotation": "0 227.5 0",
-            "target": "#iglesia15-20",
+            "target": "Iglesia15-20",
             "position": {
                 "x": -6.00271702572124,
                 "y": 0.1,
@@ -10008,7 +10008,7 @@
         {
             "id": "iglesia15-21-pointer",
             "rotation": "0 181.4 0",
-            "target": "#iglesia15-21",
+            "target": "Iglesia15-21",
             "position": {
                 "x": -3.7549795344358947,
                 "y": 0.1,
@@ -10019,7 +10019,7 @@
         {
             "id": "iglesia15-22-pointer",
             "rotation": "0 269.6 0",
-            "target": "#iglesia15-22",
+            "target": "Iglesia15-22",
             "position": {
                 "x": -2.5078656303024287,
                 "y": 0.1,
@@ -10030,7 +10030,7 @@
         {
             "id": "iglesia15-23-pointer",
             "rotation": "0 271.8 0",
-            "target": "#iglesia15-23",
+            "target": "Iglesia15-23",
             "position": {
                 "x": -2.534313699517242,
                 "y": 0.1,
@@ -10041,7 +10041,7 @@
         {
             "id": "iglesia15-24-pointer",
             "rotation": "0 269.5 0",
-            "target": "#iglesia15-24",
+            "target": "Iglesia15-24",
             "position": {
                 "x": -2.433290425021826,
                 "y": 0.1,
@@ -10052,7 +10052,7 @@
         {
             "id": "iglesia15-25-pointer",
             "rotation": "0 270.3 0",
-            "target": "#iglesia15-25",
+            "target": "Iglesia15-25",
             "position": {
                 "x": -2.320087888137625,
                 "y": 0.1,
@@ -10063,7 +10063,7 @@
         {
             "id": "iglesia15-26-pointer",
             "rotation": "0 269.5 0",
-            "target": "#iglesia15-26",
+            "target": "Iglesia15-26",
             "position": {
                 "x": -2.29718572918904,
                 "y": 0.1,
@@ -10074,7 +10074,7 @@
         {
             "id": "iglesia15-27-pointer",
             "rotation": "0 271.5 0",
-            "target": "#iglesia15-27",
+            "target": "Iglesia15-27",
             "position": {
                 "x": -2.2360578627667285,
                 "y": 0.1,
@@ -10085,7 +10085,7 @@
         {
             "id": "iglesia15-28-pointer",
             "rotation": "0 272 0",
-            "target": "#iglesia15-28",
+            "target": "Iglesia15-28",
             "position": {
                 "x": -2.0705594663355247,
                 "y": 0.1,
@@ -10096,7 +10096,7 @@
         {
             "id": "iglesia-31-faltante-pointer",
             "rotation": "0 180 0",
-            "target": "#iglesia-31-faltante",
+            "target": "Iglesia-31-faltante",
             "position": {
                 "x": 25.801882627446734,
                 "y": 0.1,
@@ -10107,7 +10107,7 @@
         {
             "id": "iglesia-31-1-pointer",
             "rotation": "0 90 0",
-            "target": "#iglesia-31-1",
+            "target": "Iglesia-31-1",
             "position": {
                 "x": 30.85674641943487,
                 "y": 1.286559161900189,
@@ -10118,7 +10118,7 @@
         {
             "id": "iglesia-31-2-pointer",
             "rotation": "0 1 0",
-            "target": "#iglesia-31-2",
+            "target": "Iglesia-31-2",
             "position": {
                 "x": 32.419429627936196,
                 "y": 2.8949265765593757,
@@ -10129,7 +10129,7 @@
         {
             "id": "iglesia-31-3-pointer",
             "rotation": "0 90 0",
-            "target": "#iglesia-31-3",
+            "target": "Iglesia-31-3",
             "position": {
                 "x": 32.14584004437922,
                 "y": 4.638609586529652,
@@ -10279,9 +10279,9 @@
         }
     ],
     "skyAssets": [
-        "Iglesia-9.jpg",
-        "Iglesia-10.jpg",
-        "Iglesia-11.jpg",
+        "Iglesia-9-low.jpg",
+        "Iglesia-10-low.jpg",
+        "Iglesia-11-low.jpg",
         "Iglesia-12.jpg"
     ]
 }

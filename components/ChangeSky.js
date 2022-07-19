@@ -54,28 +54,22 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     el.classList.add("current")
     let id = data.target.split("#")[1]
 
-    let img = new Image()
-    let isadfiased = document.querySelector("#" + id)
-
-    console.log(isadfiased)
-    img.src = isadfiased.getAttribute("src")
-    img.onload = function() {
-        console.log("loaded")
-        sky2.setAttribute("src", data.target)
-        let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
-        let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget / 2, startPoint.z - position.z)
-        if (targetSkyPosition.x < 0.000001 && targetSkyPosition.x > -0.000001) targetSkyPosition.x = 0
-        if (targetSkyPosition.y < 0.000001 && targetSkyPosition.y > -0.000001) targetSkyPosition.y = 0
-        if (targetSkyPosition.z < 0.000001 && targetSkyPosition.z > -0.000001) targetSkyPosition.z = 0
-        if (endPoint.x < 0.000001 && endPoint.x > -0.000001) endPoint.x = 0
-        if (endPoint.y < 0.000001 && endPoint.y > -0.000001) endPoint.y = 0
-        if (endPoint.z < 0.000001 && endPoint.z > -0.000001) endPoint.z = 0
-        // structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
-        // structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
-        // structureContainer.emit("moveout")
-        SetMoving()
-        MakeTransitionBetweenSkies(data, targetSkyPosition, id)
-    }
+    console.log("loaded")
+    sky2.setAttribute("src", "./img/skies/" + data.target + "-low.jpg")
+    let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
+    let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget / 2, startPoint.z - position.z)
+    if (targetSkyPosition.x < 0.000001 && targetSkyPosition.x > -0.000001) targetSkyPosition.x = 0
+    if (targetSkyPosition.y < 0.000001 && targetSkyPosition.y > -0.000001) targetSkyPosition.y = 0
+    if (targetSkyPosition.z < 0.000001 && targetSkyPosition.z > -0.000001) targetSkyPosition.z = 0
+    if (endPoint.x < 0.000001 && endPoint.x > -0.000001) endPoint.x = 0
+    if (endPoint.y < 0.000001 && endPoint.y > -0.000001) endPoint.y = 0
+    if (endPoint.z < 0.000001 && endPoint.z > -0.000001) endPoint.z = 0
+    // structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
+    // structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
+    // structureContainer.emit("moveout")
+    structureContainer.setAttribute("position", endPoint)
+    SetMoving()
+    MakeTransitionBetweenSkies(data, targetSkyPosition, id)
     
 }
 function MakeTransitionBetweenSkies(data, targetSkyPosition, id) {
@@ -97,7 +91,7 @@ function MakeTransitionBetweenSkies(data, targetSkyPosition, id) {
             } else {
                 sky1.setAttribute("rotation", "0 0 0")
             }
-            sky1.setAttribute("src", data.target)
+            sky1.setAttribute("src", "./img/skies/" + data.target + "-low.jpg")
             sky1.setAttribute("position", "0 0 0")
             sky1.emit("fadein")
 
