@@ -1,3 +1,5 @@
+let allSkies
+
 const deviceType = () => {
     const ua = navigator.userAgent;
     if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
@@ -39,6 +41,7 @@ AFRAME.registerComponent('change-sky', {
         })
     }
 })
+
 function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     let structureContainer = document.querySelector("#structure-container")
     let structureContainerPosition = structureContainer.getAttribute("position")
@@ -105,8 +108,9 @@ function MakeTransitionBetweenSkies(data, targetSkyPosition, texture) {
         sky1.object3D.children[0].material.opacity = 1
 
         sky1.object3D.children[0].material.needsUpdate = true;
-
         sky1.setAttribute("position", "0 0 0")
+
+        PreloadCloseSkies(data)
 
         UnsetMoving()
     }, 600)
@@ -134,3 +138,51 @@ let InitAFrameSky = () => {
 }
 
 InitAFrameSky()
+
+const PreloadCloseSkies = (data) => {
+    let skies = JSON.parse(sessionStorage.getItem('skies'))
+    let skiesToPreload = []
+    let currentPosition = skies.filter(sky => sky.target == data.target)[0].position
+
+    skies.forEach(sky => {
+        let currentVectorPosition = new THREE.Vector3(currentPosition.x, currentPosition.y, currentPosition.z)
+        let skyVectorPosition = new THREE.Vector3(sky.position.x, sky.position.y, sky.position.z)
+        let distance = currentVectorPosition.distanceTo(skyVectorPosition)
+
+        if(distance < 10 && !sky.loaded) skiesToPreload.push(sky)     
+    })
+
+    console.log(skiesToPreload)
+
+    let interval = 200
+    let promise = Promise.resolve();
+    skiesToPreload.forEach(sky => {
+        promise = promise.then(function () {
+            PreloadSky(sky)
+            return new Promise(function (resolve) {
+                setTimeout(resolve, interval);
+            })
+        })
+    })
+
+    promise.then(function () {
+        sessionStorage.setItem('skies', "[" + skies.map((sky) => {
+            let skyObj = sky
+            if(skiesToPreload.map(sky => sky.target).includes(sky.target)) {
+                console.log("here")
+                skyObj = {
+                    target: sky.target,
+                    position: sky.position,
+                    loaded: true
+                }
+            }
+            return JSON.stringify(skyObj)
+        }) + "]")
+    });
+}
+
+const PreloadSky = (sky) => {
+    let sky2 = document.querySelector("#sky2")
+    sky2.setAttribute("src", "#" + sky.target)
+}
+

@@ -32,7 +32,6 @@ const PreloadAllSkies = (data, currentPosition) => {
     skiesToPreload.forEach(sky => {
         promise = promise.then(function () {
             PreloadSky(sky)
-            console.log("here")
             return new Promise(function (resolve) {
                 setTimeout(resolve, interval);
             })
@@ -40,7 +39,19 @@ const PreloadAllSkies = (data, currentPosition) => {
     })
 
     promise.then(function () {
-        console.log('Loop finished.');
+        var data = JSON.parse(sessionStorage.getItem('skies'))
+        sessionStorage.setItem('skies', "[" + data.map((sky) => {
+            let skyObj = sky
+            if(skiesToPreload.map(sky => sky.target).includes(sky.target)) {
+                console.log("here")
+                skyObj = {
+                    target: sky.target,
+                    position: sky.position,
+                    loaded: true
+                }
+            }
+            return JSON.stringify(skyObj)
+        }) + "]")
     });
 }
 
@@ -53,11 +64,22 @@ const PreloadSky = (sky) => {
 Init()
 
 const AddAssets = async (data) => {
-
     let currentSky
     data.skySpots.forEach(skySpot => {
         if(skySpot.current) currentSky = skySpot.id.split("-pointer")[0]
     })
+
+    sessionStorage.setItem('skies', "[" + data.skySpots.map((sky) => {
+
+        let skyObj = {
+            target: sky.target,
+            position: sky.position,
+            loaded: false
+        }
+        console.log(skyObj)
+        return JSON.stringify(skyObj)
+    }) + "]")
+
     await preloadImages(data.skyAssets)
 }
 
