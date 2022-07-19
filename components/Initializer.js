@@ -24,7 +24,7 @@ const AddAssets = async (data) => {
 
         const image = new Image()
         image.id = assetName
-        image.src= "./img/skies/" + asset
+        image.src= "./img/skies/" + asset.split(".")[0] + "-low." + asset.split(".")[1]
         // textureLoader.load("./img/skies/" + asset, function (image) {
         //     myTexture.image = image;
         // })
@@ -32,7 +32,7 @@ const AddAssets = async (data) => {
         assets.push(image)
         
         image.onload = () => {
-            window.THREE.Cache.add("./img/skies/" + asset, image)
+            window.THREE.Cache.add("./img/skies/" + asset.split(".")[0] + "-low." + asset.split(".")[1], image)
             if(currentSky == assetName) {
                 
             }
@@ -76,7 +76,7 @@ function CreateSavedElements(data) {
 
 
     let skySpotsContainer = document.createElement("a-entity")
-    
+
     skySpots.forEach(spot => {
         skySpotsContainer.appendChild(CreateSkySpot(spot))
     });
