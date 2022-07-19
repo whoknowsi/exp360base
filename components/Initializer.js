@@ -27,7 +27,7 @@ const AddAssets = async (data) => {
     })
 }
 
-const SetFirstSky = (item) => {
+const SetFirstSky = () => {
     let sky1 = document.querySelector("#sky")
     let sky2 = document.querySelector("#sky2")
     let structureContainer = document.querySelector("#structure-container")
@@ -246,7 +246,7 @@ textureManager.onProgress = function ( item, loaded, total ) {
 };
 
 textureManager.onLoad = function () {
-    SetFirstSky(item)
+    SetFirstSky()
 };
 
 var textureLoader = new THREE.ImageLoader(textureManager)
