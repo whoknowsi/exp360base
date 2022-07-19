@@ -110,6 +110,8 @@ function CreateSavedElements(data) {
     structuresEl.setAttribute("class", "structure collidable")
     structureContainer.appendChild(skySpotsContainer)
     structureContainer.appendChild(structuresEl)
+
+    let skyspots = document.querySelectorAll(".skyChanger")
     //structureContainer.appendChild(mergedMeshEl)
 
     setTimeout(function() {

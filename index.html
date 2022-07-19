@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-        <script src="./components/aframe-master.min.js"></script>
-        <!-- <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script> -->
-        <script src="./components/Initializer.js"></script> 
+
+        <!-- <script src="./components/aframe-master.min.js"></script> -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
+        <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+        <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
         <script type="module" src="./components/info-spot.js"></script>
-        <script src="./components/ChangeSky.js"></script> 
+        <script type="module" src="./components/ChangeSky.js"></script> 
+        <script src="./components/Initializer.js"></script> 
         <link rel="stylesheet" href="main.css">
 	</head>
 	<body>
@@ -37,7 +40,6 @@
             <!-- Cámara -->
             <a-entity id="cameraContainer"
                 animation__inertia="startEvents: inertia; property: rotation; from: 0 0 0; to: 1 1 0; dur: 1000; easing: easeOutQuint; pauseEvents: pause-anim;"
-                animation__moveout="startEvents: moveout; property: position; from: 0 0 0; to: 50 0 12; dur: 300; easing: easeOutSine "
                 position="0 1.6 0">
                 <a-entity 
                     id="camera"
@@ -51,19 +53,18 @@
             <a-sky 
                 id="sky2" 
                 radius="100" 
-                src="#infoSpot-img"
                 animation__movein="startEvents: movein; property: position; from: 0 0 0; to: 0 0 0; dur: 400; easing: easeOutSine">
             </a-sky>
             
             <a-sky 
-                id="sky" 
+                id="sky"
                 radius="100" 
-                src="#infoSpot-img"
                 animation__fadeout="startEvents: fadeout; property: material.opacity; from: 1; to: 0; dur: 500; easing: easeOutSine"
                 animation__moveout="startEvents: moveout; property: position; from: 0 0 0; to: 50 0 12; dur: 500; easing: easeOutSine">
             </a-sky>
 
-            <a-entity id="structure-container">
+            <a-entity id="structure-container"
+            animation__moveout="startEvents: moveout; property: position; from: 0 0 0; to: 50 0 12; dur: 300; easing: easeOutSine">
             </a-entity>
 
         </a-scene>

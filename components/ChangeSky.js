@@ -6,7 +6,7 @@ const deviceType = () => {
     else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
         return "mobile";
     }
-    return "desktop";
+    return "desktop";   
 }
 var device = deviceType()
 AFRAME.registerComponent('change-sky', {
@@ -49,13 +49,6 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     let position = new THREE.Vector3(startPoint.x + targetPoint.x, startPoint.y + targetPoint.y, startPoint.z + targetPoint.z)
     if (IsMoving()) { return }
     if (sky1.getAttribute("src") == data.target || sky2.getAttribute("src") == data.target) { return }
-    if (currentPoint == null) currentPoint = el
-    currentPoint.classList.remove("current")
-    el.classList.add("current")
-    let id = data.target
-    console.log(data)
-    sky2.object3D.children[0].material.map = new THREE.TextureLoader().load("./img/skies/" + data.target + ".jpg")
-    sky2.object3D.children[0].material.needsUpdate = true;
 
     let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
     let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget / 2, startPoint.z - position.z)
@@ -65,42 +58,59 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     if (endPoint.x < 0.000001 && endPoint.x > -0.000001) endPoint.x = 0
     if (endPoint.y < 0.000001 && endPoint.y > -0.000001) endPoint.y = 0
     if (endPoint.z < 0.000001 && endPoint.z > -0.000001) endPoint.z = 0
-    // structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
-    // structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
-    // structureContainer.emit("moveout")
-    structureContainer.setAttribute("position", endPoint)
-    SetMoving()
-    MakeTransitionBetweenSkies(data, targetSkyPosition, id)
+    structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
+    structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
+    structureContainer.emit("moveout")
+
+    const loader = new THREE.TextureLoader();
+    loader.load("./img/skies/" + data.target + ".jpg", (texture) => {
+        if (currentPoint == null) currentPoint = el
+
+        currentPoint.classList.remove("current")
+        el.classList.add("current")
     
+        sky2.setAttribute("material", "src", "#" + data.target)
+        sky2.object3D.children[0].material.map = texture
+        sky2.object3D.children[0].material.needsUpdate = true;
+
+        structureContainer.setAttribute("position", endPoint)
+        SetMoving()
+        MakeTransitionBetweenSkies(data, targetSkyPosition, texture)
+
+    })
 }
-function MakeTransitionBetweenSkies(data, targetSkyPosition, id) {
+function MakeTransitionBetweenSkies(data, targetSkyPosition, texture) {
     let sky1 = document.querySelector("#sky")
     let sky2 = document.querySelector("#sky2")
 
-    console.log()
     sky2.components.animation__movein.data.from = targetSkyPosition.x + " " + targetSkyPosition.y + " " + targetSkyPosition.z
     sky2.emit("movein")
     sky1.emit("fadeout")
+
     if (data.rotation != "") {
         sky2.setAttribute("rotation", data.rotation)
     } else {
         sky2.setAttribute("rotation", "0 0 0")
     }
-    setTimeout(() => {
-        setTimeout(() => {
-            if (data.rotation != "") {
-                sky1.setAttribute("rotation", data.rotation)
-            } else {
-                sky1.setAttribute("rotation", "0 0 0")
-            }
-            sky1.object3D.children[0].material.map = new THREE.TextureLoader().load("./img/skies/" + data.target + ".jpg")
-            sky1.object3D.children[0].material.needsUpdate = true;
-            sky1.setAttribute("position", "0 0 0")
-            sky1.setAttribute("opacity", 1)
 
-            UnsetMoving()
-        }, 450)
-    }, 150);
+    setTimeout(() => {
+        if (data.rotation != "") {
+            sky1.setAttribute("rotation", data.rotation)
+        } else {
+            sky1.setAttribute("rotation", "0 0 0")
+        }
+
+        sky1.setAttribute("material", "src", "#" + data.target)
+        sky1.object3D.children[0].material.map = texture
+        sky1.object3D.children[0].material.opacity = 1
+
+        sky1.object3D.children[0].material.needsUpdate = true;
+
+        sky1.setAttribute("position", "0 0 0")
+
+        UnsetMoving()
+    }, 600)
+
 }
 
 function SetMoving() {
@@ -115,3 +125,12 @@ function IsMoving() {
     let structureContainer = document.querySelector("#structure-container")
     return structureContainer.classList.contains("moving")
 }
+
+let InitAFrameSky = () => {
+    let skySpots = document.querySelectorAll(".skyChanger")
+    skySpots.forEach(spot => {
+        spot.setAttribute("change-sky", "")
+    })
+}
+
+InitAFrameSky()
