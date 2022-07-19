@@ -52,9 +52,9 @@ const SetFirstSky = () => {
     console.log()
     // ESPERAR A QUE LA IMAGEN SE CARGUE ANTES DE PONERLA
     sky1.setAttribute("src", "#" + id)
-    sky2.setAttribute("src", "#" + id)
+    //sky2.setAttribute("src", "#" + id)
     sky1.setAttribute("rotation", currentSky.rotation)
-    sky2.setAttribute("rotation", currentSky.rotation)
+    //sky2.setAttribute("rotation", currentSky.rotation)
     structureContainer.setAttribute("position", currentSky.position)
 }
 

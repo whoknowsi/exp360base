@@ -56,15 +56,19 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
 
     if (IsMoving()) { return }
 
-    if (sky1.getAttribute("src") == data.target || sky2.getAttribute("src") == data.target) { return }
+    //if (sky1.getAttribute("src") == data.target || sky2.getAttribute("src") == data.target) { return }
 
     if (currentPoint == null) currentPoint = el
     currentPoint.classList.remove("current")
     el.classList.add("current")
 
     console.log(data.target.split("#")[1])
-    sky2.setAttribute("src", data.target)
+    //sky2.setAttribute("src", data.target)
+    sky1.setAttribute("src", data.target)
 
+    sky1.setAttribute("rotation", data.rotation)
+
+    // sky2.setAttribute("src", data.target)
 
     let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
     let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget/2, startPoint.z - position.z)
@@ -77,47 +81,50 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     if (endPoint.y < 0.000001 && endPoint.y > -0.000001) endPoint.y = 0
     if (endPoint.z < 0.000001 && endPoint.z > -0.000001) endPoint.z = 0
 
-    structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
-    structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
-    structureContainer.emit("moveout")
+    //structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
+    //structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
+    //structureContainer.emit("moveout")
 
-    SetMoving()
+    structureContainer.setAttribute("position", endPoint)
+
+    // SetMoving()
     MakeTransitionBetweenSkies(data, targetSkyPosition)
 
 }
 
 
 function MakeTransitionBetweenSkies(data, targetSkyPosition) {
-    let sky1 = document.querySelector("#sky")
-    let sky2 = document.querySelector("#sky2")
+    // let sky1 = document.querySelector("#sky")
+
+    // let sky2 = document.querySelector("#sky2")
 
 
-    sky2.components.animation__movein.data.from = targetSkyPosition
-    sky2.emit("movein")
-    sky1.emit("fadeout")
+    // sky2.components.animation__movein.data.from = targetSkyPosition
+    // sky2.emit("movein")
+    // sky1.emit("fadeout")
 
 
-    if (data.rotation != "") {
-        sky2.setAttribute("rotation", data.rotation)
-    } else {
-        sky2.setAttribute("rotation", "0 0 0")
-    }
+    // if (data.rotation != "") {
+    //     sky2.setAttribute("rotation", data.rotation)
+    // } else {
+    //     sky2.setAttribute("rotation", "0 0 0")
+    // }
 
-    setTimeout(() => {
+    // setTimeout(() => {
         
-        setTimeout(() => {
-            if (data.rotation != "") {
-                sky1.setAttribute("rotation", data.rotation)
-            } else {
-                sky1.setAttribute("rotation", "0 0 0")
-            }
-            sky1.setAttribute("src", data.target)
-            sky1.setAttribute("position", "0 0 0")
-            sky1.emit("fadein")
+    //     setTimeout(() => {
+    //         if (data.rotation != "") {
+    //             sky1.setAttribute("rotation", data.rotation)
+    //         } else {
+    //             sky1.setAttribute("rotation", "0 0 0")
+    //         }
+    //         sky1.setAttribute("src", data.target)
+    //         sky1.setAttribute("position", "0 0 0")
+    //         sky1.emit("fadein")
             
-            UnsetMoving()
-        }, 450)
-    }, 100);
+    //         UnsetMoving()
+    //     }, 450)
+    // }, 100);
 }
 
 function SetMoving() {
