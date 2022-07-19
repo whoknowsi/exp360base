@@ -4,7 +4,7 @@ const Init = async () => {
     const results = await fetch("./data/data.json")
     const data = await results.json()
 
-    await AddAssets(data)
+    //await AddAssets(data)
     await LoadStructures(data)
 }
 
