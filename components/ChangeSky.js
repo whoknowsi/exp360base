@@ -52,10 +52,10 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     if (currentPoint == null) currentPoint = el
     currentPoint.classList.remove("current")
     el.classList.add("current")
-    let id = data.target.split("#")[1]
+    let id = data.target
 
     console.log("loaded")
-    sky2.setAttribute("src", "./img/skies/" + data.target + "-low.jpg")
+    sky2.setAttribute("src", "#" + id + "-low")
     let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
     let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget / 2, startPoint.z - position.z)
     if (targetSkyPosition.x < 0.000001 && targetSkyPosition.x > -0.000001) targetSkyPosition.x = 0
@@ -91,7 +91,7 @@ function MakeTransitionBetweenSkies(data, targetSkyPosition, id) {
             } else {
                 sky1.setAttribute("rotation", "0 0 0")
             }
-            sky1.setAttribute("src", "./img/skies/" + data.target + "-low.jpg")
+            sky1.setAttribute("src", "#" + id + "-low")
             sky1.setAttribute("position", "0 0 0")
             sky1.emit("fadein")
 

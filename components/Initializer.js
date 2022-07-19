@@ -6,6 +6,8 @@ const Init = async () => {
 
     await LoadStructures(data)
     await AddAssets(data)
+    console.log("2")
+    SetFirstSky("#Iglesia-9-low")
     
 }
 
@@ -17,41 +19,10 @@ const AddAssets = async (data) => {
     data.skySpots.forEach(skySpot => {
         if(skySpot.current) currentSky = skySpot.id.split("-pointer")[0]
     })
-
-    let assets = []
-
-    preloadImages(data.skyAssets)
-
-//     data.skyAssets.forEach(asset => {
-//         let assetName = asset.split(".")[0].toLowerCase()
-
-//         const image = new Image()
-//         image.id = assetName
-//         image.src= "./img/skies/" + asset.split(".")[0] + "-low." + asset.split(".")[1]
-//         // textureLoader.load("./img/skies/" + asset, function (image) {
-//         //     myTexture.image = image;
-//         // })
-
-//         assets.push(image)
-        
-//         image.onload = () => {
-//             window.THREE.Cache.add("./img/skies/" + asset.split(".")[0] + "-low." + asset.split(".")[1], image)
-//             if(currentSky == assetName) {
-                
-//             }
-//         }
-        
-//     })
-
-//     document.addEventListener("DOMContentLoaded", function(){
-//         assets.forEach(asset => {  
-//             document.querySelector("#assets").appendChild(asset)
-//         })
-//         SetFirstSky(currentSky)
-// structureContainer    })
+    await preloadImages(data.skyAssets)
 }
 
-function preloadImages(array) {
+async function preloadImages(array) {
     if (!preloadImages.list) {
         preloadImages.list = [];
     }
@@ -59,19 +30,15 @@ function preloadImages(array) {
     for (var i = 0; i < array.length; i++) {
         var img = new Image();
         img.onload = function() {
-            var index = list.indexOf(this);
-            if (index !== -1) {
-                // remove image from the array once it's loaded
-                // for memory consumption reasons
-                list.splice(index, 1);
-            }
+            window.THREE.Cache.add(array[i].split(".")[0], img)
         }
         list.push(img);
         img.src = "./img/skies/" + array[i];
-        console.log(img)
+        img.id = array[i].split(".")[0]
+        document.getElementById('assets').appendChild(img)
     }
-    SetFirstSky("./img/skies/Iglesia-9-low.jpg")
-
+    console.log(list)
+    return
 }
 
 
