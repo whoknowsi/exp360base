@@ -57,9 +57,7 @@ const SetFirstSky = (id) => {
     console.log(THREE.Cache)
     // ESPERAR A QUE LA IMAGEN SE CARGUE ANTES DE PONERLA
     sky1.setAttribute("src", "#" + id)
-    //sky2.setAttribute("src", "#" + id)
-    sky1.setAttribute("rotation",currentSky.rotation)
-    //sky2.setAttribute("rotation", currentSky.rotation)
+    sky1.setAttribute("rotation", currentSky.rotation)
     sky2.setAttribute("src", "#" + id)
     sky2.setAttribute("rotation", currentSky.rotation)
     structureContainer.setAttribute("position", currentSky.position)
@@ -78,8 +76,7 @@ function CreateSavedElements(data) {
 
 
     let skySpotsContainer = document.createElement("a-entity")
-    let structureElements = []
-
+    
     skySpots.forEach(spot => {
         skySpotsContainer.appendChild(CreateSkySpot(spot))
     });
