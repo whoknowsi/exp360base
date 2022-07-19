@@ -52,6 +52,8 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     if (currentPoint == null) currentPoint = el
     currentPoint.classList.remove("current")
     el.classList.add("current")
+    let id = data.target.split("#")[1]
+    
     sky2.setAttribute("src", data.target)
     let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
     let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget / 2, startPoint.z - position.z)
@@ -65,9 +67,9 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
     structureContainer.emit("moveout")
     SetMoving()
-    MakeTransitionBetweenSkies(data, targetSkyPosition)
+    MakeTransitionBetweenSkies(data, targetSkyPosition, id)
 }
-function MakeTransitionBetweenSkies(data, targetSkyPosition) {
+function MakeTransitionBetweenSkies(data, targetSkyPosition, id) {
     let sky1 = document.querySelector("#sky")
     let sky2 = document.querySelector("#sky2")
     sky2.components.animation__movein.data.from = targetSkyPosition

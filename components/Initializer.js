@@ -4,7 +4,7 @@ const Init = async () => {
     const results = await fetch("./data/data.json")
     const data = await results.json()
 
-    //await AddAssets(data)
+    await AddAssets(data)
     await LoadStructures(data)
 }
 
@@ -17,6 +17,8 @@ const AddAssets = async (data) => {
         if(skySpot.current) currentSky = skySpot.id.split("-pointer")[0]
     })
 
+    let assets = []
+
     data.skyAssets.forEach(asset => {
         let assetName = asset.split(".")[0].toLowerCase()
 
@@ -26,28 +28,40 @@ const AddAssets = async (data) => {
         // textureLoader.load("./img/skies/" + asset, function (image) {
         //     myTexture.image = image;
         // })
+
+        assets.push(image)
+        
         image.onload = () => {
-            window.THREE.Cache.add(assetName, image)
+            window.THREE.Cache.add("./img/skies/" + asset, image)
             if(currentSky == assetName) {
-                SetFirstSky()
+                
             }
         }
         
     })
+
+    document.addEventListener("DOMContentLoaded", function(){
+        console.log(assets)
+        assets.forEach(asset => {  
+            document.querySelector("#assets").appendChild(asset)
+        })
+        SetFirstSky(currentSky)
+    })
 }
 
-const SetFirstSky = () => {
+const SetFirstSky = (id) => {
     let sky1 = document.querySelector("#sky")
     let sky2 = document.querySelector("#sky2")
     let structureContainer = document.querySelector("#structure-container")
-    let id = currentSky.id.split("-pointer")[0]
 
-    console.log(THREE.Cache.get(id).getAttribute("src"))
+    console.log(THREE.Cache)
     // ESPERAR A QUE LA IMAGEN SE CARGUE ANTES DE PONERLA
-    sky1.setAttribute("src", THREE.Cache.get(id).getAttribute("src"))
+    sky1.setAttribute("src", "#" + id)
     //sky2.setAttribute("src", "#" + id)
     sky1.setAttribute("rotation",currentSky.rotation)
     //sky2.setAttribute("rotation", currentSky.rotation)
+    sky2.setAttribute("src", "#" + id)
+    sky2.setAttribute("rotation", currentSky.rotation)
     structureContainer.setAttribute("position", currentSky.position)
 }
 
