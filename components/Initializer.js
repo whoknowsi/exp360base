@@ -29,8 +29,10 @@ async function preloadImages(array) {
     var list = preloadImages.list;
     for (var i = 0; i < array.length; i++) {
         var img = new Image();
-        img.onload = function() {
-            window.THREE.Cache.add(array[i].split(".")[0], img)
+        img.onload = function(evt) {
+            
+            console.log()
+            window.THREE.Cache.add(evt.path[0].src, evt.path[0])
         }
         list.push(img);
         img.src = "./img/skies/" + array[i];
