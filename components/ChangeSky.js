@@ -62,34 +62,43 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     currentPoint.classList.remove("current")
     el.classList.add("current")
 
-    console.log(data.target.split("#")[1])
-    //sky2.setAttribute("src", data.target)
-    sky1.setAttribute("src", data.target)
+    const image = new Image()
+        image.id = data.target.split(".")[0]
+        image.src= "./img/skies/" + data.target
 
-    sky1.setAttribute("rotation", data.rotation)
+            
+        // textureLoader.load("./img/skies/" + asset, function (image) {
+        //     myTexture.image = image;
+        // })
+        image.onload = () => {
+             //sky2.setAttribute("src", data.target)
+            sky1.setAttribute("src", data.target)
 
-    // sky2.setAttribute("src", data.target)
+            sky1.setAttribute("rotation", data.rotation)
 
-    let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
-    let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget/2, startPoint.z - position.z)
+            // sky2.setAttribute("src", data.target)
 
-    if (targetSkyPosition.x < 0.000001 && targetSkyPosition.x > -0.000001) targetSkyPosition.x = 0
-    if (targetSkyPosition.y < 0.000001 && targetSkyPosition.y > -0.000001) targetSkyPosition.y = 0
-    if (targetSkyPosition.z < 0.000001 && targetSkyPosition.z > -0.000001) targetSkyPosition.z = 0
+            let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
+            let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget/2, startPoint.z - position.z)
 
-    if (endPoint.x < 0.000001 && endPoint.x > -0.000001) endPoint.x = 0
-    if (endPoint.y < 0.000001 && endPoint.y > -0.000001) endPoint.y = 0
-    if (endPoint.z < 0.000001 && endPoint.z > -0.000001) endPoint.z = 0
+            if (targetSkyPosition.x < 0.000001 && targetSkyPosition.x > -0.000001) targetSkyPosition.x = 0
+            if (targetSkyPosition.y < 0.000001 && targetSkyPosition.y > -0.000001) targetSkyPosition.y = 0
+            if (targetSkyPosition.z < 0.000001 && targetSkyPosition.z > -0.000001) targetSkyPosition.z = 0
 
-    //structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
-    //structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
-    //structureContainer.emit("moveout")
+            if (endPoint.x < 0.000001 && endPoint.x > -0.000001) endPoint.x = 0
+            if (endPoint.y < 0.000001 && endPoint.y > -0.000001) endPoint.y = 0
+            if (endPoint.z < 0.000001 && endPoint.z > -0.000001) endPoint.z = 0
 
-    structureContainer.setAttribute("position", endPoint)
+            //structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
+            //structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
+            //structureContainer.emit("moveout")
 
-    // SetMoving()
-    MakeTransitionBetweenSkies(data, targetSkyPosition)
+            structureContainer.setAttribute("position", endPoint)
 
+            // SetMoving()
+            MakeTransitionBetweenSkies(data, targetSkyPosition)
+
+        }
 }
 
 

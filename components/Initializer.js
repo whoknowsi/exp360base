@@ -19,17 +19,10 @@ const AddAssets = async (data) => {
 
     data.skyAssets.forEach(asset => {
         let assetName = asset.split(".")[0].toLowerCase()
-        let img = document.createElement("img")
-        img.setAttribute("id", assetName)
-        img.setAttribute("class", "skyImage")
-        img.setAttribute("src", "./img/skies/" + asset)
-        
+
         const image = new Image()
         image.id = assetName
         image.src= "./img/skies/" + asset
-
-        document.querySelector("#assets").appendChild(img)
-            
         // textureLoader.load("./img/skies/" + asset, function (image) {
         //     myTexture.image = image;
         // })
@@ -49,11 +42,11 @@ const SetFirstSky = () => {
     let structureContainer = document.querySelector("#structure-container")
     let id = currentSky.id.split("-pointer")[0]
 
-    console.log()
+    console.log(THREE.Cache.get(id).getAttribute("src"))
     // ESPERAR A QUE LA IMAGEN SE CARGUE ANTES DE PONERLA
-    sky1.setAttribute("src", "#" + id)
+    sky1.setAttribute("src", THREE.Cache.get(id).getAttribute("src"))
     //sky2.setAttribute("src", "#" + id)
-    sky1.setAttribute("rotation", currentSky.rotation)
+    sky1.setAttribute("rotation",currentSky.rotation)
     //sky2.setAttribute("rotation", currentSky.rotation)
     structureContainer.setAttribute("position", currentSky.position)
 }
