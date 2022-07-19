@@ -53,7 +53,10 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     currentPoint.classList.remove("current")
     el.classList.add("current")
     let id = data.target
-    sky2.setAttribute("src", "#" + id)
+    console.log(data)
+    sky2.object3D.children[0].material.map = new THREE.TextureLoader().load("./img/skies/" + data.target + ".jpg")
+    sky2.object3D.children[0].material.needsUpdate = true;
+
     let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
     let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget / 2, startPoint.z - position.z)
     if (targetSkyPosition.x < 0.000001 && targetSkyPosition.x > -0.000001) targetSkyPosition.x = 0
@@ -73,7 +76,9 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
 function MakeTransitionBetweenSkies(data, targetSkyPosition, id) {
     let sky1 = document.querySelector("#sky")
     let sky2 = document.querySelector("#sky2")
-    sky2.components.animation__movein.data.from = targetSkyPosition
+
+    console.log()
+    sky2.components.animation__movein.data.from = targetSkyPosition.x + " " + targetSkyPosition.y + " " + targetSkyPosition.z
     sky2.emit("movein")
     sky1.emit("fadeout")
     if (data.rotation != "") {
@@ -82,16 +87,16 @@ function MakeTransitionBetweenSkies(data, targetSkyPosition, id) {
         sky2.setAttribute("rotation", "0 0 0")
     }
     setTimeout(() => {
-
         setTimeout(() => {
             if (data.rotation != "") {
                 sky1.setAttribute("rotation", data.rotation)
             } else {
                 sky1.setAttribute("rotation", "0 0 0")
             }
-            sky1.setAttribute("src", "#" + id)
+            sky1.object3D.children[0].material.map = new THREE.TextureLoader().load("./img/skies/" + data.target + ".jpg")
+            sky1.object3D.children[0].material.needsUpdate = true;
             sky1.setAttribute("position", "0 0 0")
-            sky1.emit("fadein")
+            sky1.setAttribute("opacity", 1)
 
             UnsetMoving()
         }, 450)

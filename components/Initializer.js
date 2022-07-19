@@ -6,8 +6,12 @@ const Init = async () => {
 
     await LoadStructures(data)
     await AddAssets(data)
-    console.log("2")
-    SetFirstSky("#Iglesia-9")
+    
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        let currentSky = GetCurrentSky(data)
+        SetFirstSky(currentSky)
+    })
     
 }
 
@@ -30,38 +34,40 @@ async function preloadImages(array) {
     for (var i = 0; i < array.length; i++) {
         var img = new Image();
         img.onload = function(evt) {
-            
-            console.log()
-            window.THREE.Cache.add(evt.path[0].src, evt.path[0])
+            window.THREE.Cache.add(evt.path[0].getAttribute("src"), evt.path[0])
         }
         list.push(img);
         img.src = "./img/skies/" + array[i];
         img.id = array[i].split(".")[0]
         document.getElementById('assets').appendChild(img)
     }
-    console.log(list)
-    return
 }
 
+const GetCurrentSky = (data) => {
+    let currenSky 
 
-const SetFirstSky = (id) => {
+    let skies = data.skySpots
+    skies.forEach(sky => {
+        if(sky.current) currenSky = sky
+    })
+
+    return currenSky
+}
+
+const SetFirstSky = (current) => {
     let sky1 = document.querySelector("#sky")
     let sky2 = document.querySelector("#sky2")
     let structureContainer = document.querySelector("#structure-container")
+    console.log("./img/skies/" + current.target + ".jpg")
 
-    let skies = document.querySelectorAll(".skySpot")
-    skies.forEach(item => {
-        sky1.setAttribute("src", "./img/skies/" + item.target + ".jpg")
-        sky2.setAttribute("src", "./img/skies/" + item.target + ".jpg")
-        if(item.current) currentSky = item
-    })
-    console.log(skies)
+    sky1.object3D.children[0].material.map = new THREE.TextureLoader().load("./img/skies/" + current.target + ".jpg")
+    sky1.object3D.children[0].material.needsUpdate = true;
 
+    sky2.object3D.children[0].material.map = new THREE.TextureLoader().load("./img/skies/" + current.target + ".jpg")
+    sky2.object3D.children[0].material.needsUpdate = true;
     console.log(THREE.Cache)
     // ESPERAR A QUE LA IMAGEN SE CARGUE ANTES DE PONERLA
-    sky1.setAttribute("src", id)
     sky1.setAttribute("rotation", currentSky.rotation)
-    sky2.setAttribute("src", id)
     sky2.setAttribute("rotation", currentSky.rotation)
     structureContainer.setAttribute("position", currentSky.position)
 }
