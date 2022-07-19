@@ -24,7 +24,7 @@ const PreloadAllSkies = (data, currentPosition) => {
         let skyVectorPosition = new THREE.Vector3(sky.position.x, sky.position.y, sky.position.z)
         let distance = currentVectorPosition.distanceTo(skyVectorPosition)
 
-        if(distance < 100) skiesToPreload.push(sky)     
+        if(distance < 20) skiesToPreload.push(sky)     
     })
 
     let interval = 200
