@@ -11,9 +11,44 @@ const Init = async () => {
     document.addEventListener("DOMContentLoaded", () => {
         let currentSky = GetCurrentSky(data)
         SetFirstSky(currentSky)
+        PreloadAllSkies(data, currentSky.position)
     })
-    
 }
+
+const PreloadAllSkies = (data, currentPosition) => {
+    let skies = data.skySpots
+    let skiesToPreload = []
+
+    skies.forEach(sky => {
+        let currentVectorPosition = new THREE.Vector3(currentPosition.x, currentPosition.y, currentPosition.z)
+        let skyVectorPosition = new THREE.Vector3(sky.position.x, sky.position.y, sky.position.z)
+        let distance = currentVectorPosition.distanceTo(skyVectorPosition)
+
+        if(distance < 10) skiesToPreload.push(sky)     
+    })
+
+    let interval = 200
+    let promise = Promise.resolve();
+    skiesToPreload.forEach(sky => {
+        promise = promise.then(function () {
+            PreloadSky(sky)
+            console.log("here")
+            return new Promise(function (resolve) {
+                setTimeout(resolve, interval);
+            })
+        })
+    })
+
+    promise.then(function () {
+        console.log('Loop finished.');
+    });
+}
+
+const PreloadSky = (sky) => {
+    let sky2 = document.querySelector("#sky2")
+    sky2.setAttribute("src", "#" + sky.target)
+}
+
 
 Init()
 
