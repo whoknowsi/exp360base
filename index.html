@@ -37,6 +37,7 @@
             <!-- Cámara -->
             <a-entity id="cameraContainer"
                 animation__inertia="startEvents: inertia; property: rotation; from: 0 0 0; to: 1 1 0; dur: 1000; easing: easeOutQuint; pauseEvents: pause-anim;"
+                animation__moveout="startEvents: moveout; property: position; from: 0 0 0; to: 50 0 12; dur: 300; easing: easeOutSine "
                 position="0 1.6 0">
                 <a-entity 
                     id="camera"
@@ -64,8 +65,7 @@
                 animation__fadein="startEvents: fadein; property: material.opacity; from: 0; to: 1; dur: 5">
             </a-sky>
 
-            <a-entity id="structure-container"
-                animation__moveout="startEvents: moveout; property: position; from: 0 0 0; to: 50 0 12; dur: 300; easing: easeOutSine ">
+            <a-entity id="structure-container">
             </a-entity>
 
         </a-scene>

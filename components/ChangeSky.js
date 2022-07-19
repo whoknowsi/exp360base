@@ -70,9 +70,9 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
         if (endPoint.x < 0.000001 && endPoint.x > -0.000001) endPoint.x = 0
         if (endPoint.y < 0.000001 && endPoint.y > -0.000001) endPoint.y = 0
         if (endPoint.z < 0.000001 && endPoint.z > -0.000001) endPoint.z = 0
-        structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
-        structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
-        structureContainer.emit("moveout")
+        // structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
+        // structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
+        // structureContainer.emit("moveout")
         SetMoving()
         MakeTransitionBetweenSkies(data, targetSkyPosition, id)
     }
