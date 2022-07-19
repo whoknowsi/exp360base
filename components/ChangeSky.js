@@ -62,6 +62,7 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     currentPoint.classList.remove("current")
     el.classList.add("current")
 
+    console.log(data.target.split("#")[1])
     sky2.setAttribute("src", data.target)
 
 

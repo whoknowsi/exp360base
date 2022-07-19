@@ -11,6 +11,12 @@ const Init = async () => {
 Init()
 
 const AddAssets = async (data) => {
+
+    let currentSky
+    data.skySpots.forEach(skySpot => {
+        if(skySpot.current) currentSky = skySpot.id.split("-pointer")[0]
+    })
+
     data.skyAssets.forEach(asset => {
         let assetName = asset.split(".")[0].toLowerCase()
         let img = document.createElement("img")
@@ -18,12 +24,22 @@ const AddAssets = async (data) => {
         img.setAttribute("class", "skyImage")
         img.setAttribute("src", "./img/skies/" + asset)
         
+        const image = new Image()
+        image.id = assetName
+        image.src= "./img/skies/" + asset
+
         document.querySelector("#assets").appendChild(img)
             
-    textureLoader.load("./img/skies/" + asset, function (image) {
-        myTexture.image = image;
-    })
-        THREE.Cache.add("./img/skies/" + asset, document.querySelector("#" + assetName))
+        // textureLoader.load("./img/skies/" + asset, function (image) {
+        //     myTexture.image = image;
+        // })
+        image.onload = () => {
+            window.THREE.Cache.add(assetName, image)
+            if(currentSky == assetName) {
+                SetFirstSky()
+            }
+        }
+        
     })
 }
 
@@ -33,9 +49,9 @@ const SetFirstSky = () => {
     let structureContainer = document.querySelector("#structure-container")
     let id = currentSky.id.split("-pointer")[0]
 
+    console.log()
     // ESPERAR A QUE LA IMAGEN SE CARGUE ANTES DE PONERLA
     sky1.setAttribute("src", "#" + id)
-    sky1.emit("fadein")
     sky2.setAttribute("src", "#" + id)
     sky1.setAttribute("rotation", currentSky.rotation)
     sky2.setAttribute("rotation", currentSky.rotation)
@@ -160,7 +176,7 @@ function CreateSkySpot(spot) {
 function CreateStructure(structure) {
 
     const geometry = new THREE.BoxGeometry(structure.width, structure.height, structure.depth)
-    const material = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, opacity: 0, transparent: true })
+    const material = new THREE.MeshLambertMaterial({ opacity: 0, transparent: true })
 
     const mesh = new THREE.Mesh(geometry, material);
     // PONER PARA QUE HAYA CILINDROS
