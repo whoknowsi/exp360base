@@ -11,7 +11,7 @@ const Init = async () => {
     document.addEventListener("DOMContentLoaded", () => {
         let currentSky = GetCurrentSky(data)
         SetFirstSky(currentSky)
-        PreloadAllSkies(data, currentSky.position)
+        //PreloadAllSkies(data, currentSky.position)
     })
 }
 

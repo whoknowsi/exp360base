@@ -13,7 +13,10 @@
 	</head>
 	<body>
 
-        <a-scene stats id="scene" render-enabled="true">
+        <a-scene stats id="scene" renderer="antialias: false;
+        precision: mediump;
+        maxCanvasWidth: 1280;
+        maxCanvasHeight: 1280;">
             <!-- Recursos -->
             <a-assets id="assets">
                 <img id="infoSpot-img" src="./img/infoSpotImg.png">
