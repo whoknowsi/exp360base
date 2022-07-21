@@ -1,16 +1,5 @@
 let allSkies
 
-const deviceType = () => {
-    const ua = navigator.userAgent;
-    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-        return "tablet";
-    }
-    else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
-        return "mobile";
-    }
-    return "desktop";   
-}
-var device = deviceType()
 AFRAME.registerComponent('change-sky', {
     schema: {
         target: {
@@ -23,12 +12,11 @@ AFRAME.registerComponent('change-sky', {
     init: function () {
         let data = this.data;
         let el = this.el;
-        let sky1 = document.querySelector("#sky")
+        let sky1 = document.querySelector("#sky1")
         let sky2 = document.querySelector("#sky2")
         let radiusSkyProportion = sky1.getAttribute("radius") / 8
         el.addEventListener('click', evt => {
-            if (evt.path[2].getAttribute("id").includes("structure") || evt.detail.cursorEl.getAttribute("id") == "cursor-prev-raycast")
-                ChangeSky(data, el, sky1, sky2, radiusSkyProportion)
+            ChangeSky(evt, data, el, sky1, sky2, radiusSkyProportion)
         })
         el.addEventListener('raycaster-intersected', evt => {
             if (device == "mobile" || device == "tablet") {
@@ -42,8 +30,8 @@ AFRAME.registerComponent('change-sky', {
     }
 })
 
-function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
-    let structureContainer = document.querySelector("#structure-container")
+function ChangeSky(evt, data, el, sky1, sky2, radiusSkyProportion) {
+    let structureContainer = document.querySelector("#geometriesContainer")
     let structureContainerPosition = structureContainer.getAttribute("position")
     let currentPoint = document.querySelector(".current")
     let startPoint = new THREE.Vector3(structureContainerPosition.x, structureContainerPosition.y, structureContainerPosition.z)
@@ -53,18 +41,28 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     if (IsMoving()) { return }
     if (sky1.getAttribute("src") == data.target || sky2.getAttribute("src") == data.target) { return }
 
-    let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
-    let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget / 2, startPoint.z - position.z)
-    if (targetSkyPosition.x < 0.000001 && targetSkyPosition.x > -0.000001) targetSkyPosition.x = 0
-    if (targetSkyPosition.y < 0.000001 && targetSkyPosition.y > -0.000001) targetSkyPosition.y = 0
-    if (targetSkyPosition.z < 0.000001 && targetSkyPosition.z > -0.000001) targetSkyPosition.z = 0
-    if (endPoint.x < 0.000001 && endPoint.x > -0.000001) endPoint.x = 0
-    if (endPoint.y < 0.000001 && endPoint.y > -0.000001) endPoint.y = 0
-    if (endPoint.z < 0.000001 && endPoint.z > -0.000001) endPoint.z = 0
-    structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
-    structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
-    structureContainer.emit("moveout")
+    // let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
+    // let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget / 2, startPoint.z - position.z)
+    // if (targetSkyPosition.x < 0.000001 && targetSkyPosition.x > -0.000001) targetSkyPosition.x = 0
+    // if (targetSkyPosition.y < 0.000001 && targetSkyPosition.y > -0.000001) targetSkyPosition.y = 0
+    // if (targetSkyPosition.z < 0.000001 && targetSkyPosition.z > -0.000001) targetSkyPosition.z = 0
+    // if (endPoint.x < 0.000001 && endPoint.x > -0.000001) endPoint.x = 0
+    // if (endPoint.y < 0.000001 && endPoint.y > -0.000001) endPoint.y = 0
+    // if (endPoint.z < 0.000001 && endPoint.z > -0.000001) endPoint.z = 0
+    // structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
+    // structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
+    // structureContainer.emit("moveout")
 
+    let targetSkyPosition = evt.target.object3D.position
+    let endPosition = targetSkyPosition.x + " " + (targetSkyPosition.y + Height()) + " " + targetSkyPosition.z 
+    document.querySelector("#cameraContainer").setAttribute("position", endPosition)
+    document.querySelector("#skyContainer").setAttribute("rotation", evt.target.getAttribute("change-sky").rotation)
+    document.querySelector("#skyContainer").setAttribute("position", endPosition)
+    document.querySelector("#sky1").setAttribute("src", "#" + evt.target.getAttribute("id"))
+    document.querySelector("#sky2").setAttribute("src", "#" + evt.target.getAttribute("id"))
+
+
+    return 
     const loader = new THREE.TextureLoader();
     loader.load("./img/skies/" + data.target + ".jpg", (texture) => {
         if (currentPoint == null) currentPoint = el
@@ -83,7 +81,7 @@ function ChangeSky(data, el, sky1, sky2, radiusSkyProportion) {
     })
 }
 function MakeTransitionBetweenSkies(data, targetSkyPosition, texture) {
-    let sky1 = document.querySelector("#sky")
+    let sky1 = document.querySelector("#sky1")
     let sky2 = document.querySelector("#sky2")
 
     sky2.components.animation__movein.data.from = targetSkyPosition.x + " " + targetSkyPosition.y + " " + targetSkyPosition.z
@@ -118,15 +116,15 @@ function MakeTransitionBetweenSkies(data, targetSkyPosition, texture) {
 }
 
 function SetMoving() {
-    let structureContainer = document.querySelector("#structure-container")
+    let structureContainer = document.querySelector("#geometriesContainer")
     structureContainer.classList.add("moving")
 }
 function UnsetMoving() {
-    let structureContainer = document.querySelector("#structure-container")
+    let structureContainer = document.querySelector("#geometriesContainer")
     structureContainer.classList.remove("moving")
 }
 function IsMoving() {
-    let structureContainer = document.querySelector("#structure-container")
+    let structureContainer = document.querySelector("#geometriesContainer")
     return structureContainer.classList.contains("moving")
 }
 
@@ -137,7 +135,7 @@ let InitAFrameSky = () => {
     })
 }
 
-InitAFrameSky()
+// InitAFrameSky()
 
 const PreloadCloseSkies = (data) => {
     let skies = JSON.parse(sessionStorage.getItem('skies'))
@@ -152,7 +150,6 @@ const PreloadCloseSkies = (data) => {
         if(distance < 10 && !sky.loaded) skiesToPreload.push(sky)     
     })
 
-    console.log(skiesToPreload)
 
     let interval = 200
     let promise = Promise.resolve();
@@ -169,7 +166,6 @@ const PreloadCloseSkies = (data) => {
         sessionStorage.setItem('skies', "[" + skies.map((sky) => {
             let skyObj = sky
             if(skiesToPreload.map(sky => sky.target).includes(sky.target)) {
-                console.log("here")
                 skyObj = {
                     target: sky.target,
                     position: sky.position,

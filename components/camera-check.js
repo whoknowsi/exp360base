@@ -1,17 +1,14 @@
-var rotating
-var animating
-var widthRangeFromMinusOneToOne, heightRangeFromMinusOneToOne
-var startPoint, endPoint
-var prevRotation, newRotation, prevRotationContainer, newRotationContainer
-var time, rotation
-var cameraContainer = document.querySelector("#cameraContainer")
-var myTimeOut
+let rotating, animating
+let widthRangeFromMinusOneToOne, heightRangeFromMinusOneToOne
+let startPoint, prevRotationContainer, newRotationContainer
+let time, rotation, deltaRotation, deltaTime
+let cameraContainer 
+let myTimeOut
 
 AFRAME.registerComponent('camera-check', {
     init: function () {
-        var startTime, finalTime
-        let camera = document.querySelector("#cameraContainer")
-
+        cameraContainer = document.querySelector("#cameraContainer")
+        
         document.addEventListener('mousedown', function(evt) {
             let isMouseEvent = evt.target.classList.contains("a-canvas")
             if(!isMouseEvent) { return }
@@ -36,6 +33,8 @@ AFRAME.registerComponent('camera-check', {
 
             time = Date.now()
             rotation = cameraContainerRotation
+
+            
         })
 
         document.addEventListener('mouseup', function(evt) {
@@ -74,15 +73,13 @@ AFRAME.registerComponent('camera-check', {
             
         })
         document.addEventListener("mousemove", (event) => {
-            widthRangeFromMinusOneToOne = ((event.clientX / innerWidth) * 2 - 1)
-            heightRangeFromMinusOneToOne = ((event.clientY / innerHeight) * 2 - 1)
+            widthRangeFromMinusOneToOne = ((event.clientX / window.innerWidth) * 2 - 1)
+            heightRangeFromMinusOneToOne = ((event.clientY / window.innerHeight) * 2 - 1)
         })
     },
     tick: function() {
-
-        
         if(rotating) {
-            if(time < Date.now()-10) {           
+            if(time < Date.now()-10) {            
                 let cameraContainerRotation = cameraContainer.getAttribute("rotation")
                 let newRotation = {
                     x: cameraContainerRotation.x, 
@@ -102,10 +99,10 @@ AFRAME.registerComponent('camera-check', {
                 x: prevRotationContainer.x + ((heightRangeFromMinusOneToOne-startPoint.y)*60),
                 y: prevRotationContainer.y + ((widthRangeFromMinusOneToOne-startPoint.x)*60)
             }
-
+            
             if(newRotation.x > 90) newRotation.x = 90
             if(newRotation.x < -90) newRotation.x = -90
-            
+
             cameraContainer.setAttribute("rotation", newRotation.x + " " + newRotation.y + " 0")
         }
     }

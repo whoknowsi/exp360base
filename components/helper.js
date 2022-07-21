@@ -1,16 +1,16 @@
 var _targetsInPool = [];
 
-export function AddTarget(target) {
+function AddTarget(target) {
     _targetsInPool.push(target)
 }
 
-export function RemoveTarget(target) {
+function RemoveTarget(target) {
     var filtered = _targetsInPool.filter( _target => _target != target);
     _targetsInPool = filtered
 }
 
-export function GetCurrentTarget() {
-    let raycasterEl = document.querySelector("#cursor-prev-raycast")
+function GetCurrentTarget() {
+    let raycasterEl = document.querySelector("#raycaster")
     let raycaster = raycasterEl.components.raycaster
     let intersection
     let previousDistance = 100000000
@@ -29,14 +29,14 @@ export function GetCurrentTarget() {
     return closestTarget
 }
 
-export function MapInterval(val, srcMin, srcMax, dstMin, dstMax)
+function MapInterval(val, srcMin, srcMax, dstMin, dstMax)
 {
     if (val >= srcMax) return dstMax;
     if (val <= srcMin) return dstMin;
     return dstMin + (val - srcMin) / (srcMax - srcMin) * (dstMax - dstMin);
 }
 
-export function NormalizeAngleInRadians(cameraRotation) {
+function NormalizeAngleInRadians(cameraRotation) {
     let pi = Math.PI
     if(cameraRotation < 0) {
         while(cameraRotation < 0) {

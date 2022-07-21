@@ -1,33 +1,23 @@
-import { ShowPanelInfo, HidePanelInfo } from "./InfoSpotManagment.js"
+let cameraEl
+let camera
+let canvas
+let structureObjects
+let hotspotObjects
 
-const deviceType = () => {
-    const ua = navigator.userAgent;
-    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-        return "tablet";
-    }
-    else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
-        return "mobile";
-    }
-    return "desktop";
-}
-
-const device = deviceType()
-const temporalRaycaster = new THREE.Raycaster()
-const pointer = new THREE.Vector2()
-const touch = new THREE.Vector2()
-const cameraEl = document.querySelector("#camera")
-const camera = cameraEl.components.camera.camera
-const canvas = document.querySelector(".a-canvas")
-const structureObjects = []
-const hotspotObjects = []
-
-AFRAME.registerComponent('info-spot', {
+AFRAME.registerComponent('hot-spot', {
     schema: {
         title: { type: 'string' },
         description: { type: 'string' },
         image: { type: 'string' }
     },
     init: function () {
+        cameraEl = document.querySelector("a-camera")
+        camera = cameraEl.components.camera.camera
+        canvas = document.querySelector(".a-canvas")
+        structureObjects = []
+        hotspotObjects = []
+
+
         let structures = document.querySelectorAll(".structure")
         let hotsposts = document.querySelectorAll(".infoSpot")
         let hotspot = this.el
@@ -42,8 +32,6 @@ AFRAME.registerComponent('info-spot', {
         if(device == "desktop") {
             hotspot.addEventListener('raycaster-intersected', evt => handleEnterHotspot(evt.detail.el, hotspot, title, description, image))
             hotspot.addEventListener('raycaster-intersected-cleared', handleLeaveHotspot)
-
-            window.addEventListener('pointermove', onPointerMove);
         }
         else if(device == "mobile" || device == "tablet") {
             canvas.addEventListener('touchend', handleTouchMobile);
@@ -55,9 +43,6 @@ AFRAME.registerComponent('info-spot', {
 })
 
 let handleEnterHotspot = (raycaster, hotspot, title, description, image) => {
-    let isCorrectRaycaster = raycaster.getAttribute("id") == "cursor-prev-raycast"
-    if (!isCorrectRaycaster) { return }
-
     let hotspotIntersection = raycaster.components.raycaster.getIntersection(hotspot)
 
     let isBlocked = CheckIfItIsBlocked(hotspotIntersection, structureObjects, pointer)
@@ -99,17 +84,12 @@ let handleTouchMobile = (evt) => {
     ShowPanelInfo(hotspot, hotspotIntersection, title, description, image)
 }
 
-let UpdateTouchPoint = (evt) => {
-    touch.x = (evt.changedTouches[0].pageX / window.innerWidth) * 2 - 1;
-    touch.y = -(evt.changedTouches[0].pageY / window.innerHeight) * 2 + 1;
-}
+
 
 let CheckIfItIsBlocked = (hotspotIntersection, structureObjects, cursorPosition) => {
     temporalRaycaster.setFromCamera(cursorPosition, camera)
     let structures = document.querySelector(".structure")
     const structureIntersections = temporalRaycaster.intersectObject(structures.object3D)
-
-    console.log(structureIntersections)
 
     let isBlocked = false
     structureIntersections.forEach(structure => {
@@ -119,12 +99,7 @@ let CheckIfItIsBlocked = (hotspotIntersection, structureObjects, cursorPosition)
 }
 
 let FaceHotspotToCamera = (hotspot) => {
-    hotspot.object3D.lookAt(cameraEl.object3D.position)
-}
-
-let onPointerMove = (evt) => {
-    pointer.x = (evt.clientX / window.innerWidth) * 2 - 1;
-    pointer.y = - (evt.clientY / window.innerHeight) * 2 + 1;
+    hotspot.object3D.lookAt(cameraEl.parentElement.object3D.position)
 }
 
 let InitAFrameHotspots = () => {
@@ -134,4 +109,4 @@ let InitAFrameHotspots = () => {
     })
 }
 
-InitAFrameHotspots()
+// InitAFrameHotspots()

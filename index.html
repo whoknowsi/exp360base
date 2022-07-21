@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-
         <!-- <script src="./components/aframe-master.min.js"></script> -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
         <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-        <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
-        <script type="module" src="./components/info-spot.js"></script>
-        <script type="module" src="./components/ChangeSky.js"></script> 
+        <script src="./components/GlobalConfig.js"></script>
+        <script src="./components/helper.js"></script>
         <script src="./components/Initializer.js"></script> 
+        <script src="./components/InfoSpotManagment.js"></script>
+        <script src="./components/camera-check.js"></script>
+        <script src="./components/hot-spot.js"></script>
+        <script src="./components/change-sky.js"></script> 
+        <script src="./components/raycaster.js"></script> 
+        <!-- <script src="./components/raycaster-cursor.js"></script>  -->
+        <script src="./components/raycaster-listener.js"></script>
         <link rel="stylesheet" href="main.css">
 	</head>
 	<body>
 
-        <a-scene stats id="scene" renderer="antialias: false;
+        <!-- <a-scene stats id="scene" renderer="antialias: true;
         precision: mediump;
         maxCanvasWidth: 1280;
         maxCanvasHeight: 1280;">
-            <!-- Recursos -->
             <a-assets id="assets">
                 <img id="infoSpot-img" src="./img/infoSpotImg.png">
             </a-assets>
@@ -40,7 +43,6 @@
                 </a-entity>
             </a-entity>
             
-            <!-- Cámara -->
             <a-entity id="cameraContainer"
                 animation__inertia="startEvents: inertia; property: rotation; from: 0 0 0; to: 1 1 0; dur: 1000; easing: easeOutQuint; pauseEvents: pause-anim;"
                 position="0 1.6 0">
@@ -70,10 +72,10 @@
             animation__moveout="startEvents: moveout; property: position; from: 0 0 0; to: 50 0 12; dur: 300; easing: easeOutSine">
             </a-entity>
 
-        </a-scene>
+        </a-scene> -->
 
-        <script src="./index.js"></script>
+        <!-- <script src="./index.js"></script>
         <script src="./components/camera-check.js"></script>
-        <script type="module" src="./components/raycaster-listener.js"></script>
+        <script type="module" src="./components/raycaster-listener.js"></script> -->
 	</body>
 </html>

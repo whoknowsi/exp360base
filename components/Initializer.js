@@ -1,225 +1,267 @@
-var currentSky
-
 const Init = async () => {
     const results = await fetch("./data/data.json")
     const data = await results.json()
 
-    await LoadStructures(data)
-    await AddAssets(data)
-    
-    
-    document.addEventListener("DOMContentLoaded", () => {
-        let currentSky = GetCurrentSky(data)
-        SetFirstSky(currentSky)
-        //PreloadAllSkies(data, currentSky.position)
-    })
+    document.readyState !== 'loading'
+        ? InitCode(data)
+        : document.addEventListener('DOMContentLoaded', InitCode(data))
 }
-
-const PreloadAllSkies = (data, currentPosition) => {
-    let skies = data.skySpots
-    let skiesToPreload = []
-
-    skies.forEach(sky => {
-        let currentVectorPosition = new THREE.Vector3(currentPosition.x, currentPosition.y, currentPosition.z)
-        let skyVectorPosition = new THREE.Vector3(sky.position.x, sky.position.y, sky.position.z)
-        let distance = currentVectorPosition.distanceTo(skyVectorPosition)
-
-        if(distance < 100) skiesToPreload.push(sky)     
-    })
-
-    let skyEls = document.createElement("a-entity")
-    let interval = 0
-    let promise = Promise.resolve();
-    skiesToPreload.forEach(sky => {
-        promise = promise.then(function () {
-            skyEls.appendChild(PreloadSky(sky))
-            return new Promise(function (resolve) {
-                setTimeout(resolve, interval);
-            })
-        })
-    })
-
-    promise.then(function () {
-        document.querySelector("#scene").appendChild(skyEls)
-        console.log(document.querySelector('a-assets').fileLoader);
-        let skyEl = document.querySelector("#temporalSky")
-        skyEl != null && skyEl.remove()
-        var data = JSON.parse(sessionStorage.getItem('skies'))
-        sessionStorage.setItem('skies', "[" + data.map((sky) => {
-            let skyObj = sky
-            if(skiesToPreload.map(sky => sky.target).includes(sky.target)) {
-                console.log("here")
-                skyObj = {
-                    target: sky.target,
-                    position: sky.position,
-                    loaded: true
-                }
-            }
-            return JSON.stringify(skyObj)
-        }) + "]")
-    });
-}
-
-const PreloadSky = (sky) => {
-    let skyEl = document.createElement("a-sky")
-    skyEl.setAttribute("id", "temporalSky")
-    skyEl.setAttribute("material", "opacity", 0)
-    skyEl.setAttribute("src", "#" + sky.target)
-    return skyEl
-}
-
 
 Init()
 
-const AddAssets = async (data) => {
-    let currentSky
-    data.skySpots.forEach(skySpot => {
-        if(skySpot.current) currentSky = skySpot.id.split("-pointer")[0]
-    })
+const InitCode = (data) => {
+    CreateAframeHTML(data)
+    SetInitialPosition()
+    SetInitialSky()
+    InitGlobalConfigAfterCanvasIsCreated()
+}
 
-    sessionStorage.setItem('skies', "[" + data.skySpots.map((sky) => {
+const InitGlobalConfigAfterCanvasIsCreated = () => {
+    const targetNode = document.querySelector("a-scene")
+    const config = { childList: true, subtree: true }
 
-        let skyObj = {
-            target: sky.target,
-            position: sky.position,
-            loaded: false
+    const callback = function (mutationsList, observer) {
+        for (let mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                let mutationAddedNodes = Array.from(mutation.addedNodes)
+                mutationAddedNodes.forEach(mutationAddedNode => {
+                    if (mutationAddedNode.nodeName.toLowerCase() == "canvas") {
+                        InitGlobalConfig()
+                        observer.disconnect()
+                    }
+
+                })
+            }
         }
-        console.log(skyObj)
-        return JSON.stringify(skyObj)
-    }) + "]")
-
-    await preloadImages(data.skyAssets)
-}
-
-async function preloadImages(array) {
-    if (!preloadImages.list) {
-        preloadImages.list = [];
     }
-    var list = preloadImages.list;
-    for (var i = 0; i < array.length; i++) {
-        var img = new Image();
-        img.onload = function(evt) {
-            window.THREE.Cache.add(evt.path[0].getAttribute("src"), evt.path[0])
-        }
-        list.push(img);
-        img.src = "./img/skies/" + array[i];
-        img.id = array[i].split(".")[0]
-        document.getElementById('assets').appendChild(img)
+
+    const observer = new MutationObserver(callback)
+    observer.observe(targetNode, config)
+}
+
+const CreateAframeHTML = (data) => {
+    let scene = document.createElement("a-scene")
+    scene.setAttribute("stats", "")
+    if (device == "desktop") {
+        scene.setAttribute("renderer", "antialias: true; precision: high; maxCanvasWidth: 1920; maxCanvasHeight: 1920")
+    } else {
+        scene.setAttribute("renderer", "antialias: false; precision: low; maxCanvasWidth: 1280; maxCanvasHeight: 1280")
     }
+
+    let assetsContainer = CreateAssets(data)
+    scene.appendChild(assetsContainer)
+
+    let cameraContainer = CreateCamera()
+    scene.appendChild(cameraContainer)
+
+    let cursorVisualContainer = CreateVisualCursor()
+    scene.appendChild(cursorVisualContainer)
+
+    let raycaster = CreateRaycaster()
+    scene.appendChild(raycaster)
+
+    let geometriesContainer = CreateGeometries(data)
+    scene.appendChild(geometriesContainer)
+
+    let skiesContainer = CreateSkies(currentSky.target)
+    scene.appendChild(skiesContainer)
+
+    document.body.appendChild(scene)
 }
 
-const GetCurrentSky = (data) => {
-    let currenSky 
-
-    let skies = data.skySpots
-    skies.forEach(sky => {
-        if(sky.current) currenSky = sky
-    })
-
-    return currenSky
+const SetInitialPosition = () => {
+    let cameraContainer = document.querySelector("#cameraContainer")
+    let position = new THREE.Vector3(currentSky.position.x, currentSky.position.y + Height(), currentSky.position.z)
+    cameraContainer.setAttribute("position", position)
 }
 
-const SetFirstSky = (current) => {
-    let sky1 = document.querySelector("#sky")
+const SetInitialSky = () => {
+    let sky1 = document.querySelector("#sky1")
     let sky2 = document.querySelector("#sky2")
-    let structureContainer = document.querySelector("#structure-container")
-    console.log("./img/skies/" + current.target + ".jpg")
+    let skyConatiner = document.querySelector("#skyContainer")
 
-    sky1.object3D.children[0].material.map = new THREE.TextureLoader().load("./img/skies/" + current.target + ".jpg")
-    sky1.object3D.children[0].material.needsUpdate = true;
+    sky1.setAttribute("src", "#" + currentSky.target)
+    sky2.setAttribute("src", "#" + currentSky.target)
 
-    sky2.object3D.children[0].material.map = new THREE.TextureLoader().load("./img/skies/" + current.target + ".jpg")
-    sky2.object3D.children[0].material.needsUpdate = true;
-    console.log(THREE.Cache)
-    // ESPERAR A QUE LA IMAGEN SE CARGUE ANTES DE PONERLA
-    sky1.setAttribute("rotation", currentSky.rotation)
-    sky2.setAttribute("rotation", currentSky.rotation)
-    structureContainer.setAttribute("position", currentSky.position)
+    skyConatiner.setAttribute("position", currentSky.position)
+
+    //let rotation = new THREE.Vector3(currentSky.rotation.split(" ")[0], currentSky.rotation.split(" ")[1], currentSky.rotation.split(" ")[2])
+    skyConatiner.setAttribute("rotation", currentSky.rotation)
+
 }
 
-const LoadStructures = async (data) => {
-    CreateSavedElements(data)
+const CreateAssets = (data) => {
+    let assetContainer = document.createElement("a-assets")
+
+    data.skyAssets.forEach(skyAsset => {
+        let img = document.createElement("a-img")
+
+        img.setAttribute("id", skyAsset.split(".")[0])
+        img.setAttribute("src", "./img/skies/" + skyAsset)
+
+        assetContainer.appendChild(img)
+    })
+
+    return assetContainer
 }
 
+const CreateCamera = () => {
+    let cameraContainer = document.createElement("a-entity")
+    cameraContainer.setAttribute("camera-check", "")
+    cameraContainer.setAttribute("id", "cameraContainer")
+    cameraContainer.setAttribute("animation__inertia", "startEvents: inertia; property: rotation; dur: 1000; easing: easeOutQuint; pauseEvents: pause-anim")
+    cameraContainer.setAttribute("position", "0 " + Height() + " 0")
 
-function CreateSavedElements(data) {
-    let skySpots = data.skySpots
-    let structures = data.structures
-    let infoSpots = data.infoSpots
-    let structureContainer = document.querySelector("#structure-container")
+    let camera = document.createElement("a-camera")
+    camera.setAttribute("position", "0 0 0")
+    camera.setAttribute("look-controls-enabled", "false")
+    camera.setAttribute("wasd-controls-enabled", "false")
 
+    cameraContainer.appendChild(camera)
+    return cameraContainer
+}
 
+const CreateVisualCursor = () => {
+    let cursorContainer = document.createElement("a-entity")
+    cursorContainer.setAttribute("id", "cursor")
+
+    let outterRing = document.createElement("a-ring")
+    outterRing.setAttribute("geometry", {
+        radiusInner: 0.2,
+        radiusOuter: 0.19
+    })
+    outterRing.setAttribute("material", {
+        opacity: .8,
+        color: "white",
+        side: "double",
+        shader: "flat",
+        alphaTest: .5
+    })
+
+    let innerRing = document.createElement("a-ring")
+    innerRing.setAttribute("geometry", {
+        radiusInner: 0.1825,
+        radiusOuter: 0.13
+    })
+    innerRing.setAttribute("material", {
+        opacity: .5,
+        color: "white",
+        side: "double",
+        shader: "flat",
+        alphaTest: .5
+    })
+
+    cursorContainer.appendChild(outterRing)
+    cursorContainer.appendChild(innerRing)
+
+    return cursorContainer
+}
+
+const CreateRaycaster = () => {
+    let raycaster = document.createElement("a-entity")
+
+    raycaster.setAttribute("raycaster-element", "")
+    raycaster.setAttribute("cursor", "rayOrigin: mouse")
+    raycaster.setAttribute("id", "raycaster")
+    raycaster.setAttribute("raycaster", "objects: .structure, .skySpot, .hotSpot")
+    raycaster.setAttribute("position", "0 " + Height() + " 0")
+
+    return raycaster
+}
+
+const CreateGeometries = (data) => {
+    let geometriesContainer = document.createElement("a-entity")
+    geometriesContainer.setAttribute("id", "geometriesContainer")
+
+    let structuresEl = CreateStructures(data.structures)
+    geometriesContainer.appendChild(structuresEl)
+
+    let skySpotsEl = CreateSkySpots(data.skySpots)
+    geometriesContainer.appendChild(skySpotsEl)
+
+    let hotSpotsEl = CreateHotSpots(data.hotSpots)
+    geometriesContainer.appendChild(hotSpotsEl)
+
+    return geometriesContainer
+}
+
+const CreateSkies = (currentSky) => {
+    let skyContainer = document.createElement("a-entity")
+    skyContainer.setAttribute("id", "skyContainer")
+
+    let sky1 = document.createElement("a-sky")
+    sky1.setAttribute("geometry", {
+        radius: 100
+    })
+    sky1.setAttribute("id", "sky1")
+    sky1.setAttribute("src", "#" + currentSky)
+
+    let sky2 = document.createElement("a-sky")
+    sky2.setAttribute("geometry", {
+        radius: 100
+    })
+    sky2.setAttribute("id", "sky2")
+    sky2.setAttribute("src", "#" + currentSky)
+
+    skyContainer.appendChild(sky1)
+    skyContainer.appendChild(sky2)
+    return skyContainer
+}
+
+const CreateStructures = (structures) => {
+    let structureContainer = document.createElement("a-entity")
+    structureContainer.setAttribute("id", "structureContainer")
+
+    structures.forEach(structure => {
+        let structureEl = CreateStructure(structure)
+        structureContainer.appendChild(structureEl)
+    })
+
+    return structureContainer
+}
+
+const CreateStructure = (structure) => {
+    let structureEl = document.createElement("a-" + structure.primitive)
+
+    structureEl.setAttribute("id", structure.id)
+    structureEl.setAttribute("geometry", {
+        radius: structure.radius,
+        width: structure.width,
+        height: structure.height,
+        depth: structure.depth
+    })
+    structureEl.setAttribute("material", {
+        opacity: 0
+    })
+    structureEl.setAttribute("class", "structure")
+    structureEl.setAttribute("position", structure.position.x + " " + structure.position.y + " " + structure.position.z)
+    structureEl.setAttribute("raycaster-listener", "")
+
+    return structureEl
+}
+
+const CreateSkySpots = (skySpots) => {
     let skySpotsContainer = document.createElement("a-entity")
 
-    skySpots.forEach(spot => {
-        skySpotsContainer.appendChild(CreateSkySpot(spot))
-    });
-    let elements = []
-    structures.forEach(structure => {
-        //geometries.push(CreateStructure(structure))
-        //structureElements.push(CreateStructure(structure))
-        let elem = CreateStructure(structure)
-        elements.push(elem)
-        structureContainer.appendChild(elem)
+    skySpots.forEach(skySpot => {
+        let skySpotEl = CreateSkySpot(skySpot)
+        skySpotsContainer.appendChild(skySpotEl)
     })
 
-    infoSpots.forEach(infoSpot => {
-        structureContainer.appendChild(CreateInfoSpot(infoSpot))
-    })
-
-    // const mergedGeo = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
-    // const mergedMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3, vertexColors: THREE.FaceColors });
-    // const mergedMesh = new THREE.Mesh(mergedGeo, mergedMaterial);
-    // let mergedMeshEl = document.createElement("a-box")
-    let structuresEl = document.createElement("a-entity")
-    structuresEl.setAttribute("class", "structure collidable")
-    structureContainer.appendChild(skySpotsContainer)
-    structureContainer.appendChild(structuresEl)
-
-    let skyspots = document.querySelectorAll(".skyChanger")
-    //structureContainer.appendChild(mergedMeshEl)
-
-    setTimeout(function() {
-        
-        let geometries = []
-        elements.forEach(x => {
-            let node = x.object3D.children[0]
-            if (node.type === "Mesh") {
-                const geometry = node.geometry.clone();
-                geometry.applyMatrix4(node.parent.matrix);
-                geometries.push(geometry)
-
-                node.parent.el.remove();
-                node.geometry.dispose();
-                node.material.dispose();
-            }
-        })
-
-        const mergedGeo = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
-        const mergedMaterial = new THREE.MeshStandardMaterial({ opacity: 0, alphaTest: 0.5, color: "black" });
-
-        const mergedMesh = new THREE.Mesh(mergedGeo, mergedMaterial);
-        structuresEl.object3D.add(mergedMesh)
-        structuresEl.setAttribute("raycaster-listener", "")
-    }, 1000);
-
+    return skySpotsContainer
 }
 
-function CreateSkySpot(spot) {
+const CreateSkySpot = (skySpot) => {
     let spotEl = document.createElement("a-entity")
-    spotEl.setAttribute("id", spot.id)
-    spotEl.classList.add("skyChanger")
-    if (spot.current) {
+    spotEl.setAttribute("id", skySpot.target)
+    spotEl.classList.add("skySpot")
+    if (skySpot.current) {
+        currentSky = skySpot
         spotEl.classList.add("current")
-        currentSky = {
-            id: spot.id,
-            rotation: spot.rotation,
-            position: (-spot.position.x) + " " + (-spot.position.y + .2 / 2) + " " + (-spot.position.z),
-        }
     }
     spotEl.setAttribute("rotation", "90 0 0")
-    spotEl.setAttribute("position", spot.position.x + " " + spot.position.y + " " + spot.position.z)
-    spotEl.setAttribute("change-sky", "target: " + spot.target + "; rotation: " + spot.rotation)
+    spotEl.setAttribute("position", skySpot.position.x + " " + skySpot.position.y + " " + skySpot.position.z)
+    spotEl.setAttribute("change-sky", "target: " + skySpot.target + "; rotation: " + skySpot.rotation)
     spotEl.setAttribute("geometry", {
         primitive: "circle",
         radius: .2
@@ -246,97 +288,47 @@ function CreateSkySpot(spot) {
     return spotEl
 }
 
-function CreateStructure(structure) {
+const CreateHotSpots = (hotSpots) => {
+    let hotSpotsContainer = document.createElement("a-entity")
 
-    const geometry = new THREE.BoxGeometry(structure.width, structure.height, structure.depth)
-    const material = new THREE.MeshLambertMaterial({ opacity: 0, transparent: true })
+    hotSpots.forEach(hotSpot => {
+        let hotSpotEl = CreateHotSpot(hotSpot)
+        hotSpotsContainer.appendChild(hotSpotEl)
+    })
 
-    const mesh = new THREE.Mesh(geometry, material);
-    // PONER PARA QUE HAYA CILINDROS
-
-
-    let structureContainer = document.createElement("a-entity")
-    structureContainer.setAttribute("id", "container-" + structure.id)
-
-
-
-    let structureEl = document.createElement("a-" + structure.primitive)
-    structureEl.setAttribute("id", structure.id)
-    structureEl.setAttribute("class", "collidable structure")
-    structureEl.setAttribute("radius", structure.radius)
-    structureEl.setAttribute("color", "#7BC8A4")
-    structureEl.setAttribute("opacity", "0")
-    structureEl.setAttribute("rotate-corner", "all")
-    structureEl.object3D.add(mesh)
-    structureEl.setAttribute("position", structure.position.x + " " + structure.position.y + " " + structure.position.z)
-    structureContainer.appendChild(structureEl)
-
-    // modelElement.addEventListener('model-loaded', (e) => {
-    //     var obj = modelElement.getObject3D('mesh');
-    //     var bbox = new THREE.Box3().setFromObject(obj);
-    // })
-
-    // structureEl.object3D.traverse(node => {
-    //     if (node.type === "Mesh") { 
-
-    //         const geometry = node.geometry.clone();
-    //         geometry.applyMatrix4(node.parent.matrix);
-    //         mesh.push(geometry)
-    //     }
-    // })
-
-    return structureEl
+    return hotSpotsContainer
 }
 
-function CreateInfoSpot(infoSpot) {
-    let radius = 0.1
-    let infoSpotContainer = document.createElement("a-entity")
-    infoSpotContainer.setAttribute("id", "container-" + infoSpot.id)
+const CreateHotSpot = (hotSpot) => {
+    let hotSpotContainer = document.createElement("a-entity")
 
     let line = document.createElement("a-entity")
     line.setAttribute("line", {
-        start: infoSpot.startPosition,
-        end: infoSpot.endPosition,
-        // opacity: 0.99,
-        // alphaTest: .5,
+        start: hotSpot.startPosition,
+        end: hotSpot.endPosition,
+        color: "white",
+        opacity: 0.99
+    })
+
+    let target = document.createElement("a-image")
+    target.setAttribute("id", hotSpot.id)
+    target.setAttribute("position", hotSpot.position)
+    target.setAttribute("geometry", {
+        primitive: "circle",
+        radius: .1
+    })
+    target.classList.add("hotSpot")
+    target.setAttribute("material", {
         color: "white"
     })
-
-    let pointer = document.createElement("a-image")
-    pointer.setAttribute("id", infoSpot.id)
-    pointer.setAttribute("position", infoSpot.position)
-    pointer.setAttribute("geometry", {
-        primitive: "circle",
-        radius: radius
-    })
-    pointer.classList.add("infoSpot")
-    pointer.setAttribute("material", {
-        src: "#infoSpot-img",
-        opacity: 0.5,
-        alphaTest: .5
-    })
-    pointer.setAttribute("info-spot",
-        "title: " + infoSpot.infoSpot.title +
-        "; description: " + infoSpot.infoSpot.description +
-        "; image: " + infoSpot.infoSpot.image
+    target.setAttribute("hot-spot",
+        "title: " + hotSpot.title +
+        "; description: " + hotSpot.description +
+        "; image: " + hotSpot.image
     )
 
-    infoSpotContainer.appendChild(line)
-    infoSpotContainer.appendChild(pointer)
-    return infoSpotContainer
+    hotSpotContainer.appendChild(line)
+    hotSpotContainer.appendChild(target)
+
+    return hotSpotContainer
 }
-
-var textureManager = new THREE.LoadingManager();
-textureManager.onProgress = function ( item, loaded, total ) {
-    // this gets called after any item has been loaded
-    
-};
-
-textureManager.onLoad = function () {
-    SetFirstSky()
-};
-
-var textureLoader = new THREE.ImageLoader(textureManager)
-var myTextureArray = [];
-var myTexture = new THREE.Texture();
-myTextureArray.push(myTexture);

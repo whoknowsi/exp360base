@@ -10138,14 +10138,12 @@
             "current": false
         }
     ],
-    "infoSpots": [
+    "hotSpots": [
         {
-            "id": "info-spot-1658097708439",
-            "infoSpot": {
-                "title": "Algo",
-                "description": "algo algo",
-                "image": ""
-            },
+            "id": "hotSpot-1658097708439",
+            "title": "Algo",
+            "description": "algo algo",
+            "image": "",
             "position": {
                 "x": 33.28706509411973,
                 "y": 6.5480816355660725,
@@ -10163,12 +10161,10 @@
             }
         },
         {
-            "id": "info-spot-1658097782583",
-            "infoSpot": {
-                "title": "Alguien",
-                "description": "algo algo algo",
-                "image": ""
-            },
+            "id": "hotSpot-1658097782583",
+            "title": "Alguien",
+            "description": "algo algo algo",
+            "image": "",
             "position": {
                 "x": 19.659162898067425,
                 "y": 3.1324690159898774,
@@ -10186,12 +10182,10 @@
             }
         },
         {
-            "id": "info-spot-1658097808417",
-            "infoSpot": {
-                "title": "Alguien",
-                "description": "algo algo algo",
-                "image": ""
-            },
+            "id": "hotSpot-1658097808417",
+            "title": "Alguien",
+            "description": "algo algo algo",
+            "image": "",
             "position": {
                 "x": 21.173361236873028,
                 "y": 2.4862233929543427,
@@ -10209,12 +10203,10 @@
             }
         },
         {
-            "id": "info-spot-1658097839177",
-            "infoSpot": {
-                "title": "La doña",
-                "description": "la doña",
-                "image": ""
-            },
+            "id": "hotSpot-1658097839177",
+            "title": "La doña",
+            "description": "la doña",
+            "image": "",
             "position": {
                 "x": -6.834969668097037,
                 "y": 3.0770761914136573,
@@ -10232,12 +10224,10 @@
             }
         },
         {
-            "id": "info-spot-1658097912779",
-            "infoSpot": {
-                "title": "algo",
-                "description": "la doña",
-                "image": ""
-            },
+            "id": "hotSpot-1658097912779",
+            "title": "algo",
+            "description": "la doña",
+            "image": "",
             "position": {
                 "x": 11.93501578527098,
                 "y": 1.0505868655530664,
@@ -10255,12 +10245,10 @@
             }
         },
         {
-            "id": "info-spot-1658097953641",
-            "infoSpot": {
-                "title": "algo",
-                "description": "prueba",
-                "image": ""
-            },
+            "id": "hotSpot-1658097953641",
+            "title": "algo",
+            "description": "prueba",
+            "image": "",
             "position": {
                 "x": 16.823493927409775,
                 "y": 0.4974182433420808,

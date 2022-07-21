@@ -1,5 +1,3 @@
-import { Height } from "./GlobalConfig.js"
-import { MapInterval, NormalizeAngleInRadians } from "./helper.js"
 let innerWidth, innerHeight
 let point
 let angleBetweenXandZ
@@ -10,32 +8,12 @@ let fov = {
     vertical: .8
 }
 let relativeAngle = 0
-let structureContainerPosition = document.querySelector("#structure-container").getAttribute("position")
+let structureContainerPosition
 
-export function ShowPanelInfo(target, intersection, title, description, image) {
+function ShowPanelInfo(target, intersection, title, description, image) {
 
     let existPanel = document.querySelector(".infoPanel")
     if(existPanel != null) existPanel.remove()
-
-    let targetPosition = target.getAttribute("position") 
-    point = {
-        x: targetPosition.x + structureContainerPosition.x,
-        y: targetPosition.y + structureContainerPosition.y,
-        z: targetPosition.z + structureContainerPosition.z
-    }
-    
-    let atan = point.z/point.x
-    angleBetweenXandZ = Math.atan(atan)
-
-    if(point.z < 0 && point.x > 0) relativeAngle = - angleBetweenXandZ
-    if(point.z < 0 && point.x < 0) relativeAngle = Math.PI - angleBetweenXandZ
-    if(point.z > 0 && point.x < 0) relativeAngle = Math.PI - angleBetweenXandZ
-    if(point.z > 0 && point.x > 0) relativeAngle = (Math.PI*2 - angleBetweenXandZ)
-
-
-    angleBetweenHorizontalAndY = Math.acos((Math.sqrt(point.z*point.z + point.x*point.x))/intersection.distance)
-    if(target.getAttribute("position").y >= Height) angleBetweenHorizontalAndY = -angleBetweenHorizontalAndY
-
     CreatePanel(title, description, image, intersection.object)
 
 }
@@ -78,15 +56,15 @@ var MovePanel = function(target) {
     panel.style.transform = `translate(${transform.x}px, ${transform.y}px)`
 }
 
-export function HidePanelInfo() {
+function HidePanelInfo() {
     document.removeEventListener("mousemove", MovePanel)
     panel != null && panel.remove()
 }
 
 function toScreenPosition(obj)
 {
-    let camera = document.querySelector("#camera").components.camera.camera
-    let canvas = document.querySelector(".a-canvas")
+    let camera = document.querySelector("a-camera").components.camera.camera
+    let canvas = document.querySelector("a-canvas")
 
     var vector = new THREE.Vector3()
 
