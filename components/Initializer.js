@@ -5,6 +5,8 @@ const Init = async () => {
     document.readyState !== 'loading'
         ? InitCode(data)
         : document.addEventListener('DOMContentLoaded', InitCode(data))
+
+   
 }
 
 Init()
@@ -14,13 +16,17 @@ const InitCode = (data) => {
     SetInitialPosition()
     SetInitialSky()
     InitGlobalConfigAfterCanvasIsCreated()
+    
+    document.querySelector("a-assets").addEventListener("loaded", () => {
+        InitImagesGPU()
+    })
 }
 
 const InitGlobalConfigAfterCanvasIsCreated = () => {
     const targetNode = document.querySelector("a-scene")
     const config = { childList: true, subtree: true }
 
-    const callback = function (mutationsList, observer) {
+    const callback = (mutationsList, observer) => {
         for (let mutation of mutationsList) {
             if (mutation.type === 'childList') {
                 let mutationAddedNodes = Array.from(mutation.addedNodes)
@@ -37,6 +43,17 @@ const InitGlobalConfigAfterCanvasIsCreated = () => {
 
     const observer = new MutationObserver(callback)
     observer.observe(targetNode, config)
+}
+
+const InitImagesGPU = async () => {
+    let assets = Array.from(document.querySelector("a-assets").children)
+    let renderer = document.querySelector("a-scene").renderer
+
+    await Promise.all(assets.map(async (asset) => {
+        const texture = await new THREE.TextureLoader().loadAsync(asset.getAttribute("src"))
+        console.log(texture)
+        await renderer.initTexture(texture)
+    }))
 }
 
 const CreateAframeHTML = (data) => {
@@ -94,7 +111,6 @@ const SetInitialSky = () => {
 
 const CreateAssets = (data) => {
     let assetContainer = document.createElement("a-assets")
-
     data.skyAssets.forEach(skyAsset => {
         let img = document.createElement("img")
 
