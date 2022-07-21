@@ -27,8 +27,9 @@ AFRAME.registerComponent('raycaster-listener', {
             this.el.addEventListener('mouseup', (evt) => OnMouseUp(evt, this.el))
         }
         else if(device == "tablet" || device == "mobile") {
-
-        }
+            this.el.addEventListener('mousedown', () => OnMouseDown())
+            this.el.addEventListener('mouseup', (evt) => OnMouseUp(evt, this.el))
+        }   
         
         // this.el.addEventListener('click', evt => {
         //     if (evt.detail.cursorEl.getAttribute("id") == "cursor-prev-raycast") {
@@ -109,19 +110,17 @@ function CheckIfUserClick() {
 
 function MoveToNextSky(evt, el) {
     let cameraObj3D = document.querySelector("a-camera").components.camera.camera
-    temporalRaycaster.setFromCamera(pointer, cameraObj3D);
     let cameraContainerPosition = document.querySelector("#cameraContainer").object3D.position
-    let intersection 
 
     if(device == "mobile" || device == "tablet") {
-        intersection = temporalRaycaster.intersectObject(el.object3D)[0]
-        if(intersection == null) { return }
+        temporalRaycaster.setFromCamera(touch, cameraObj3D);
     }
     else if(device == "desktop") {
-        let raycaster = document.querySelector("#raycaster").components.raycaster
-        intersection = raycaster.getIntersection(el)
-        if (intersection == null) { return }
+        temporalRaycaster.setFromCamera(pointer, cameraObj3D);
     }
+
+    let intersection = temporalRaycaster.intersectObject(el.object3D)[0]
+    if(intersection == null) { return }
     
     let closestSkySpotDistance = 100000
     let closetsSkySpot
