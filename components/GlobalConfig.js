@@ -4,6 +4,7 @@ const pointer = new THREE.Vector2()
 const temporalRaycaster = new THREE.Raycaster()
 let height = 1.6    
 let currentSky
+let structuersObj3D = []
 
 const deviceType = () => {
     const ua = navigator.userAgent;
@@ -29,13 +30,15 @@ let onTouchMove = (evt) => {
 }
 
 const InitGlobalConfig = () => {
-    console.log("sadfasdf")
     if(device == "desktop") {
         window.addEventListener('pointermove', onPointerMove)
     }
     else if(device == "mobile" || device == "tablet") {
         document.querySelector("canvas").addEventListener("touchmove", onTouchMove)
     }
+
+    
+    document.querySelectorAll(".structure").forEach(structure => structuersObj3D.push(structure.object3D))
 }
 
 function Height() {
