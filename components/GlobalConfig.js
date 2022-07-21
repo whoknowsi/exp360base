@@ -23,14 +23,18 @@ let onPointerMove = (evt) => {
     pointer.y = - (evt.clientY / window.innerHeight) * 2 + 1;
 }
 
-let onTouchClick = (evt) => {
+let onTouchMove = (evt) => {
     touch.x = (evt.changedTouches[0].pageX / window.innerWidth) * 2 - 1;
     touch.y = -(evt.changedTouches[0].pageY / window.innerHeight) * 2 + 1;
 }
 
 const InitGlobalConfig = () => {
-    window.addEventListener('pointermove', onPointerMove);
-    document.querySelector("canvas").addEventListener("touchstart", onTouchClick)
+    if(device == "desktop") {
+        window.addEventListener('pointermove', onPointerMove)
+    }
+    else if(device == "mobile" || device == "tablet") {
+        document.querySelector("canvas").addEventListener("touchmove", onTouchMove)
+    }
 }
 
 function Height() {

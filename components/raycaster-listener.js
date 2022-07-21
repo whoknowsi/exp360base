@@ -1,14 +1,6 @@
 var startCamRotation
 let perspectiveCamera
 
-if(device == "mobile" || device == "tablet") {
-    let camera = document.querySelector("#camera")
-    camera.removeAttribute("camera-check")
-    camera.removeAttribute("look-controls")
-    camera.setAttribute("look-controls", "")
-    document.querySelector("#cursor-prev-raycast").setAttribute("cursor", "rayOrigin: mouse")
-}
-
 AFRAME.registerComponent('raycaster-listener', {
     init: function () {
         perspectiveCamera = document.querySelector("a-camera").components.camera.camera
@@ -56,6 +48,8 @@ AFRAME.registerComponent('raycaster-listener', {
         // if (!thereIsHotspotIntersection) { return }
     
         // cursorPrev.setAttribute("visible", "true")
+        if(device == "mobile" || device == "tablet") { return }
+        
         if(this.raycaster == null) { return }
         
 

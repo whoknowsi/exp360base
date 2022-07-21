@@ -19,7 +19,7 @@ AFRAME.registerComponent('hot-spot', {
 
 
         let structures = document.querySelectorAll(".structure")
-        let hotsposts = document.querySelectorAll(".infoSpot")
+        let hotsposts = document.querySelectorAll(".hotSpot")
         let hotspot = this.el
         let data = this.data
         let title = data.title
@@ -56,8 +56,7 @@ let handleLeaveHotspot = () => {
 }
 
 let handleTouchMobile = (evt) => {
-    UpdateTouchPoint(evt)
-
+    onTouchMove(evt)
     temporalRaycaster.setFromCamera(touch, camera)
     const hotspotIntersections = temporalRaycaster.intersectObjects(hotspotObjects)
 
@@ -76,7 +75,7 @@ let handleTouchMobile = (evt) => {
     if (isBlocked) { return }
 
     let hotspot = hotspotIntersection.object.el
-    let data = hotspotIntersection.object.el.components["info-spot"].data
+    let data = hotspotIntersection.object.el.components["hot-spot"].data
     let title = data.description
     let description = data.description
     let image = data.image

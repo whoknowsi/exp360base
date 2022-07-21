@@ -54,8 +54,10 @@ const CreateAframeHTML = (data) => {
     let cameraContainer = CreateCamera()
     scene.appendChild(cameraContainer)
 
-    let cursorVisualContainer = CreateVisualCursor()
-    scene.appendChild(cursorVisualContainer)
+    if(device == "desktop") {
+        let cursorVisualContainer = CreateVisualCursor()
+        scene.appendChild(cursorVisualContainer)
+    }
 
     let raycaster = CreateRaycaster()
     scene.appendChild(raycaster)
@@ -110,6 +112,7 @@ const CreateCamera = () => {
     cameraContainer.setAttribute("camera-check", "")
     cameraContainer.setAttribute("id", "cameraContainer")
     cameraContainer.setAttribute("animation__inertia", "startEvents: inertia; property: rotation; dur: 1000; easing: easeOutQuint; pauseEvents: pause-anim")
+    cameraContainer.setAttribute("animation__moveNextSky", "startEvents: moveNextSky; property: position; dur: 1000; to: 0 0 0; from: 0 0 0; easing: easeOutQuint")
     cameraContainer.setAttribute("position", "0 " + Height() + " 0")
 
     let camera = document.createElement("a-camera")

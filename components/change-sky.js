@@ -14,13 +14,12 @@ AFRAME.registerComponent('change-sky', {
         let el = this.el;
         let sky1 = document.querySelector("#sky1")
         let sky2 = document.querySelector("#sky2")
-        let radiusSkyProportion = sky1.getAttribute("radius") / 8
         el.addEventListener('click', evt => {
-            ChangeSky(evt, data, el, sky1, sky2, radiusSkyProportion)
+            ChangeSky(evt, data, el, sky1, sky2)
         })
         el.addEventListener('raycaster-intersected', evt => {
             if (device == "mobile" || device == "tablet") {
-                ChangeSky(data, el, sky1, sky2, radiusSkyProportion)
+                ChangeSky(evt, data, el, sky1, sky2)
             }
             el.firstChild.setAttribute("material", "opacity", .6)
         })
@@ -30,56 +29,25 @@ AFRAME.registerComponent('change-sky', {
     }
 })
 
-function ChangeSky(evt, data, el, sky1, sky2, radiusSkyProportion) {
-    let structureContainer = document.querySelector("#geometriesContainer")
-    let structureContainerPosition = structureContainer.getAttribute("position")
-    let currentPoint = document.querySelector(".current")
-    let startPoint = new THREE.Vector3(structureContainerPosition.x, structureContainerPosition.y, structureContainerPosition.z)
-    let targetPoint = el.object3D.position
-    let heightTarget = .2
-    let position = new THREE.Vector3(startPoint.x + targetPoint.x, startPoint.y + targetPoint.y, startPoint.z + targetPoint.z)
+function ChangeSky(evt, data, el, sky1, sky2) {
     if (IsMoving()) { return }
     if (sky1.getAttribute("src") == data.target || sky2.getAttribute("src") == data.target) { return }
-
-    // let targetSkyPosition = new THREE.Vector3(position.x * radiusSkyProportion, position.y * radiusSkyProportion, position.z * radiusSkyProportion)
-    // let endPoint = new THREE.Vector3(startPoint.x - position.x, (startPoint.y - position.y) + heightTarget / 2, startPoint.z - position.z)
-    // if (targetSkyPosition.x < 0.000001 && targetSkyPosition.x > -0.000001) targetSkyPosition.x = 0
-    // if (targetSkyPosition.y < 0.000001 && targetSkyPosition.y > -0.000001) targetSkyPosition.y = 0
-    // if (targetSkyPosition.z < 0.000001 && targetSkyPosition.z > -0.000001) targetSkyPosition.z = 0
-    // if (endPoint.x < 0.000001 && endPoint.x > -0.000001) endPoint.x = 0
-    // if (endPoint.y < 0.000001 && endPoint.y > -0.000001) endPoint.y = 0
-    // if (endPoint.z < 0.000001 && endPoint.z > -0.000001) endPoint.z = 0
-    // structureContainer.components.animation__moveout.data.to = endPoint.x + " " + endPoint.y + " " + endPoint.z
-    // structureContainer.components.animation__moveout.data.from = startPoint.x + " " + startPoint.y + " " + startPoint.z
-    // structureContainer.emit("moveout")
+    
+    // let cameraContainer = document.querySelector("#cameraContainer")
+    // console.log(cameraContainer.components.animation__moveNextSky)
+    // cameraContainer.components.animation__moveNextSky.data.to = targetPoint
+    // cameraContainer.components.animation__moveNextSky.data.from = document.querySelector("#cameraContainer").object3D.position
+    // cameraContainer.emit("moveNextSky")
 
     let targetSkyPosition = evt.target.object3D.position
     let endPosition = targetSkyPosition.x + " " + (targetSkyPosition.y + Height()) + " " + targetSkyPosition.z 
-    document.querySelector("#cameraContainer").setAttribute("position", endPosition)
+    cameraContainer.setAttribute("position", endPosition)
     document.querySelector("#skyContainer").setAttribute("rotation", evt.target.getAttribute("change-sky").rotation)
     document.querySelector("#skyContainer").setAttribute("position", endPosition)
     document.querySelector("#sky1").setAttribute("src", "#" + evt.target.getAttribute("id"))
     document.querySelector("#sky2").setAttribute("src", "#" + evt.target.getAttribute("id"))
-
-
-    return 
-    const loader = new THREE.TextureLoader();
-    loader.load("./img/skies/" + data.target + ".jpg", (texture) => {
-        if (currentPoint == null) currentPoint = el
-
-        currentPoint.classList.remove("current")
-        el.classList.add("current")
-    
-        sky2.setAttribute("material", "src", "#" + data.target)
-        sky2.object3D.children[0].material.map = texture
-        sky2.object3D.children[0].material.needsUpdate = true;
-
-        structureContainer.setAttribute("position", endPoint)
-        SetMoving()
-        MakeTransitionBetweenSkies(data, targetSkyPosition, texture)
-
-    })
 }
+
 function MakeTransitionBetweenSkies(data, targetSkyPosition, texture) {
     let sky1 = document.querySelector("#sky1")
     let sky2 = document.querySelector("#sky2")
