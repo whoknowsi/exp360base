@@ -106,12 +106,11 @@ const SetInitialSky = () => {
     let img = document.createElement("img")
     console.log(currentSky)
     img.onload = () => {
-        sky1.setAttribute("src","./img/skies/" + currentSky.target + ".jpg")
-        sky2.setAttribute("src", "./img/skies/" + currentSky.target + ".jpg")
-        console.log("HERE")
+        sky1.setAttribute("src","./img/skies/1664/" + currentSky.target + ".jpg")
+        sky2.setAttribute("src", "./img/skies/1664/" + currentSky.target + ".jpg")
     } 
     img.onerror = () => {}
-    img.src = "./img/skies/" + currentSky.target + ".jpg"
+    img.src = "./img/skies/1664/" + currentSky.target + ".jpg"
 
     skyConatiner.setAttribute("position", currentSky.position)
 
@@ -124,8 +123,7 @@ const CreateAssets = (data) => {
     let assetContainer = document.createElement("a-assets")
     data.skyAssets.forEach(skyAsset => {
         let img = document.createElement("img")
-        let fileNameArray = skyAsset.split(".")
-        let fileName = "./img/skies/" + fileNameArray[0] + "-low." + fileNameArray[1]
+        let fileName = "./img/skies/832/" + skyAsset
 
         img.setAttribute("id", skyAsset.split(".")[0])
         img.setAttribute("src", fileName)

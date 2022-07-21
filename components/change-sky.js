@@ -47,14 +47,12 @@ function ChangeSky(evt, data, el, sky1, sky2) {
     document.querySelector("#sky2").setAttribute("src", "#" + id)
 
     let img = document.createElement("img")
-    console.log(currentSky)
     img.onload = () => {
-        document.querySelector("#sky1").setAttribute("src", "./img/skies/" + id + ".jpg")
-        document.querySelector("#sky2").setAttribute("src", "./img/skies/" + id + ".jpg")
-        console.log(id)
+        document.querySelector("#sky1").setAttribute("src", "./img/skies/1664/" + id + ".jpg")
+        document.querySelector("#sky2").setAttribute("src", "./img/skies/1664/" + id + ".jpg")
     } 
     img.onerror = () => {}
-    img.src = "./img/skies/" + id + ".jpg"
+    img.src = "./img/skies/1664/" + id + ".jpg"
     
     
     cameraContainer.setAttribute("position", endPosition)
