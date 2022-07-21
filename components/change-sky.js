@@ -38,7 +38,6 @@ function ChangeSky(evt, data, el, sky1, sky2) {
     // cameraContainer.components.animation__moveNextSky.data.to = targetPoint
     // cameraContainer.components.animation__moveNextSky.data.from = document.querySelector("#cameraContainer").object3D.position
     // cameraContainer.emit("moveNextSky")
-    console.log(THREE.Cache)
 
     let targetSkyPosition = evt.target.object3D.position
     let endPosition = targetSkyPosition.x + " " + (targetSkyPosition.y + Height()) + " " + targetSkyPosition.z 

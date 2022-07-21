@@ -51,7 +51,6 @@ const InitImagesGPU = async () => {
 
     await Promise.all(assets.map(async (asset) => {
         const texture = await new THREE.TextureLoader().loadAsync(asset.getAttribute("src"))
-        console.log(texture)
         await renderer.initTexture(texture)
     }))
 }
@@ -62,7 +61,7 @@ const CreateAframeHTML = (data) => {
     if (device == "desktop") {
         scene.setAttribute("renderer", "antialias: true; precision: high; maxCanvasWidth: 1920; maxCanvasHeight: 1920")
     } else {
-        scene.setAttribute("renderer", "antialias: false; precision: low; maxCanvasWidth: 1280; maxCanvasHeight: 1280")
+        scene.setAttribute("renderer", "antialias: false; precision: low; maxCanvasWidth: 720; maxCanvasHeight: 720")
     }
 
     let assetsContainer = CreateAssets(data)
