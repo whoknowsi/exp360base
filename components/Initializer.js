@@ -96,7 +96,7 @@ const CreateAssets = (data) => {
     let assetContainer = document.createElement("a-assets")
 
     data.skyAssets.forEach(skyAsset => {
-        let img = document.createElement("a-img")
+        let img = document.createElement("img")
 
         img.setAttribute("id", skyAsset.split(".")[0])
         img.setAttribute("src", "./img/skies/" + skyAsset)

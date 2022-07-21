@@ -38,14 +38,15 @@ function ChangeSky(evt, data, el, sky1, sky2) {
     // cameraContainer.components.animation__moveNextSky.data.to = targetPoint
     // cameraContainer.components.animation__moveNextSky.data.from = document.querySelector("#cameraContainer").object3D.position
     // cameraContainer.emit("moveNextSky")
+    console.log(THREE.Cache)
 
     let targetSkyPosition = evt.target.object3D.position
     let endPosition = targetSkyPosition.x + " " + (targetSkyPosition.y + Height()) + " " + targetSkyPosition.z 
+    document.querySelector("#sky1").setAttribute("src", "#" + evt.target.getAttribute("id"))
+    document.querySelector("#sky2").setAttribute("src", "#" + evt.target.getAttribute("id"))
     cameraContainer.setAttribute("position", endPosition)
     document.querySelector("#skyContainer").setAttribute("rotation", evt.target.getAttribute("change-sky").rotation)
     document.querySelector("#skyContainer").setAttribute("position", endPosition)
-    document.querySelector("#sky1").setAttribute("src", "#" + evt.target.getAttribute("id"))
-    document.querySelector("#sky2").setAttribute("src", "#" + evt.target.getAttribute("id"))
 }
 
 function MakeTransitionBetweenSkies(data, targetSkyPosition, texture) {
