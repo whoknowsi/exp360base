@@ -60,7 +60,7 @@ AFRAME.registerComponent('camera-check', {
 const onDownHandler = (evt, mouse) => {
     if(device == "mobile" || device == "tablet")
         onTouchMove(evt)
-
+        
     rotating = true
     if(animating) {
         cameraContainer.emit("pause-anim")

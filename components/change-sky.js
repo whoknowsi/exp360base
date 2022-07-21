@@ -41,8 +41,22 @@ function ChangeSky(evt, data, el, sky1, sky2) {
 
     let targetSkyPosition = evt.target.object3D.position
     let endPosition = targetSkyPosition.x + " " + (targetSkyPosition.y + Height()) + " " + targetSkyPosition.z 
-    document.querySelector("#sky1").setAttribute("src", "#" + evt.target.getAttribute("id"))
-    document.querySelector("#sky2").setAttribute("src", "#" + evt.target.getAttribute("id"))
+    let id = evt.target.getAttribute("id")
+
+    document.querySelector("#sky1").setAttribute("src", "#" + id)
+    document.querySelector("#sky2").setAttribute("src", "#" + id)
+
+    let img = document.createElement("img")
+    console.log(currentSky)
+    img.onload = () => {
+        document.querySelector("#sky1").setAttribute("src", "./img/skies/" + id + ".jpg")
+        document.querySelector("#sky2").setAttribute("src", "./img/skies/" + id + ".jpg")
+        console.log(id)
+    } 
+    img.onerror = () => {}
+    img.src = "./img/skies/" + id + ".jpg"
+    
+    
     cameraContainer.setAttribute("position", endPosition)
     document.querySelector("#skyContainer").setAttribute("rotation", evt.target.getAttribute("change-sky").rotation)
     document.querySelector("#skyContainer").setAttribute("position", endPosition)

@@ -13,12 +13,12 @@ Init()
 
 const InitCode = (data) => {
     CreateAframeHTML(data)
-    SetInitialPosition()
-    SetInitialSky()
     InitGlobalConfigAfterCanvasIsCreated()
     
     document.querySelector("a-assets").addEventListener("loaded", () => {
         InitImagesGPU()
+        SetInitialPosition()
+        SetInitialSky()
     })
 }
 
@@ -50,10 +50,12 @@ const InitImagesGPU = async () => {
     let renderer = document.querySelector("a-scene").renderer
 
     await Promise.all(assets.map(async (asset) => {
-        const texture = await new THREE.TextureLoader().loadAsync(asset.getAttribute("src"))
-        await renderer.initTexture(texture)
+        let fileName = asset.getAttribute("src")
+        const texture = await new THREE.TextureLoader().loadAsync(fileName)
+        await renderer.initTexture(texture) 
     }))
 }
+
 
 const CreateAframeHTML = (data) => {
     let scene = document.createElement("a-scene")
@@ -101,6 +103,16 @@ const SetInitialSky = () => {
     sky1.setAttribute("src", "#" + currentSky.target)
     sky2.setAttribute("src", "#" + currentSky.target)
 
+    let img = document.createElement("img")
+    console.log(currentSky)
+    img.onload = () => {
+        sky1.setAttribute("src","./img/skies/" + currentSky.target + ".jpg")
+        sky2.setAttribute("src", "./img/skies/" + currentSky.target + ".jpg")
+        console.log("HERE")
+    } 
+    img.onerror = () => {}
+    img.src = "./img/skies/" + currentSky.target + ".jpg"
+
     skyConatiner.setAttribute("position", currentSky.position)
 
     //let rotation = new THREE.Vector3(currentSky.rotation.split(" ")[0], currentSky.rotation.split(" ")[1], currentSky.rotation.split(" ")[2])
@@ -112,9 +124,11 @@ const CreateAssets = (data) => {
     let assetContainer = document.createElement("a-assets")
     data.skyAssets.forEach(skyAsset => {
         let img = document.createElement("img")
+        let fileNameArray = skyAsset.split(".")
+        let fileName = "./img/skies/" + fileNameArray[0] + "-low." + fileNameArray[1]
 
         img.setAttribute("id", skyAsset.split(".")[0])
-        img.setAttribute("src", "./img/skies/" + skyAsset)
+        img.setAttribute("src", fileName)
 
         assetContainer.appendChild(img)
     })

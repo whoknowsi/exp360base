@@ -29,6 +29,7 @@ let onTouchMove = (evt) => {
 }
 
 const InitGlobalConfig = () => {
+    console.log("sadfasdf")
     if(device == "desktop") {
         window.addEventListener('pointermove', onPointerMove)
     }
