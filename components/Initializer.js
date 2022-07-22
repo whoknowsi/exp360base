@@ -5,8 +5,6 @@ const Init = async () => {
     document.readyState !== 'loading'
         ? InitCode(data)
         : document.addEventListener('DOMContentLoaded', InitCode(data))
-
-   
 }
 
 Init()
@@ -50,6 +48,7 @@ const InitImagesGPU = async () => {
     let renderer = document.querySelector("a-scene").renderer
 
     await Promise.all(assets.map(async (asset) => {
+        if(asset.getAttribute("id").includes("-H")) { return }
         let fileName = asset.getAttribute("src")
         const texture = await new THREE.TextureLoader().loadAsync(fileName)
         await renderer.initTexture(texture) 
@@ -84,8 +83,6 @@ const CreateAframeHTML = (data) => {
     let skiesContainer = CreateSkies(currentSky.target)
     scene.appendChild(skiesContainer)
     scene.appendChild(geometriesContainer)
-
-    
 
     document.body.appendChild(scene)
 }
@@ -124,7 +121,14 @@ const CreateAssets = (data) => {
         img.setAttribute("id", skyAsset.split(".")[0])
         img.setAttribute("src", fileName)
 
+        let img2 = document.createElement("img")
+        let fileName2 = "./img/skies/1664/" + skyAsset
+
+        img2.setAttribute("id", skyAsset.split(".")[0] + "-H")
+        img2.setAttribute("src", fileName2)
+
         assetContainer.appendChild(img)
+        assetContainer.appendChild(img2)
     })
 
     return assetContainer

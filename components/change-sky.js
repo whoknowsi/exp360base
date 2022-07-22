@@ -60,17 +60,14 @@ function ChangeSky(el, data) {
     sky1.setAttribute("rotation", data.rotation)
 
     setTimeout(() => {
-
-        let img = document.createElement("img")
-        img.onload = () => {
-            sky1.setAttribute("src", "./img/skies/1664/" + data.target + ".jpg")
-            sky2.setAttribute("src", "./img/skies/1664/" + data.target + ".jpg")
-            UnsetMoving()
-        }
-        img.onerror = () => { }
-        img.src = "./img/skies/1664/" + data.target + ".jpg"
-        sky2.setAttribute("rotation", data.rotation)
+        // const loader = new THREE.TextureLoader()
+        // const texture = loader.load();
         
+        sky1.setAttribute("src", "#" +  data.target + "-H")
+        sky2.setAttribute("src", "#" +  data.target + "-H")
+        sky2.setAttribute("rotation", data.rotation)
+        UnsetMoving()
+
     }, 1001);
 
 
