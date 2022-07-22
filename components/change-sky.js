@@ -14,7 +14,7 @@ AFRAME.registerComponent('change-sky', {
         let el = this.el;
 
         el.addEventListener('click', () => ChangeSky(el, data))
-        el.addEventListener('raycaster-intersected',  () => {
+        el.addEventListener('raycaster-intersected', () => {
             if (device == "mobile" || device == "tablet") {
                 ChangeSky(evt)
             }
@@ -31,6 +31,9 @@ function ChangeSky(el, data) {
     if (IsMoving()) { return }
     SetMoving()
 
+    let backSky = document.querySelector("#sky1")
+    let frontSky = document.querySelector("#sky2")
+
     let geometriesContainer = document.querySelector("#geometriesContainer")
     let geometriesContainerPos = geometriesContainer.object3D.position
     let geometriesContainerTarget = new THREE.Vector3(geometriesContainerPos.x, geometriesContainerPos.y, geometriesContainerPos.z)
@@ -38,40 +41,46 @@ function ChangeSky(el, data) {
     el.object3D.getWorldPosition(spotPositon)
 
     geometriesContainerTarget.add(spotPositon.negate())
-    
+
     geometriesContainer.components.animation__move.data.to = geometriesContainerTarget.x + " " + geometriesContainerTarget.y + " " + geometriesContainerTarget.z
     geometriesContainer.components.animation__move.data.from = geometriesContainerPos.x + " " + geometriesContainerPos.y + " " + geometriesContainerPos.z
     geometriesContainer.emit("move")
 
 
-    let skyTarget = new THREE.Vector3(spotPositon.x*12.5, spotPositon.y*12.5, spotPositon.z*12.5)
-    let sky2 = document.querySelector("#sky2")
-    sky2.components.animation__move.data.to = skyTarget.x + " " + skyTarget.y + " " + skyTarget.z
-    sky2.components.animation__move.data.from = "0 0 0"
-    sky2.emit("move")
-    sky2.emit("fade")
+    let skyTarget = new THREE.Vector3(spotPositon.x * 500, spotPositon.y * 500, spotPositon.z * 500)
 
-    let sky1 = document.querySelector("#sky1")
-    sky1.components.animation__move.data.from = (-skyTarget.x) + " " + (-skyTarget.y) + " " + (-skyTarget.z)
-    sky1.components.animation__move.data.to = "0 0 0"
-    sky1.emit("move")
+    frontSky.components.animation__move.data.to = skyTarget.x + " " + skyTarget.y + " " + skyTarget.z
+    frontSky.components.animation__move.data.from = "0 0 0"
+    frontSky.emit("move")
+    frontSky.components.cubemap.material.transparent = true
+    frontSky.emit("fade")
 
-    sky1.setAttribute("src", "#" + data.target)
-    sky1.setAttribute("rotation", data.rotation)
 
-    setTimeout(() => {
-        // const loader = new THREE.TextureLoader()
-        // const texture = loader.load();
-        
-        sky1.setAttribute("src", "#" +  data.target + "-H")
-        sky2.setAttribute("src", "#" +  data.target + "-H")
-        sky2.setAttribute("rotation", data.rotation)
-        UnsetMoving()
 
-    }, 1001);
+    backSky.components.animation__move.data.from = (-skyTarget.x) + " " + (-skyTarget.y) + " " + (-skyTarget.z)
+    backSky.components.animation__move.data.to = "0 0 0"
+    
+    //sky1.emit("move")
+    backSky.setAttribute("cubemap", "folder: #" + data.target)
+    backSky.setAttribute("rotation", data.rotation)
 
+    function onAnimationMoveFinish(evt) {
+        if (evt.detail.name === "animation__move") {
+            console.log("here")
+            frontSky.setAttribute("position", "0 0 0")
+            frontSky.setAttribute("rotation", data.rotation)
+            frontSky.setAttribute("cubemap", "folder: #" + data.target)
+    
+            frontSky.removeEventListener("animationcomplete", onAnimationMoveFinish)
+            UnsetMoving()
+        }
+    }
+
+    frontSky.addEventListener("animationcomplete", onAnimationMoveFinish)
 
 }
+
+
 
 function SetMoving() {
     let structureContainer = document.querySelector("#geometriesContainer")
