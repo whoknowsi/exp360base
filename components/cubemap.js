@@ -111,7 +111,7 @@ AFRAME.registerComponent("cubemap", {
                 this.loader.setPath(srcPath);
                 // Cubemap image files must follow this naming scheme
                 // from: https://threejs.org/docs/index.html#api/en/textures/CubeTexture
-                urls = ["posx", "negx", "posy", "negy", "posz", "negz"];
+                urls = ["px", "nx", "py", "ny", "pz", "nz"];
                 // Apply extension
                 urls = urls.map(function (val) {
                     return val + "." + data.ext;

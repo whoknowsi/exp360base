@@ -47,7 +47,7 @@ function ChangeSky(el, data) {
     geometriesContainer.emit("move")
 
 
-    let skyTarget = new THREE.Vector3(spotPositon.x * 500, spotPositon.y * 500, spotPositon.z * 500)
+    let skyTarget = new THREE.Vector3(spotPositon.x * 250, spotPositon.y * 250, spotPositon.z * 250)
 
     frontSky.components.animation__move.data.to = skyTarget.x + " " + skyTarget.y + " " + skyTarget.z
     frontSky.components.animation__move.data.from = "0 0 0"
@@ -59,9 +59,10 @@ function ChangeSky(el, data) {
 
     backSky.components.animation__move.data.from = (-skyTarget.x) + " " + (-skyTarget.y) + " " + (-skyTarget.z)
     backSky.components.animation__move.data.to = "0 0 0"
+    backSky.emit("move")
     
     //sky1.emit("move")
-    backSky.setAttribute("cubemap", "folder: #" + data.target)
+    backSky.setAttribute("cubemap", "folder: ./img/skies/test/" + data.target + "/")
     backSky.setAttribute("rotation", data.rotation)
 
     function onAnimationMoveFinish(evt) {
@@ -69,7 +70,7 @@ function ChangeSky(el, data) {
             console.log("here")
             frontSky.setAttribute("position", "0 0 0")
             frontSky.setAttribute("rotation", data.rotation)
-            frontSky.setAttribute("cubemap", "folder: #" + data.target)
+            frontSky.setAttribute("cubemap", "folder: ./img/skies/test/" + data.target + "/")
     
             frontSky.removeEventListener("animationcomplete", onAnimationMoveFinish)
             UnsetMoving()

@@ -13,7 +13,7 @@ const InitCode = (data) => {
     CreateAframeHTML(data)
     InitGlobalConfigAfterCanvasIsCreated()
     
-    document.querySelector("a-assets").addEventListener("loaded", () => {
+    document.querySelector("a-scene").addEventListener("loaded", () => {
         InitImagesGPU()
         SetInitialPosition()
         SetInitialSky()
@@ -65,8 +65,8 @@ const CreateAframeHTML = (data) => {
         scene.setAttribute("renderer", "antialias: false; precision: low; maxCanvasWidth: 720; maxCanvasHeight: 720")
     }
 
-    let assetsContainer = CreateAssets(data)
-    scene.appendChild(assetsContainer)
+    // let assetsContainer = CreateAssets(data)
+    // scene.appendChild(assetsContainer)
 
     let cameraContainer = CreateCamera()
     scene.appendChild(cameraContainer)
@@ -83,7 +83,6 @@ const CreateAframeHTML = (data) => {
     let createCubicSky = CreateCubicSky()
     scene.appendChild(createCubicSky)
     scene.appendChild(geometriesContainer)
-  
 
     document.body.appendChild(scene)
 }
@@ -92,13 +91,13 @@ const CreateCubicSky = () => {
     let skyContainer = document.createElement("a-entity")
     let sky1 = document.createElement("a-entity")
     sky1.setAttribute("id", "sky1")
-    sky1.setAttribute("cubemap", "folder: #Iglesia-9")
+    sky1.setAttribute("cubemap", "folder: ./img/skies/test/Iglesia-9/")
     sky1.setAttribute("rotation", currentSky.rotation)
     sky1.setAttribute("animation__move", "startEvents: move; property: position; dur: 1000; from: 0 0 0; to: 0 0 0; easing: easeOutSine")
 
     let sky2 = document.createElement("a-entity")
     sky2.setAttribute("id", "sky2")
-    sky2.setAttribute("cubemap", "folder: #Iglesia-9")
+    sky2.setAttribute("cubemap", "folder: ./img/skies/test/Iglesia-9/")
     sky2.setAttribute("rotation", currentSky.rotation)
     sky2.setAttribute("animation__fade", "startEvents: fade; property: components.cubemap.material.uniforms.opacity.value; dur: 1000; from: 1.0; to: 0.0; easing: easeOutSine")
     sky2.setAttribute("animation__move", "startEvents: move; property: position; dur: 1000; from: 0 0 0; to: 0 0 0; easing: easeOutSine")
