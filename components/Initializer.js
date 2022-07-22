@@ -81,10 +81,39 @@ const CreateAframeHTML = (data) => {
 
     let geometriesContainer = CreateGeometries(data)
     let skiesContainer = CreateSkies(currentSky.target)
-    scene.appendChild(skiesContainer)
+    //scene.appendChild(skiesContainer)
     scene.appendChild(geometriesContainer)
 
+    let createCubicSky = CreateCubicSky()
+    scene.appendChild(createCubicSky)
+
     document.body.appendChild(scene)
+}
+
+const CreateCubicSky = () => {
+    // const loader = new THREE.TextureLoader()
+    // let textureArray = []
+    // let frontTexture = loader.load("./img/skies/test/Iglesia-9-front.jpg")
+    // let backTexture = loader.load("./img/skies/test/Iglesia-9-front.jpg")
+    // let topTexture = loader.load("./img/skies/test/Iglesia-9-top.jpg")
+    // let bottomTexture = loader.load("./img/skies/test/Iglesia-9-bottom.jpg")
+    // let leftTexture = loader.load("./img/skies/test/Iglesia-9-left.jpg")
+    // let rightTexture = loader.load("./img/skies/test/Iglesia-9-right.jpg")
+
+    // textureArray.push(new THREE.MeshBasicMaterial({map: frontTexture, side: THREE.BackSide}))
+    // textureArray.push(new THREE.MeshBasicMaterial({map: backTexture}))
+    // textureArray.push(new THREE.MeshBasicMaterial({map: topTexture}))
+    // textureArray.push(new THREE.MeshBasicMaterial({map: bottomTexture}))
+    // textureArray.push(new THREE.MeshBasicMaterial({map: leftTexture}))
+    // textureArray.push(new THREE.MeshBasicMaterial({map: rightTexture}))
+
+    // const cubeGeometry = new THREE.BoxGeometry(100, 100, 100)
+    // const skyBox = new THREE.Mesh(cubeGeometry, textureArray)
+    // return skyBox
+    // <a-entity id="skybox" cubemap="folder:#yokohama"></a-entity>
+    let skyCube = document.createElement("a-entity")
+    skyCube.setAttribute("cubemap", "folder: #Iglesia-9-box")
+    return skyCube
 }
 
 const SetInitialPosition = () => {
@@ -96,6 +125,8 @@ const SetInitialPosition = () => {
 const SetInitialSky = () => {
     let sky1 = document.querySelector("#sky1")
     let sky2 = document.querySelector("#sky2")
+
+    if(sky1 == null || sky2 == null) { return }
 
     sky1.setAttribute("src", "#" + currentSky.target)
     sky2.setAttribute("src", "#" + currentSky.target)
@@ -114,6 +145,32 @@ const SetInitialSky = () => {
 
 const CreateAssets = (data) => {
     let assetContainer = document.createElement("a-assets")
+
+    let cubemap = document.createElement("a-cubemap")
+    cubemap.setAttribute("id", "Iglesia-9-box")
+
+    let imgRight = document.createElement("img")
+    imgRight.setAttribute("src", "./img/skies/test/Iglesia-9-right.jpg")
+    let imgLeft = document.createElement("img")
+    imgLeft.setAttribute("src", "./img/skies/test/Iglesia-9-left.jpg")
+    let imgTop = document.createElement("img")
+    imgTop.setAttribute("src", "./img/skies/test/Iglesia-9-top.jpg")
+    let imgBottom = document.createElement("img")
+    imgBottom.setAttribute("src", "./img/skies/test/Iglesia-9-bottom.jpg")
+    let imgFront = document.createElement("img")
+    imgFront.setAttribute("src", "./img/skies/test/Iglesia-9-front.jpg")
+    let imgBack = document.createElement("img")
+    imgBack.setAttribute("src", "./img/skies/test/Iglesia-9-back.jpg")
+
+    cubemap.appendChild(imgRight)
+    cubemap.appendChild(imgLeft)
+    cubemap.appendChild(imgTop)
+    cubemap.appendChild(imgBottom)
+    cubemap.appendChild(imgFront)
+    cubemap.appendChild(imgBack)
+
+    assetContainer.appendChild(cubemap)
+
     data.skyAssets.forEach(skyAsset => {
         let img = document.createElement("img")
         let fileName = "./img/skies/832/" + skyAsset
@@ -131,6 +188,8 @@ const CreateAssets = (data) => {
         assetContainer.appendChild(img2)
     })
 
+
+    
     return assetContainer
 }
 
