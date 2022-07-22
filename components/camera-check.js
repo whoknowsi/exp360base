@@ -104,7 +104,6 @@ const onUpHandler = () => {
     if(to.x > 90) to.x = 90   
     if(to.x < -90) to.x = -90
 
-    
     cameraContainer.components.animation__inertia.data.from = from.x + " " + from.y + " 0"
     cameraContainer.components.animation__inertia.data.to = to.x + " " + to.y + " 0"
     cameraContainer.emit('inertia');

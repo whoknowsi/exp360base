@@ -81,42 +81,38 @@ const CreateAframeHTML = (data) => {
     scene.appendChild(raycaster)
 
     let geometriesContainer = CreateGeometries(data)
-    scene.appendChild(geometriesContainer)
-
     let skiesContainer = CreateSkies(currentSky.target)
     scene.appendChild(skiesContainer)
+    scene.appendChild(geometriesContainer)
+
+    
 
     document.body.appendChild(scene)
 }
 
 const SetInitialPosition = () => {
-    let cameraContainer = document.querySelector("#cameraContainer")
-    let position = new THREE.Vector3(currentSky.position.x, currentSky.position.y + Height(), currentSky.position.z)
-    cameraContainer.setAttribute("position", position)
+    let geometriesContainer = document.querySelector("#geometriesContainer")
+    let position = new THREE.Vector3(-currentSky.position.x, -currentSky.position.y + SkyMiddleHeight(), -currentSky.position.z)
+    geometriesContainer.setAttribute("position", position)
 }
 
 const SetInitialSky = () => {
     let sky1 = document.querySelector("#sky1")
     let sky2 = document.querySelector("#sky2")
-    let skyConatiner = document.querySelector("#skyContainer")
 
     sky1.setAttribute("src", "#" + currentSky.target)
     sky2.setAttribute("src", "#" + currentSky.target)
 
+    sky1.setAttribute("rotation", currentSky.rotation)
+    sky2.setAttribute("rotation", currentSky.rotation)
+
     let img = document.createElement("img")
-    console.log(currentSky)
     img.onload = () => {
         sky1.setAttribute("src","./img/skies/1664/" + currentSky.target + ".jpg")
         sky2.setAttribute("src", "./img/skies/1664/" + currentSky.target + ".jpg")
     } 
     img.onerror = () => {}
     img.src = "./img/skies/1664/" + currentSky.target + ".jpg"
-
-    skyConatiner.setAttribute("position", currentSky.position)
-
-    //let rotation = new THREE.Vector3(currentSky.rotation.split(" ")[0], currentSky.rotation.split(" ")[1], currentSky.rotation.split(" ")[2])
-    skyConatiner.setAttribute("rotation", currentSky.rotation)
-
 }
 
 const CreateAssets = (data) => {
@@ -139,7 +135,6 @@ const CreateCamera = () => {
     cameraContainer.setAttribute("camera-check", "")
     cameraContainer.setAttribute("id", "cameraContainer")
     cameraContainer.setAttribute("animation__inertia", "startEvents: inertia; property: rotation; dur: 1000; easing: easeOutQuint; pauseEvents: pause-anim")
-    cameraContainer.setAttribute("animation__moveNextSky", "startEvents: moveNextSky; property: position; dur: 1000; to: 0 0 0; from: 0 0 0; easing: easeOutQuint")
     cameraContainer.setAttribute("position", "0 " + Height() + " 0")
 
     let camera = document.createElement("a-camera")
@@ -202,6 +197,7 @@ const CreateRaycaster = () => {
 const CreateGeometries = (data) => {
     let geometriesContainer = document.createElement("a-entity")
     geometriesContainer.setAttribute("id", "geometriesContainer")
+    geometriesContainer.setAttribute("animation__move", "startEvents: move; property: position; dur: 1000; to: 0 0 0; from: 0 0 0; elasticity: 0; easing: easeOutSine")
 
     let structuresEl = CreateStructures(data.structures)
     geometriesContainer.appendChild(structuresEl)
@@ -225,6 +221,7 @@ const CreateSkies = (currentSky) => {
     })
     sky1.setAttribute("id", "sky1")
     sky1.setAttribute("src", "#" + currentSky)
+    sky1.setAttribute("animation__move", "startEvents: move; property: position; dur: 1000; from: 0 0 0; to: 0 0 0; easing: easeOutSine")
 
     let sky2 = document.createElement("a-sky")
     sky2.setAttribute("geometry", {
@@ -232,6 +229,8 @@ const CreateSkies = (currentSky) => {
     })
     sky2.setAttribute("id", "sky2")
     sky2.setAttribute("src", "#" + currentSky)
+    sky2.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 1000; from: 1; to: 0; easing: easeOutSine")
+    sky2.setAttribute("animation__move", "startEvents: move; property: position; dur: 1000; from: 0 0 0; to: 0 0 0; easing: easeOutSine")
 
     skyContainer.appendChild(sky1)
     skyContainer.appendChild(sky2)
@@ -261,7 +260,8 @@ const CreateStructure = (structure) => {
         depth: structure.depth
     })
     structureEl.setAttribute("material", {
-        opacity: 0
+        opacity: 0,
+        color: "#7BC8A4"
     })
     structureEl.setAttribute("class", "structure")
     structureEl.setAttribute("position", structure.position.x + " " + structure.position.y + " " + structure.position.z)
@@ -294,7 +294,7 @@ const CreateSkySpot = (skySpot) => {
     spotEl.setAttribute("change-sky", "target: " + skySpot.target + "; rotation: " + skySpot.rotation)
     spotEl.setAttribute("geometry", {
         primitive: "circle",
-        radius: .2
+        radius: skyHeight
     })
     spotEl.setAttribute("material", {
         opacity: "0",

@@ -127,18 +127,21 @@ function MoveToNextSky(evt, el) {
 
     let skySpots = document.querySelectorAll(".skySpot")
     skySpots.forEach(spot => {
-        let distanceCameraSpot = cameraContainerPosition.distanceTo(spot.object3D.position)
+        let spotWorldPosition = new THREE.Vector3()
+        spot.object3D.getWorldPosition(spotWorldPosition)
+
+        let distanceCameraSpot = cameraContainerPosition.distanceTo(spotWorldPosition)
         if(distanceCameraSpot > 10) { return }
 
 
-        let distanceSpotIntersection = spot.object3D.position.distanceTo(intersection.point)
+        let distanceSpotIntersection = spotWorldPosition.distanceTo(intersection.point)
         let distanceCameraIntersection = cameraContainerPosition.distanceTo(intersection.point)
         let angle = Math.acos((distanceSpotIntersection * distanceSpotIntersection - distanceCameraIntersection * distanceCameraIntersection - distanceCameraSpot * distanceCameraSpot) / (-2 * distanceCameraIntersection * distanceCameraSpot))
 
         temporalRaycaster.setFromCamera(pointer, cameraObj3D)
         const intersects = temporalRaycaster.intersectObjects(structuersObj3D)
         let intersected = false 
-        if (angle < .4) {
+        if (angle < .7) {
 
             if (distanceCameraSpot < closestSkySpotDistance) {
                 if (intersects.length > 0) {

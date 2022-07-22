@@ -2,7 +2,8 @@
 const touch = new THREE.Vector2()
 const pointer = new THREE.Vector2()
 const temporalRaycaster = new THREE.Raycaster()
-let height = 1.6    
+let height = 1.6
+let skyHeight = .2
 let currentSky
 let structuersObj3D = []
 
@@ -42,5 +43,9 @@ const InitGlobalConfig = () => {
 }
 
 function Height() {
-    return height;
+    return height
+}
+
+function SkyMiddleHeight() {
+    return skyHeight/2
 }
