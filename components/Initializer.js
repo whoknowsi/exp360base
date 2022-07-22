@@ -14,7 +14,7 @@ const InitCode = (data) => {
     InitGlobalConfigAfterCanvasIsCreated()
     
     document.querySelector("a-assets").addEventListener("loaded", () => {
-        InitImagesGPU()
+        //InitImagesGPU()
         SetInitialPosition()
         SetInitialSky()
     })
@@ -81,39 +81,10 @@ const CreateAframeHTML = (data) => {
 
     let geometriesContainer = CreateGeometries(data)
     let skiesContainer = CreateSkies(currentSky.target)
-    //scene.appendChild(skiesContainer)
+    scene.appendChild(skiesContainer)
     scene.appendChild(geometriesContainer)
 
-    let createCubicSky = CreateCubicSky()
-    scene.appendChild(createCubicSky)
-
     document.body.appendChild(scene)
-}
-
-const CreateCubicSky = () => {
-    // const loader = new THREE.TextureLoader()
-    // let textureArray = []
-    // let frontTexture = loader.load("./img/skies/test/Iglesia-9-front.jpg")
-    // let backTexture = loader.load("./img/skies/test/Iglesia-9-front.jpg")
-    // let topTexture = loader.load("./img/skies/test/Iglesia-9-top.jpg")
-    // let bottomTexture = loader.load("./img/skies/test/Iglesia-9-bottom.jpg")
-    // let leftTexture = loader.load("./img/skies/test/Iglesia-9-left.jpg")
-    // let rightTexture = loader.load("./img/skies/test/Iglesia-9-right.jpg")
-
-    // textureArray.push(new THREE.MeshBasicMaterial({map: frontTexture, side: THREE.BackSide}))
-    // textureArray.push(new THREE.MeshBasicMaterial({map: backTexture}))
-    // textureArray.push(new THREE.MeshBasicMaterial({map: topTexture}))
-    // textureArray.push(new THREE.MeshBasicMaterial({map: bottomTexture}))
-    // textureArray.push(new THREE.MeshBasicMaterial({map: leftTexture}))
-    // textureArray.push(new THREE.MeshBasicMaterial({map: rightTexture}))
-
-    // const cubeGeometry = new THREE.BoxGeometry(100, 100, 100)
-    // const skyBox = new THREE.Mesh(cubeGeometry, textureArray)
-    // return skyBox
-    // <a-entity id="skybox" cubemap="folder:#yokohama"></a-entity>
-    let skyCube = document.createElement("a-entity")
-    skyCube.setAttribute("cubemap", "folder: #Iglesia-9-box")
-    return skyCube
 }
 
 const SetInitialPosition = () => {
@@ -146,31 +117,6 @@ const SetInitialSky = () => {
 const CreateAssets = (data) => {
     let assetContainer = document.createElement("a-assets")
 
-    let cubemap = document.createElement("a-cubemap")
-    cubemap.setAttribute("id", "Iglesia-9-box")
-
-    let imgRight = document.createElement("img")
-    imgRight.setAttribute("src", "./img/skies/test/Iglesia-9-right.jpg")
-    let imgLeft = document.createElement("img")
-    imgLeft.setAttribute("src", "./img/skies/test/Iglesia-9-left.jpg")
-    let imgTop = document.createElement("img")
-    imgTop.setAttribute("src", "./img/skies/test/Iglesia-9-top.jpg")
-    let imgBottom = document.createElement("img")
-    imgBottom.setAttribute("src", "./img/skies/test/Iglesia-9-bottom.jpg")
-    let imgFront = document.createElement("img")
-    imgFront.setAttribute("src", "./img/skies/test/Iglesia-9-front.jpg")
-    let imgBack = document.createElement("img")
-    imgBack.setAttribute("src", "./img/skies/test/Iglesia-9-back.jpg")
-
-    cubemap.appendChild(imgRight)
-    cubemap.appendChild(imgLeft)
-    cubemap.appendChild(imgTop)
-    cubemap.appendChild(imgBottom)
-    cubemap.appendChild(imgFront)
-    cubemap.appendChild(imgBack)
-
-    assetContainer.appendChild(cubemap)
-
     data.skyAssets.forEach(skyAsset => {
         let img = document.createElement("img")
         let fileName = "./img/skies/832/" + skyAsset
@@ -178,14 +124,14 @@ const CreateAssets = (data) => {
         img.setAttribute("id", skyAsset.split(".")[0])
         img.setAttribute("src", fileName)
 
-        let img2 = document.createElement("img")
-        let fileName2 = "./img/skies/1664/" + skyAsset
+        // let img2 = document.createElement("img")
+        // let fileName2 = "./img/skies/1664/" + skyAsset
 
-        img2.setAttribute("id", skyAsset.split(".")[0] + "-H")
-        img2.setAttribute("src", fileName2)
+        // img2.setAttribute("id", skyAsset.split(".")[0] + "-H")
+        // img2.setAttribute("src", fileName2)
 
         assetContainer.appendChild(img)
-        assetContainer.appendChild(img2)
+        //assetContainer.appendChild(img2)
     })
 
 
