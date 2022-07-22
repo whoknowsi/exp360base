@@ -43,7 +43,6 @@ function ChangeSky(el, data) {
     geometriesContainer.components.animation__move.data.from = geometriesContainerPos.x + " " + geometriesContainerPos.y + " " + geometriesContainerPos.z
     geometriesContainer.emit("move")
 
-
     let skyTarget = new THREE.Vector3(spotPositon.x*12.5, spotPositon.y*12.5, spotPositon.z*12.5)
     let sky2 = document.querySelector("#sky2")
     sky2.components.animation__move.data.to = skyTarget.x + " " + skyTarget.y + " " + skyTarget.z
@@ -59,21 +58,22 @@ function ChangeSky(el, data) {
     sky1.setAttribute("src", "#" + data.target)
     sky1.setAttribute("rotation", data.rotation)
 
-    setTimeout(() => {
-        let img = document.createElement("img")
-        img.onload = () => {
-            THREE.Cache.add("./img/skies/1664/" +  data.target + ".jpg", img)
+    let img = document.createElement("img")
+    img.onload = () => {
+        THREE.Cache.add("./img/skies/1664/" +  data.target + ".jpg", img)
+    } 
+    img.src = "./img/skies/1664/" +  data.target + ".jpg"
+
+    function onAnimationMoveFinish(evt) {
+        if (evt.detail.name === "animation__move") {
             sky1.setAttribute("src", "./img/skies/1664/" +  data.target + ".jpg")
             sky2.setAttribute("src", "./img/skies/1664/" +  data.target + ".jpg")
             sky2.setAttribute("rotation", data.rotation)
-            console.log(THREE.Cache)
             UnsetMoving()
-        } 
+        }
+    }
 
-        img.src = "./img/skies/1664/" +  data.target + ".jpg"
-
-    }, 1001);
-
+    sky2.addEventListener("animationcomplete", onAnimationMoveFinish)
 
 }
 
