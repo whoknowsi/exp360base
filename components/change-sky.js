@@ -46,6 +46,11 @@ function ChangeSky(el, data) {
     geometriesContainer.components.animation__move.data.from = geometriesContainerPos.x + " " + geometriesContainerPos.y + " " + geometriesContainerPos.z
     geometriesContainer.emit("move")
 
+    let rotation = (data.rotation.split(" ")[0]) + " " +  (data.rotation.split(" ")[1] - 90) + " " + (data.rotation.split(" ")[2])
+    console.log(rotation)
+
+    //geometriesContainer.setAttribute("rotation", rotation)
+
 
     let skyTarget = new THREE.Vector3(spotPositon.x * 250, spotPositon.y * 250, spotPositon.z * 250)
 
@@ -57,13 +62,13 @@ function ChangeSky(el, data) {
 
 
 
+
     backSky.components.animation__move.data.from = (-skyTarget.x) + " " + (-skyTarget.y) + " " + (-skyTarget.z)
     backSky.components.animation__move.data.to = "0 0 0"
     backSky.emit("move")
     
     //sky1.emit("move")
     backSky.setAttribute("cubemap", "folder: ./img/skies/test/" + data.target + "/")
-    backSky.setAttribute("rotation", data.rotation)
 
     function onAnimationMoveFinish(evt) {
         if (evt.detail.name === "animation__move") {
