@@ -13,6 +13,7 @@ AFRAME.registerComponent('change-sky', {
         let data = this.data;
         let el = this.el;
 
+
         el.addEventListener('click', () => ChangeSky(el, data))
         el.addEventListener('raycaster-intersected',  () => {
             if (device == "mobile" || device == "tablet") {
@@ -31,6 +32,8 @@ function ChangeSky(el, data) {
     SetMoving()
 
     let geometriesContainer = document.querySelector("#geometriesContainer")
+    let skySpots = document.querySelectorAll(".skySpot")
+    let hotSpots = document.querySelectorAll(".hotSpot")
     let geometriesContainerPos = geometriesContainer.object3D.position
     let geometriesContainerTarget = new THREE.Vector3(geometriesContainerPos.x, geometriesContainerPos.y, geometriesContainerPos.z)
     let spotPositon = new THREE.Vector3()
@@ -41,6 +44,57 @@ function ChangeSky(el, data) {
     geometriesContainer.components.animation__move.data.to = geometriesContainerTarget.x + " " + geometriesContainerTarget.y + " " + geometriesContainerTarget.z
     geometriesContainer.components.animation__move.data.from = geometriesContainerPos.x + " " + geometriesContainerPos.y + " " + geometriesContainerPos.z
     geometriesContainer.emit("move")
+
+    skySpots.forEach(skySpot => {
+        skySpot.firstChild.components.animation__fade.data.to = 0
+        skySpot.firstChild.components.animation__fade.data.from = .3
+        skySpot.firstChild.emit("fade")
+
+        function onAnimationFadeFinish(evt) {
+            if (evt.detail.name === "animation__fade") {
+                skySpot.firstChild.components.animation__fade.data.to = .3
+                skySpot.firstChild.components.animation__fade.data.from = 0
+                skySpot.firstChild.emit("fade")
+                skySpot.firstChild.removeEventListener("animationcomplete", onAnimationFadeFinish)
+            }
+        }
+        skySpot.firstChild.addEventListener("animationcomplete", onAnimationFadeFinish)
+    })
+
+    hotSpots.forEach(hotSpot => {
+        Array.from(hotSpot.children).forEach(child => {
+            child.components.animation__fade.data.to = 0
+            child.components.animation__fade.data.from = 1
+            child.emit("fade")
+
+            function onAnimationFadeFinishPointer(evt) {
+                if (evt.detail.name === "animation__fade") {
+                    child.components.animation__fade.data.to = 1
+                    child.components.animation__fade.data.from = 0
+                    child.emit("fade")
+                    child.removeEventListener("animationcomplete", onAnimationFadeFinishPointer)
+                }
+            }
+            child.addEventListener("animationcomplete", onAnimationFadeFinishPointer)
+        })
+        
+        hotSpot.previousSibling.components.animation__fade.data.to = 0
+        hotSpot.previousSibling.components.animation__fade.data.from = .99
+        hotSpot.previousSibling.emit("fade")
+
+        function onAnimationFadeFinishLine(evt) {
+            if (evt.detail.name === "animation__fade") {
+                hotSpot.previousSibling.components.animation__fade.data.to = .99
+                hotSpot.previousSibling.components.animation__fade.data.from = 0
+                hotSpot.previousSibling.emit("fade")
+                hotSpot.previousSibling.removeEventListener("animationcomplete", onAnimationFadeFinishLine)
+            }
+        }
+        console.log(hotSpot.previousSibling.components)
+        hotSpot.previousSibling.addEventListener("animationcomplete", onAnimationFadeFinishLine)
+
+    })
+
 
     let skyTarget = new THREE.Vector3(spotPositon.x*12.5, spotPositon.y*12.5, spotPositon.z*12.5)
     let sky2 = document.querySelector("#sky2")
@@ -69,8 +123,10 @@ function ChangeSky(el, data) {
             sky2.setAttribute("src", "./img/skies/1664/" +  data.target + ".jpg")
             sky2.setAttribute("rotation", data.rotation)
             UnsetMoving()
+            sky2.removeEventListener("animationcomplete", onAnimationMoveFinish)
         }
     }
+        
 
     sky2.addEventListener("animationcomplete", onAnimationMoveFinish)
 

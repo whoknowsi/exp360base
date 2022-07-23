@@ -14,7 +14,6 @@ const InitCode = (data) => {
     InitGlobalConfigAfterCanvasIsCreated()
     
     document.querySelector("a-assets").addEventListener("loaded", () => {
-        //InitImagesGPU()
         SetInitialPosition()
         SetInitialSky()
     })
@@ -42,19 +41,6 @@ const InitGlobalConfigAfterCanvasIsCreated = () => {
     const observer = new MutationObserver(callback)
     observer.observe(targetNode, config)
 }
-
-const InitImagesGPU = async () => {
-    let assets = Array.from(document.querySelector("a-assets").children)
-    let renderer = document.querySelector("a-scene").renderer
-
-    await Promise.all(assets.map(async (asset) => {
-        if(asset.getAttribute("id").includes("-H")) { return }
-        let fileName = asset.getAttribute("src")
-        const texture = await new THREE.TextureLoader().loadAsync(fileName)
-        await renderer.initTexture(texture) 
-    }))
-}
-
 
 const CreateAframeHTML = (data) => {
     let scene = document.createElement("a-scene")
@@ -326,6 +312,7 @@ const CreateSkySpot = (skySpot) => {
     })
 
     let spotInnerRing = document.createElement("a-entity")
+    spotInnerRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutSine")
     spotInnerRing.setAttribute("geometry", {
         primitive: "ring",
         radiusInner: .1825,
@@ -357,6 +344,7 @@ const CreateHotSpot = (hotSpot) => {
     let hotSpotContainer = document.createElement("a-entity")
 
     let line = document.createElement("a-entity")
+    line.setAttribute("animation__fade", "startEvents: fade; property: components.line.material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutSine")
     line.setAttribute("line", {
         start: hotSpot.startPosition,
         end: hotSpot.endPosition,
@@ -373,14 +361,51 @@ const CreateHotSpot = (hotSpot) => {
     })
     target.classList.add("hotSpot")
     target.setAttribute("material", {
-        color: "white"
+        opacity: 0,
+        transparent: true
     })
     target.setAttribute("hot-spot",
         "title: " + hotSpot.title +
         "; description: " + hotSpot.description +
         "; image: " + hotSpot.image
     )
+    let targetColoredRing = document.createElement("a-image")
+    targetColoredRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutSine")
+    
+    targetColoredRing.setAttribute("geometry", {
+        primitive: "ring",
+        radiusInner: 0.04,
+        radiusOuter: 0.08
+    })
+    targetColoredRing.setAttribute("material", {
+        color: "#b50070",
+    })
 
+    let targetInnerRing = document.createElement("a-image")
+    targetInnerRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutSine")
+    targetInnerRing.setAttribute("geometry", {
+        primitive: "ring",
+        radiusInner: 0.00,
+        radiusOuter: 0.04
+    })
+    targetInnerRing.setAttribute("material", {
+        color: "white",
+    })
+
+    let targetOuterRing = document.createElement("a-image")
+    targetOuterRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutSine")
+    targetOuterRing.setAttribute("geometry", {
+        primitive: "ring",
+        radiusInner: 0.08,
+        radiusOuter: 0.1
+    })
+    targetOuterRing.setAttribute("material", {
+        color: "white",
+    })
+
+    target.appendChild(targetInnerRing)
+    target.appendChild(targetColoredRing)
+    target.appendChild(targetOuterRing)
     hotSpotContainer.appendChild(line)
     hotSpotContainer.appendChild(target)
 
