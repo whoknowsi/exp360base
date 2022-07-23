@@ -5,7 +5,8 @@ const temporalRaycaster = new THREE.Raycaster()
 let height = 1.6
 let skyHeight = .2
 let currentSky
-let structuersObj3D = []
+let skySpotObj3D = []
+let perspectiveCamera
 
 const deviceType = () => {
     const ua = navigator.userAgent;
@@ -37,9 +38,8 @@ const InitGlobalConfig = () => {
     else if(device == "mobile" || device == "tablet") {
         document.querySelector("canvas").addEventListener("touchmove", onTouchMove)
     }
-
     
-    document.querySelectorAll(".structure").forEach(structure => structuersObj3D.push(structure.object3D))
+    document.querySelectorAll(".skySpot").forEach(spot => skySpotObj3D.push(spot.object3D))
 }
 
 function Height() {

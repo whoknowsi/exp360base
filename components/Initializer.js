@@ -76,13 +76,13 @@ const CreateAframeHTML = (data) => {
         scene.appendChild(cursorVisualContainer)
     }
 
-    let raycaster = CreateRaycaster()
-    scene.appendChild(raycaster)
-
     let geometriesContainer = CreateGeometries(data)
     let skiesContainer = CreateSkies(currentSky.target)
     scene.appendChild(skiesContainer)
     scene.appendChild(geometriesContainer)
+
+    let raycaster = CreateRaycaster()
+    scene.appendChild(raycaster)
 
     document.body.appendChild(scene)
 }
@@ -143,7 +143,7 @@ const CreateCamera = () => {
     let cameraContainer = document.createElement("a-entity")
     cameraContainer.setAttribute("camera-check", "")
     cameraContainer.setAttribute("id", "cameraContainer")
-    cameraContainer.setAttribute("animation__inertia", "startEvents: inertia; property: rotation; dur: 1000; easing: easeOutQuint; pauseEvents: pause-anim")
+    cameraContainer.setAttribute("animation__inertia", "startEvents: inertia; property: rotation; dur: 1500; easing: easeOutQuint; pauseEvents: pause-anim")
     cameraContainer.setAttribute("position", "0 " + Height() + " 0")
 
     let camera = document.createElement("a-camera")
@@ -247,36 +247,51 @@ const CreateSkies = (currentSky) => {
 }
 
 const CreateStructures = (structures) => {
-    let structureContainer = document.createElement("a-entity")
-    structureContainer.setAttribute("id", "structureContainer")
+
+    let structureGeometries = []
 
     structures.forEach(structure => {
-        let structureEl = CreateStructure(structure)
-        structureContainer.appendChild(structureEl)
+        let structureGeometry = CreateGeometry(structure)
+        structureGeometries.push(structureGeometry)
     })
 
-    return structureContainer
-}
-
-const CreateStructure = (structure) => {
-    let structureEl = document.createElement("a-" + structure.primitive)
-
-    structureEl.setAttribute("id", structure.id)
-    structureEl.setAttribute("geometry", {
-        radius: structure.radius,
-        width: structure.width,
-        height: structure.height,
-        depth: structure.depth
+    let geometries = []
+    structureGeometries.forEach(structure => {
+        if (structure.type === "Mesh") {
+            const geometry = structure.geometry.clone()
+            geometry.translate(structure.position.x, structure.position.y, structure.position.z)
+            geometries.push(geometry)
+        }
     })
-    structureEl.setAttribute("material", {
-        opacity: 0,
-        color: "#7BC8A4"
-    })
+
+    const mergedGeo = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
+    const mergedMaterial = new THREE.MeshStandardMaterial({ opacity: 0, side: THREE.DoubleSide, transparent: true, color: "black" });
+
+    let structureEl = document.createElement("a-entity")
+    structureEl.setAttribute("id", "structureContainer")
+
+    const mergedMesh = new THREE.Mesh(mergedGeo, mergedMaterial);
+    structureEl.object3D.add(mergedMesh)
     structureEl.setAttribute("class", "structure")
-    structureEl.setAttribute("position", structure.position.x + " " + structure.position.y + " " + structure.position.z)
     structureEl.setAttribute("raycaster-listener", "")
 
     return structureEl
+}
+
+const CreateGeometry = (structure) => {
+
+    let geometry 
+    if(structure.primitive == "box") {
+        geometry = new THREE.BoxGeometry(structure.width, structure.height, structure.depth)
+    } else if(structure.primitive == "cylinder") {
+        geometry = new THREE.CylinderGeometry(structure.radius, structure.radius, structure.height)
+    }
+    let material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
+
+    let mesh = new THREE.Mesh(geometry, material)
+    mesh.position.set(structure.position.x, structure.position.y, structure.position.z)
+
+    return mesh
 }
 
 const CreateSkySpots = (skySpots) => {

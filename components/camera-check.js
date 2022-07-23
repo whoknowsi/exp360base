@@ -8,6 +8,7 @@ let myTimeOut
 AFRAME.registerComponent('camera-check', {
     init: function () {
         cameraContainer = document.querySelector("#cameraContainer")
+        perspectiveCamera = document.querySelector("a-camera").components.camera.camera
         
         if(device == "desktop") {
             this.mouse = pointer

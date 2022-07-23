@@ -27,7 +27,6 @@ AFRAME.registerComponent('change-sky', {
 })
 
 function ChangeSky(el, data) {
-
     if (IsMoving()) { return }
     SetMoving()
 
