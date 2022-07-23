@@ -12,7 +12,6 @@ AFRAME.registerComponent('raycaster-element', {
         if(device == "desktop") {
             this.el.addEventListener('mousedown', () => OnMouseDown())
             this.el.addEventListener('mouseup', () => OnMouseUp(this.raycaster, this.structure))
-            this.raycaster.setFromCamera(pointer, this.camera)
         }
         else if(device == "tablet" || device == "mobile") {
             this.el.addEventListener('mousedown', () => OnMouseDown())
@@ -84,6 +83,13 @@ function CheckIfUserClick() {
 
 function MoveToNextSky(raycaster, structure) {
 
+    if(device == "mobile" || device == "tablet") {
+        raycaster.setFromCamera(touch, perspectiveCamera);
+    }
+    else if(device == "desktop") {
+        raycaster.setFromCamera(pointer, perspectiveCamera);
+    }
+
     let intersection = raycaster.intersectObject(structure)[0]
     let existIntersection = intersection != undefined
     if(!existIntersection) { return }
@@ -93,13 +99,6 @@ function MoveToNextSky(raycaster, structure) {
     if(isClickingOnSpotSky) { return }
 
     let cameraContainerPosition = document.querySelector("#cameraContainer").object3D.position
-
-    if(device == "mobile" || device == "tablet") {
-        temporalRaycaster.setFromCamera(touch, perspectiveCamera);
-    }
-    else if(device == "desktop") {
-        temporalRaycaster.setFromCamera(pointer, perspectiveCamera);
-    }
     
     let closestSkySpotDistance = 100000
     let closetsSkySpot
