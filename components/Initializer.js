@@ -44,7 +44,7 @@ const InitGlobalConfigAfterCanvasIsCreated = () => {
 
 const CreateAframeHTML = (data) => {
     let scene = document.createElement("a-scene")
-    scene.setAttribute("stats", "")
+    // scene.setAttribute("stats", "")
     if (device == "desktop") {
         scene.setAttribute("renderer", "antialias: true; precision: high; maxCanvasWidth: 1920; maxCanvasHeight: 1920")
     } else {
