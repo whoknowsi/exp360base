@@ -11,11 +11,11 @@ AFRAME.registerComponent('raycaster-element', {
 
         if(device == "desktop") {
             this.el.addEventListener('mousedown', () => OnMouseDown())
-            this.el.addEventListener('mouseup', () => OnMouseUp(this.raycaster, this.structure))
+            this.el.addEventListener('mouseup', () => OnMouseUp())
         }
         else if(device == "tablet" || device == "mobile") {
             this.el.addEventListener('mousedown', () => OnMouseDown())
-            this.el.addEventListener('mouseup', () => OnMouseUp(this.raycaster, this.structure))
+            this.el.addEventListener('mouseup', () => OnMouseUp())
         }   
     },
     tick: function() {
@@ -23,13 +23,13 @@ AFRAME.registerComponent('raycaster-element', {
         if(device == "mobile" || device == "tablet") { return }
 
         this.raycaster.setFromCamera(pointer, this.camera)
-        let intersectionN = this.raycaster.intersectObject(this.structure)
+        let intersection = this.raycaster.intersectObject(this.structure)
         // temporalRaycaster.setFromCamera(pointer, document.querySelector("a-camera").components.camera.camera)
         // let intersectionN = temporalRaycaster.intersectObject(document.querySelector(".structure").object3D)
 
-        if(intersectionN.length == 0) { return }
+        if(intersection.length == 0) { return }
 
-        CursorManagment(intersectionN[0], this.cursor)
+        CursorManagment(intersection[0], this.cursor)
 
         return
     }
@@ -60,10 +60,10 @@ var OnMouseDown = function () {
     }
 }
 
-var OnMouseUp = function (raycaster, structure) {
+var OnMouseUp = function () {
     let userClick = CheckIfUserClick()
     if (userClick) {
-        MoveToNextSky(raycaster, structure)
+        HandleRaycasterIntersection()
     }
 }
 
@@ -80,63 +80,94 @@ function CheckIfUserClick() {
     return (diffX < delta && diffY < delta)
 }
 
+const HandleRaycasterIntersection = () => {
+    let intersectionObj = GetIntersection()
+    
+    MoveToNextSky(intersectionObj)
+    handleClick(intersectionObj)
+}
 
-function MoveToNextSky(raycaster, structure) {
+const GetIntersection = () => {
+    UpdateRaycaster()
 
+    let structureIntersections = raycaster.intersectObject(structure.object3D)
+    let hotSpotIntersections = raycaster.intersectObjects(hotSpotsObj3D)
+    let hotSpotIntersection 
+
+    if(hotSpotIntersections.length == 0 && structureIntersections.length == 0) { return null }
+    else if (hotSpotIntersections.length == 0) {
+        return {
+            type: "structure",
+            intersection: structureIntersections[0]
+        }
+    }
+    else if(structureIntersections.length == 0) {
+        for (let i = 0; i < hotSpotIntersections.length; i++) {
+            const hotSpotComponent = hotSpotIntersections[i];
+            if(hotSpotComponent.object.el.children.length != 0) { 
+                hotSpotIntersection = hotSpotComponent
+                break
+            }
+        }
+        return {
+            type: "hotSpot",
+            intersection: hotSpotIntersection
+        }
+    }
+    else if(structureIntersections[0].distance < hotSpotIntersections[0].distance) {
+        return {
+            type: "structure",
+            intersection: structureIntersections[0]
+        }
+    }
+    else if(structureIntersections[0].distance > hotSpotIntersections[0].distance) {
+        for (let i = 0; i < hotSpotIntersections.length; i++) {
+            const hotSpotComponent = hotSpotIntersections[i];
+            if(hotSpotComponent.object.el.children.length != 0) { 
+                hotSpotIntersection = hotSpotComponent
+                break
+            }
+        }
+        return {
+            type: "hotSpot",
+            intersection: hotSpotIntersection
+        }
+    }
+    
+    return null
+}
+
+function MoveToNextSky(intersectionObj) {
+    if(intersectionObj == null) { return }
+    if(intersectionObj.type != "structure") { return }
+
+    let closetsSkySpot = GetClosetsSkyIntersectionPoint(intersectionObj.intersection)
+    closetsSkySpot != null && closetsSkySpot.click()
+}
+
+const GetClosetsSkyIntersectionPoint = (intersection) => {
+    let closestSkySpotDistance = 100000
+    let closetsSkySpot
+
+    skySpots.forEach(skySpot => {
+        let skyWorldPosition = new THREE.Vector3()
+        skySpot.object3D.getWorldPosition(skyWorldPosition)
+        let distanceBetweenIntersectionAndSkySpot = intersection.point.distanceTo(skyWorldPosition)
+        if(distanceBetweenIntersectionAndSkySpot < closestSkySpotDistance) {
+            closestSkySpotDistance = distanceBetweenIntersectionAndSkySpot
+            closetsSkySpot = skySpot
+        }
+    })
+
+    return closetsSkySpot
+}   
+
+const UpdateRaycaster = () => {
     if(device == "mobile" || device == "tablet") {
         raycaster.setFromCamera(touch, perspectiveCamera);
     }
     else if(device == "desktop") {
         raycaster.setFromCamera(pointer, perspectiveCamera);
     }
-
-    let intersection = raycaster.intersectObject(structure)[0]
-    let existIntersection = intersection != undefined
-    if(!existIntersection) { return }
-
-    let intersectingSpots = raycaster.intersectObjects(skySpotObj3D)
-    let isClickingOnSpotSky = intersectingSpots.length > 0
-    if(isClickingOnSpotSky) { return }
-
-    let cameraContainerPosition = document.querySelector("#cameraContainer").object3D.position
-    
-    let closestSkySpotDistance = 100000
-    let closetsSkySpot
-
-    let skySpots = document.querySelectorAll(".skySpot")
-    skySpots.forEach(spot => {
-        let spotWorldPosition = new THREE.Vector3()
-        spot.object3D.getWorldPosition(spotWorldPosition)
-
-        let distanceCameraSpot = cameraContainerPosition.distanceTo(spotWorldPosition)
-        if(distanceCameraSpot > 10) { return }
-
-
-        let distanceSpotIntersection = spotWorldPosition.distanceTo(intersection.point)
-        let distanceCameraIntersection = cameraContainerPosition.distanceTo(intersection.point)
-        let angle = Math.acos((distanceSpotIntersection * distanceSpotIntersection - distanceCameraIntersection * distanceCameraIntersection - distanceCameraSpot * distanceCameraSpot) / (-2 * distanceCameraIntersection * distanceCameraSpot))
-
-        temporalRaycaster.setFromCamera(pointer, perspectiveCamera)
-        const intersects = temporalRaycaster.intersectObjects(skySpotObj3D)
-        let intersected = false 
-        if (angle < .7) {
-
-            if (distanceCameraSpot < closestSkySpotDistance) {
-                if (intersects.length > 0) {
-                    intersects.forEach(intersect => {
-                        if (intersect.distance < distanceCameraSpot) {
-                            intersected = true
-                            return
-                        }
-                    })
-                }
-                if (!intersected) {
-                    closestSkySpotDistance = distanceCameraSpot
-                    closetsSkySpot = spot
-                }
-            }
-        }
-
-    })
-    closetsSkySpot != null && closetsSkySpot.click()
+    return raycaster
 }

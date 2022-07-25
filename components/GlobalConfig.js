@@ -2,11 +2,15 @@
 const touch = new THREE.Vector2()
 const pointer = new THREE.Vector2()
 const temporalRaycaster = new THREE.Raycaster()
-let height = 1.6
-let skyHeight = .2
+const height = 1.6
+const skyHeight = .2
+const maxTraslationSky = 40
 let currentSky
-let skySpotObj3D = []
+const skySpots = []
+const hotSpotsObj3D = []
+let structure
 let perspectiveCamera
+const raycaster = new THREE.Raycaster()
 
 const deviceType = () => {
     const ua = navigator.userAgent;
@@ -39,7 +43,9 @@ const InitGlobalConfig = () => {
         document.querySelector("canvas").addEventListener("touchmove", onTouchMove)
     }
     
-    document.querySelectorAll(".skySpot").forEach(spot => skySpotObj3D.push(spot.object3D))
+    document.querySelectorAll(".skySpot").forEach(spot => skySpots.push(spot))
+    document.querySelectorAll(".hotSpot").forEach(hotSpot => hotSpotsObj3D.push(hotSpot.object3D))
+    structure = document.querySelector(".structure")
 }
 
 function Height() {

@@ -17,7 +17,7 @@ AFRAME.registerComponent('change-sky', {
         el.addEventListener('click', () => ChangeSky(el, data))
         el.addEventListener('raycaster-intersected',  () => {
             if (device == "mobile" || device == "tablet") {
-                ChangeSky(evt)
+                ChangeSky(el, data)
             }
             el.firstChild.setAttribute("material", "opacity", .6)
         })
@@ -29,7 +29,15 @@ AFRAME.registerComponent('change-sky', {
 
 function ChangeSky(el, data) {
     if (IsMoving()) { return }
+
+    let targetIsCurrentSky = el.classList.contains("current")
+    if(targetIsCurrentSky) { return }
     SetMoving()
+
+    let currentSky = document.querySelector(".current")
+    currentSky.classList.remove("current")
+
+    el.classList.add("current")
 
     let geometriesContainer = document.querySelector("#geometriesContainer")
     let skySpots = document.querySelectorAll(".skySpot")
@@ -50,12 +58,14 @@ function ChangeSky(el, data) {
     skySpots.forEach(skySpot => {
         skySpot.firstChild.components.animation__fade.data.to = 0
         skySpot.firstChild.components.animation__fade.data.from = .3
+        skySpot.firstChild.components.animation__fade.data.easing = "easeOutExpo"
         skySpot.firstChild.emit("fade")
 
         function onAnimationFadeFinish(evt) {
             if (evt.detail.name === "animation__fade") {
                 skySpot.firstChild.components.animation__fade.data.to = .3
                 skySpot.firstChild.components.animation__fade.data.from = 0
+                skySpot.firstChild.components.animation__fade.data.easing = "easeInExpo"
                 skySpot.firstChild.emit("fade")
                 skySpot.firstChild.removeEventListener("animationcomplete", onAnimationFadeFinish)
             }
@@ -67,12 +77,14 @@ function ChangeSky(el, data) {
         Array.from(hotSpot.children).forEach(child => {
             child.components.animation__fade.data.to = 0
             child.components.animation__fade.data.from = 1
+            child.components.animation__fade.data.easing = "easeOutExpo"
             child.emit("fade")
 
             function onAnimationFadeFinishPointer(evt) {
                 if (evt.detail.name === "animation__fade") {
                     child.components.animation__fade.data.to = 1
                     child.components.animation__fade.data.from = 0
+                    child.components.animation__fade.data.easing = "easeInExpo"
                     child.emit("fade")
                     child.removeEventListener("animationcomplete", onAnimationFadeFinishPointer)
                 }
@@ -82,23 +94,32 @@ function ChangeSky(el, data) {
         
         hotSpot.previousSibling.components.animation__fade.data.to = 0
         hotSpot.previousSibling.components.animation__fade.data.from = .99
+        hotSpot.previousSibling.components.animation__fade.data.easing = "easeOutExpo"
         hotSpot.previousSibling.emit("fade")
 
         function onAnimationFadeFinishLine(evt) {
             if (evt.detail.name === "animation__fade") {
                 hotSpot.previousSibling.components.animation__fade.data.to = .99
                 hotSpot.previousSibling.components.animation__fade.data.from = 0
+                hotSpot.previousSibling.components.animation__fade.data.easing = "easeInExpo"
                 hotSpot.previousSibling.emit("fade")
                 hotSpot.previousSibling.removeEventListener("animationcomplete", onAnimationFadeFinishLine)
             }
         }
-        console.log(hotSpot.previousSibling.components)
         hotSpot.previousSibling.addEventListener("animationcomplete", onAnimationFadeFinishLine)
-
     })
 
 
     let skyTarget = new THREE.Vector3(spotPositon.x*12.5, spotPositon.y*12.5, spotPositon.z*12.5)
+
+    if(skyTarget.x > maxTraslationSky) skyTarget.x = maxTraslationSky
+    if(skyTarget.y > maxTraslationSky) skyTarget.y = maxTraslationSky 
+    if(skyTarget.z > maxTraslationSky) skyTarget.z = maxTraslationSky 
+
+    if(skyTarget.x < -maxTraslationSky) skyTarget.x = -maxTraslationSky
+    if(skyTarget.y < -maxTraslationSky) skyTarget.y = -maxTraslationSky 
+    if(skyTarget.z < -maxTraslationSky) skyTarget.z = -maxTraslationSky 
+
     let sky2 = document.querySelector("#sky2")
     sky2.components.animation__move.data.to = skyTarget.x + " " + skyTarget.y + " " + skyTarget.z
     sky2.components.animation__move.data.from = "0 0 0"
@@ -149,49 +170,3 @@ function IsMoving() {
     let structureContainer = document.querySelector("#geometriesContainer")
     return structureContainer.classList.contains("moving")
 }
-
-const PreloadCloseSkies = (data) => {
-    let skies = JSON.parse(sessionStorage.getItem('skies'))
-    let skiesToPreload = []
-    let currentPosition = skies.filter(sky => sky.target == data.target)[0].position
-
-    skies.forEach(sky => {
-        let currentVectorPosition = new THREE.Vector3(currentPosition.x, currentPosition.y, currentPosition.z)
-        let skyVectorPosition = new THREE.Vector3(sky.position.x, sky.position.y, sky.position.z)
-        let distance = currentVectorPosition.distanceTo(skyVectorPosition)
-
-        if (distance < 10 && !sky.loaded) skiesToPreload.push(sky)
-    })
-
-
-    let interval = 200
-    let promise = Promise.resolve();
-    skiesToPreload.forEach(sky => {
-        promise = promise.then(function () {
-            PreloadSky(sky)
-            return new Promise(function (resolve) {
-                setTimeout(resolve, interval);
-            })
-        })
-    })
-
-    promise.then(function () {
-        sessionStorage.setItem('skies', "[" + skies.map((sky) => {
-            let skyObj = sky
-            if (skiesToPreload.map(sky => sky.target).includes(sky.target)) {
-                skyObj = {
-                    target: sky.target,
-                    position: sky.position,
-                    loaded: true
-                }
-            }
-            return JSON.stringify(skyObj)
-        }) + "]")
-    });
-}
-
-const PreloadSky = (sky) => {
-    let sky2 = document.querySelector("#sky2")
-    sky2.setAttribute("src", "#" + sky.target)
-}
-

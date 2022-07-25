@@ -312,7 +312,7 @@ const CreateSkySpot = (skySpot) => {
     })
 
     let spotInnerRing = document.createElement("a-entity")
-    spotInnerRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutSine")
+    spotInnerRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutExpo")
     spotInnerRing.setAttribute("geometry", {
         primitive: "ring",
         radiusInner: .1825,
@@ -344,7 +344,7 @@ const CreateHotSpot = (hotSpot) => {
     let hotSpotContainer = document.createElement("a-entity")
 
     let line = document.createElement("a-entity")
-    line.setAttribute("animation__fade", "startEvents: fade; property: components.line.material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutSine")
+    line.setAttribute("animation__fade", "startEvents: fade; property: components.line.material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutExpo")
     line.setAttribute("line", {
         start: hotSpot.startPosition,
         end: hotSpot.endPosition,
@@ -370,7 +370,7 @@ const CreateHotSpot = (hotSpot) => {
         "; image: " + hotSpot.image
     )
     let targetColoredRing = document.createElement("a-image")
-    targetColoredRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutSine")
+    targetColoredRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutExpo")
     
     targetColoredRing.setAttribute("geometry", {
         primitive: "ring",
@@ -382,7 +382,7 @@ const CreateHotSpot = (hotSpot) => {
     })
 
     let targetInnerRing = document.createElement("a-image")
-    targetInnerRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutSine")
+    targetInnerRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutExpo")
     targetInnerRing.setAttribute("geometry", {
         primitive: "ring",
         radiusInner: 0.00,
@@ -393,7 +393,7 @@ const CreateHotSpot = (hotSpot) => {
     })
 
     let targetOuterRing = document.createElement("a-image")
-    targetOuterRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutSine")
+    targetOuterRing.setAttribute("animation__fade", "startEvents: fade; property: material.opacity; dur: 500; to: 0; from: 0; elasticity: 0; easing: easeOutExpo")
     targetOuterRing.setAttribute("geometry", {
         primitive: "ring",
         radiusInner: 0.08,
