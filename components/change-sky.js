@@ -49,15 +49,27 @@ function ChangeSky(el, data) {
     let imgLoaded = false
     let animationEnded = false
 
-    geometriesContainerTarget.add(spotPositon.negate())
     
+    geometriesContainerTarget.add(spotPositon.negate())
+    let difference = new THREE.Vector3(geometriesContainerPos.x - geometriesContainerTarget.x, geometriesContainerPos.y - geometriesContainerTarget.y, geometriesContainerPos.z - geometriesContainerTarget.z)
+
+    if(difference.x > maxTraslationSky/12.5) difference.x = maxTraslationSky/12.5
+    if(difference.y > maxTraslationSky/12.5) difference.y = maxTraslationSky/12.5 
+    if(difference.z > maxTraslationSky/12.5) difference.z = maxTraslationSky/12.5 
+
+    if(difference.x < -maxTraslationSky/12.5) difference.x = -maxTraslationSky/12.5
+    if(difference.y < -maxTraslationSky/12.5) difference.y = -maxTraslationSky/12.5 
+    if(difference.z < -maxTraslationSky/12.5) difference.z = -maxTraslationSky/12.5 
+    
+    let geometriesContainerFrom = new THREE.Vector3(geometriesContainerTarget.x + difference.x, geometriesContainerTarget.y + difference.y, geometriesContainerTarget.z + difference.z)
+
     geometriesContainer.components.animation__move.data.to = geometriesContainerTarget.x + " " + geometriesContainerTarget.y + " " + geometriesContainerTarget.z
-    geometriesContainer.components.animation__move.data.from = geometriesContainerPos.x + " " + geometriesContainerPos.y + " " + geometriesContainerPos.z
+    geometriesContainer.components.animation__move.data.from = geometriesContainerFrom.x + " " + geometriesContainerFrom.y + " " + geometriesContainerFrom.z
     geometriesContainer.emit("move")
 
     skySpots.forEach(skySpot => {
         skySpot.firstChild.components.animation__fade.data.to = 0
-        skySpot.firstChild.components.animation__fade.data.from = .3
+        skySpot.firstChild.components.animation__fade.data.from = 0
         skySpot.firstChild.components.animation__fade.data.easing = "easeOutExpo"
         skySpot.firstChild.emit("fade")
 
@@ -65,7 +77,7 @@ function ChangeSky(el, data) {
             if (evt.detail.name === "animation__fade") {
                 skySpot.firstChild.components.animation__fade.data.to = .3
                 skySpot.firstChild.components.animation__fade.data.from = 0
-                skySpot.firstChild.components.animation__fade.data.easing = "easeInExpo"
+                skySpot.firstChild.components.animation__fade.data.easing = "easeOutExpo"
                 skySpot.firstChild.emit("fade")
                 skySpot.firstChild.removeEventListener("animationcomplete", onAnimationFadeFinish)
             }
@@ -76,7 +88,7 @@ function ChangeSky(el, data) {
     hotSpots.forEach(hotSpot => {
         Array.from(hotSpot.children).forEach(child => {
             child.components.animation__fade.data.to = 0
-            child.components.animation__fade.data.from = 1
+            child.components.animation__fade.data.from = 0
             child.components.animation__fade.data.easing = "easeOutExpo"
             child.emit("fade")
 
@@ -84,7 +96,7 @@ function ChangeSky(el, data) {
                 if (evt.detail.name === "animation__fade") {
                     child.components.animation__fade.data.to = 1
                     child.components.animation__fade.data.from = 0
-                    child.components.animation__fade.data.easing = "easeInExpo"
+                    child.components.animation__fade.data.easing = "easeOutExpo"
                     child.emit("fade")
                     child.removeEventListener("animationcomplete", onAnimationFadeFinishPointer)
                 }
@@ -93,7 +105,7 @@ function ChangeSky(el, data) {
         })
         
         hotSpot.previousSibling.components.animation__fade.data.to = 0
-        hotSpot.previousSibling.components.animation__fade.data.from = .99
+        hotSpot.previousSibling.components.animation__fade.data.from = 0
         hotSpot.previousSibling.components.animation__fade.data.easing = "easeOutExpo"
         hotSpot.previousSibling.emit("fade")
 
@@ -101,7 +113,7 @@ function ChangeSky(el, data) {
             if (evt.detail.name === "animation__fade") {
                 hotSpot.previousSibling.components.animation__fade.data.to = .99
                 hotSpot.previousSibling.components.animation__fade.data.from = 0
-                hotSpot.previousSibling.components.animation__fade.data.easing = "easeInExpo"
+                hotSpot.previousSibling.components.animation__fade.data.easing = "easeOutExpo"
                 hotSpot.previousSibling.emit("fade")
                 hotSpot.previousSibling.removeEventListener("animationcomplete", onAnimationFadeFinishLine)
             }
